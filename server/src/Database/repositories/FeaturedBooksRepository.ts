@@ -25,6 +25,26 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
             return new FeaturedBooks();
         }
     }
+
+    async getById(id: number): Promise<FeaturedBooks> {
+        try {
+            const query = `SELECT * FROM featured_books WHERE id = ?`;
+
+            const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
+
+            if (rows.length > 0) {
+                const row = rows[0];
+                return new FeaturedBooks(row.id, row.book_id, row.editor_id, row.featured_at);
+            }
+
+            return new FeaturedBooks(); // nije našao
+        } 
+        catch (error) {
+            console.error("Error fetching featured book by id:", error);
+            return new FeaturedBooks();
+        }
+    }
+
     async getByBookId(id: number): Promise<FeaturedBooks> {
         try {
             const query = `SELECT * FROM featured_books WHERE book_id = ?`;

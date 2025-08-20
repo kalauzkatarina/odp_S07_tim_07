@@ -47,7 +47,8 @@ export class UserService implements IUserService{
             updates.username || existingUser.username,
             updates.password || existingUser.password,
             updates.email   || existingUser.email,
-            updates.role || existingUser.role
+            updates.role || existingUser.role,
+            existingUser.created_at
         );
 
         const savedUser = await this.userRepository.update(updatedUser);

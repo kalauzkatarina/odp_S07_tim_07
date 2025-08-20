@@ -104,7 +104,7 @@ export class BookGenreRepository implements IBookGenreRepository {
     }
     async exists(id: number): Promise<boolean> {
         try {
-            const query = `SELECT COUNT(*) as count FROM book_genress = ? WHERE book_id = ?`;
+            const query = `SELECT COUNT(*) as count FROM book_genress WHERE book_id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 

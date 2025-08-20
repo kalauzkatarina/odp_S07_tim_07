@@ -104,7 +104,7 @@ export class BookAuthorRepository implements IBookAuthorRepository {
     }
     async exists(id: number): Promise<boolean> {
         try {
-            const query = `SELECT COUNT(*) as count FROM book_authors = ? WHERE book_id = ?`;
+            const query = `SELECT COUNT(*) as count FROM book_authors WHERE book_id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
