@@ -1,8 +1,12 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Book } from "../../Domain/models/Book";
 import { IBookRepository } from "../../Domain/repositories/IBooksRepository";
+<<<<<<< Updated upstream
 import db from "../connection/db_connection_pool";
 import { Genres } from "../../Domain/enums/Genres";
+=======
+import db from "../connection/DbConnectionPool";
+>>>>>>> Stashed changes
 
 export class BookRepository implements IBookRepository{
     async create(book: Book): Promise<Book> {
@@ -28,8 +32,13 @@ export class BookRepository implements IBookRepository{
             }
             return new Book();
         }
+<<<<<<< Updated upstream
         catch(error){
             console.error("Error creating user: ", error);
+=======
+        catch (error) {
+            console.error("Error creating book: ", error);
+>>>>>>> Stashed changes
             return new Book();
         }
     }
