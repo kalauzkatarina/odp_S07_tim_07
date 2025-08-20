@@ -1,7 +1,8 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Book } from "../../Domain/models/Book";
 import { IBookRepository } from "../../Domain/repositories/IBooksRepository";
-import db from "../connection/db_connection_pool";
+import { Genres } from "../../Domain/enums/Genres";
+import db from "../connection/DbConnectionPool";
 
 export class BookRepository implements IBookRepository {
     async create(book: Book): Promise<Book> {
@@ -26,9 +27,8 @@ export class BookRepository implements IBookRepository {
                 return new Book(result.insertId, book.title, book.summary, book.format, book.pages, book.script, book.binding, book.publish_date, book.isbn, book.cover_image_url, book.created_at, book.views);
             }
             return new Book();
-        }
-        catch (error) {
-            console.error("Error creating user: ", error);
+        } catch (error) {
+            console.error("Error creating book: ", error);
             return new Book();
         }
     }

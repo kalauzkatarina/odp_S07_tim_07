@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { FeaturedBooks } from "../../Domain/models/FeaturedBooks";
 import { IFeaturedBooksRepository } from "../../Domain/repositories/IFeaturedBooksRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class FeaturedBooksRepository implements IFeaturedBooksRepository {
     async create(featured_books: FeaturedBooks): Promise<FeaturedBooks> {

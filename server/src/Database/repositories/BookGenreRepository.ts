@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { BookGenre } from "../../Domain/models/BookGenre";
 import { IBookGenreRepository } from "../../Domain/repositories/IBookGenreRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class BookGenreRepository implements IBookGenreRepository {
     async create(book_genre: BookGenre): Promise<BookGenre> {

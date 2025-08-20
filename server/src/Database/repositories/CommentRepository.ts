@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Comment } from "../../Domain/models/Comment";
 import { ICommentRepository } from "../../Domain/repositories/ICommentRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class CommentRepository implements ICommentRepository {
     async create(comment: Comment): Promise<Comment> {

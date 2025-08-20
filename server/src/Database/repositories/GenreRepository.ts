@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Genre } from "../../Domain/models/Genre";
 import { IGenreRepository } from "../../Domain/repositories/IGenreRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class GenreRepository implements IGenreRepository {
     async create(genre: Genre): Promise<Genre> {

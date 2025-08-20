@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { User } from "../../Domain/models/User";
 import { IUserRepository } from "../../Domain/repositories/IUserRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class UserRepository implements IUserRepository {
     async create(user: User): Promise<User> {

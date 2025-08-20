@@ -1,7 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { BookAuthor } from "../../Domain/models/BookAuthor";
 import { IBookAuthorRepository } from "../../Domain/repositories/IBookAuthorRepository";
-import db from "../connection/db_connection_pool";
+import db from "../connection/DbConnectionPool";
 
 export class BookAuthorRepository implements IBookAuthorRepository {
     async create(book_author: BookAuthor): Promise<BookAuthor> {
