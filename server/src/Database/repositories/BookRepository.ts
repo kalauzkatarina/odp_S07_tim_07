@@ -1,7 +1,6 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { Book } from "../../Domain/models/Book";
 import { IBookRepository } from "../../Domain/repositories/IBooksRepository";
-import { Genres } from "../../Domain/enums/Genres";
 import db from "../connection/DbConnectionPool";
 
 export class BookRepository implements IBookRepository {
@@ -48,7 +47,7 @@ export class BookRepository implements IBookRepository {
             return new Book();
         }
     }
-    async getAll(): Promise<Book[]> {
+    async getAll(filters?: {title?: string; author?: string; genre?: string;}): Promise<Book[]> {
         try {
             const query = `SELECT * FROM books ORDER BY id ASC`;
 
