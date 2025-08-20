@@ -43,21 +43,25 @@ export class CommentRepository implements ICommentRepository {
             return new Comment();
         }
     }
-    async getByBookId(id: number): Promise<Comment> {
+    async getByBookId(id: number): Promise<Comment[]> {
         try {
             const query = `SELECT * FROM comments WHERE book_id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
-            if (rows.length > 0) {
-                const row = rows[0];
-                return new Comment(row.id, row.content, row.created_at, row.user_id, row.book_id);
-            }
+            return rows.map(row =>
+                new Comment(
+                    row.id,
+                    row.content,
+                    row.created_at,
+                    row.user_id, 
+                    row.book_id
+                )
+            );
 
-            return new Comment();
         }
         catch {
-            return new Comment();
+            return [];
         }
     }
     async getAll(): Promise<Comment[]> {

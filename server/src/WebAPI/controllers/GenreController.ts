@@ -15,17 +15,16 @@ export class GenreController{
 
     private initializeRoutes(): void {
         this.router.get("/genres", this.getGenres.bind(this));
-        this.router.post("/genres/:id", authenticate, authorize("editor"), this.createGenre.bind(this));
+        this.router.post("/genres", authenticate, authorize("editor"), this.createGenre.bind(this));
     }
 
     private async getGenres(req: Request, res: Response){
         try{
-            const filters = {
-                id: Number(req.query.id) as number,
-                name: req.query.name as string
-            };
+            const filters: {id?: number, name?: string} = {}
+            if(req.query.id) filters.id = Number(req.query.id);
+            if(req.query.name) filters.name = String(req.query.name);
             const genres = await this.genreService.getAllGenres(filters);
-            res.status(200).json(genres);
+            res.status(201).json(genres);
         }
         catch(error){
             res.status(500).json({success: false, message: error});
