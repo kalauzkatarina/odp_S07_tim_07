@@ -57,7 +57,7 @@ export class GenreRepository implements IGenreRepository {
             return new Genre();
         }
     }
-    async getAll(): Promise<Genre[]> {
+    async getAll(filters?: { id?: number; name?: string; }): Promise<Genre[]> {
         try {
             const query = `SELECT * FROM genres ORDER BY id ASC`;
 
