@@ -16,7 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get<{}, {data: string}>('/', (req, res) => {
+app.get<{}, { data: string }>('/', (req, res) => {
   res.json({
     data: "response",
   });
