@@ -11,8 +11,11 @@ export const authApi: IAuthAPIService = {
                 username,
                 password,
             });
+
+            
             return res.data;
         } catch (error) {
+            console.log(error);
             let message = "Error while logging in.";
             if (axios.isAxiosError(error)) {
                 message = error.response?.data?.message || message;
