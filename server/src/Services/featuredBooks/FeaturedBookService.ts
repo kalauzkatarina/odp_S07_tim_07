@@ -10,14 +10,6 @@ export class FeaturedBookService implements IFeaturedBookService {
         const featuredBooks: FeaturedBooks[] = await this.featuredBookRepository.getAll();
         return featuredBooks.map(fb => new FeaturedBookDto(fb.id, fb.book_id, fb.editor_id));
     }
-    
-    async getFeaturedBookById(id: number): Promise<FeaturedBookDto> {
-        const fb = await this.featuredBookRepository.getById(id);
-        if (fb.id !== 0) {
-            return new FeaturedBookDto(fb.id, fb.book_id, fb.editor_id);
-        }
-        return new FeaturedBookDto();
-    }
    
     async addFeaturedBook(bookId: number, editorId: number): Promise<FeaturedBookDto> {
         const newFb = await this.featuredBookRepository.create(new FeaturedBooks(0, bookId, editorId));

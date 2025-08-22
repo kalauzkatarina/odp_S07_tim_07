@@ -1,4 +1,4 @@
-import type { AuthResponse } from "../../types/AuthResponse";
+import type { AuthResponse } from "../../types/auth/AuthResponse";
 
 export interface IAuthAPIService {
     logIn(username: string, password: string): Promise<AuthResponse>;

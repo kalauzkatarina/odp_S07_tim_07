@@ -1,4 +1,4 @@
-import type { AuthResponse } from "../../types/AuthResponse";
+import type { AuthResponse } from "../../types/auth/AuthResponse";
 import type { IAuthAPIService } from "./IAuthAPIService";
 import axios from "axios";
 
