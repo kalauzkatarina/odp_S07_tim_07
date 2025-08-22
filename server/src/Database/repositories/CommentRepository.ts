@@ -46,9 +46,8 @@ export class CommentRepository implements ICommentRepository {
     async getByBookId(id: number): Promise<Comment[]> {
         try {
             const query = `SELECT * FROM comments WHERE book_id = ?`;
-
-            const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
-
+            
+            const [rows] = await db.execute<RowDataPacket[]>(query, [id]);      
             return rows.map(row =>
                 new Comment(
                     row.id,

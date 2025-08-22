@@ -15,30 +15,16 @@ CREATE TABLE IF NOT EXISTS books(
     pages INT,
     script VARCHAR(50),
     binding VARCHAR(50),
-    publish_date DATE,
+    publish_date VARCHAR(20),
     isbn VARCHAR(20) UNIQUE,
     cover_image_url VARCHAR(300),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     views INT DEFAULT 0
 );
 
-CREATE TABLE IF NOT EXISTS authors (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS genres (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) UNIQUE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS book_authors (
-	book_id INT,
-    author_id INT,
-    PRIMARY KEY (book_id, author_id),
-    FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (author_id) REFERENCES authors(id)
 );
 
 CREATE TABLE IF NOT EXISTS book_genres(

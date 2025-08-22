@@ -14,15 +14,15 @@ export class CommentController{
     }
 
     private initializeRoutes(): void {
-        this.router.get("/books/:id/comments", this.getComments.bind(this));
-        this.router.post("/books/:id/comments", authenticate, this.createComment.bind(this));
-        this.router.delete("/comments/:id", authenticate, authorize("editor"), this.deleteComment.bind(this));
+        this.router.get("/comments/getComments", this.getComments.bind(this));
+        this.router.post("/comments/createComment", authenticate, this.createComment.bind(this));
+        this.router.delete("/comments/deleteComment", authenticate, authorize("editor"), this.deleteComment.bind(this));
     }
 
     private async getComments(req: Request, res: Response){
         try{
-            const bookId = Number(req.params.id);
-            const comments = await this.commentService.getAllCommentsByBook(bookId);
+            const { book_id } = req.body;
+            const comments = await this.commentService.getAllCommentsByBook(book_id);
             res.status(200).json(comments);
         }
         catch(error){
@@ -32,27 +32,19 @@ export class CommentController{
 
     private async createComment(req: Request, res: Response){
         try{
-            const bookId = Number(req.params.id);
-            const userId = req.user?.id;
+            const { book_id, user_id, content}  = req.body;
             
-            if(!userId){
+            if(!user_id){
                 res.status(401).json({success: false, message: "Unauthorized"});
                 return;
             }
-            const { content } = req.body;
 
             if(!content || content.trim().length === 0){
                 res.status(400).json({success: false, message: "Content is required"});
                 return;
             }
 
-            const comment = await this.commentService.createComment({
-                id: 0,
-                content, 
-                created_at: new Date(),
-                user_id: userId,
-                book_id: bookId
-            });
+            const comment = await this.commentService.createComment( content, book_id, user_id);
 
             res.status(201).json(comment);
         }
@@ -63,7 +55,8 @@ export class CommentController{
 
     private async deleteComment(req: Request, res: Response){
         try{
-            const result = await this.commentService.deleteComment(Number(req.params.id));
+            const { id } = req.body;
+            const result = await this.commentService.deleteComment(id);
             res.status(result ? 200 : 404).json({success: result});
         }
         catch(error){

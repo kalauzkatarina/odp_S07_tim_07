@@ -8,6 +8,23 @@ import { IUserService } from './Domain/services/users/IUserService';
 import { UserService } from './Services/users/UserService';
 import { AuthContoller } from './WebAPI/controllers/AuthController';
 import { UserController } from './WebAPI/controllers/UserController';
+import { ICommentRepository } from './Domain/repositories/ICommentRepository';
+import { CommentRepository } from './Database/repositories/CommentRepository';
+import { ICommentService } from './Domain/services/comments/ICommentService';
+import { CommentService } from './Services/comments/CommentService';
+import { CommentController } from './WebAPI/controllers/CommentController';
+import { IGenreRepository } from './Domain/repositories/IGenreRepository';
+import { GenreRepository } from './Database/repositories/GenreRepository';
+import { IGenreService } from './Domain/services/genres/IGenreService';
+import { GenreService } from './Services/genres/GenreService';
+import { GenreController } from './WebAPI/controllers/GenreController';
+import { IBookRepository } from './Domain/repositories/IBooksRepository';
+import { BookRepository } from './Database/repositories/BookRepository';
+import { IBookService } from './Domain/services/books/IBookService';
+import { BookService } from './Services/books/BookService';
+import { IBookGenreRepository } from './Domain/repositories/IBookGenreRepository';
+import { BookGenreRepository } from './Database/repositories/BookGenreRepository';
+import { BookController } from './WebAPI/controllers/BookController';
 
 require('dotenv').config();
 
@@ -24,17 +41,30 @@ app.get<{}, { data: string }>('/', (req, res) => {
 
 //Repositories
 const userRepository: IUserRepository = new UserRepository();
+const commentRepository: ICommentRepository = new CommentRepository();
+const genreRepository: IGenreRepository = new GenreRepository();
+const bookRepository: IBookRepository = new BookRepository();
+const bookGenreRepository: IBookGenreRepository = new BookGenreRepository();
 
 //Services
 const authService: IAuthService = new AuthService(userRepository);
 const userService: IUserService = new UserService(userRepository);
+const commentService: ICommentService = new CommentService(commentRepository);
+const genreService: IGenreService = new GenreService(genreRepository);
+const bookService: IBookService = new BookService(bookRepository, bookGenreRepository, genreRepository);
 
 //WebAPI routes
 const authController = new AuthContoller(authService);
 const userController = new UserController(userService);
+const commentController = new CommentController(commentService);
+const genreController = new GenreController(genreService);
+const bookController = new BookController(bookService);
 
 // Registering routes
 app.use('/api/v1', authController.getRouter());
 app.use('/api/v1', userController.getRouter());
+app.use('/api/v1', commentController.getRouter());
+app.use('/api/v1', genreController.getRouter());
+app.use('/api/v1', bookController.getRouter());
 
 export default app;

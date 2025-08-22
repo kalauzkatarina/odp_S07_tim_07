@@ -2,6 +2,7 @@ export class Book {
     public constructor(
         public id               : number = 0,
         public title            : string = '',
+        public author           : string = '',
         public summary          : string = '',
         public format           : string = '',
         public pages            : number = 0,

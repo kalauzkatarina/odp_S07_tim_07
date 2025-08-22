@@ -6,10 +6,11 @@ import db from "../connection/DbConnectionPool";
 export class BookRepository implements IBookRepository {
     async create(book: Book): Promise<Book> {
         try {
-            const query = `INSERT INTO books (title, author, genres, summary, format, pages, script, binding, publish_date, isbn, cover_image_url, created_at, views) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            const query = `INSERT INTO books (title, author, summary, format, pages, script, binding, publish_date, isbn, cover_image_url, created_at, views) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
             const [result] = await db.execute<ResultSetHeader>(query, [
                 book.title,
+                book.author,
                 book.summary,
                 book.format,
                 book.pages,
@@ -23,7 +24,7 @@ export class BookRepository implements IBookRepository {
             ]);
 
             if (result.insertId) {
-                return new Book(result.insertId, book.title, book.summary, book.format, book.pages, book.script, book.binding, book.publish_date, book.isbn, book.cover_image_url, book.created_at, book.views);
+                return new Book(result.insertId, book.title, book.author, book.summary, book.format, book.pages, book.script, book.binding, book.publish_date, book.isbn, book.cover_image_url, book.created_at, book.views);
             }
             return new Book();
         } catch (error) {
@@ -38,7 +39,7 @@ export class BookRepository implements IBookRepository {
             const [rows] = await db.execute<RowDataPacket[]>(query, [title]);
             if (rows.length > 0) {
                 const row = rows[0];
-                return new Book(row.id, row.title, row.summary, row.format, row.pages, row.script, row.binding, row.publlish_date, row.isbn, row.cover_image_url, row.created_at, row.views);
+                return new Book(row.id, row.title, row.author, row.summary, row.format, row.pages, row.script, row.binding, row.publish_date, row.isbn, row.cover_image_url, row.created_at, row.views);
             }
             return new Book();
         }
@@ -47,14 +48,32 @@ export class BookRepository implements IBookRepository {
             return new Book();
         }
     }
-    async getAll(filters?: {title?: string; author?: string; genre?: string;}): Promise<Book[]> {
+
+    async getByAuthor(author: string): Promise<Book>{
+        try {
+            const query = `SELECT * FROM books WHERE author = ?`;
+
+            const [rows] = await db.execute<RowDataPacket[]>(query, [author]);
+            if (rows.length > 0) {
+                const row = rows[0];
+                return new Book(row.id, row.title, row.author, row.summary, row.format, row.pages, row.script, row.binding, row.publlish_date, row.isbn, row.cover_image_url, row.created_at, row.views);
+            }
+            return new Book();
+        }
+        catch (error) {
+            console.error("Error getting the book by author: ", error);
+            return new Book();
+        }
+    }
+
+    async getAll(): Promise<Book[]> {
         try {
             const query = `SELECT * FROM books ORDER BY id ASC`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query);
 
             return rows.map(
-                (row) => new Book(row.id, row.title, row.summary, row.format, row.pages, row.script, row.binding, row.publlish_date, row.isbn, row.cover_image_url, row.created_at, row.views)
+                (row) => new Book(row.id, row.title, row.author, row.summary, row.format, row.pages, row.script, row.binding, row.publlish_date, row.isbn, row.cover_image_url, row.created_at, row.views)
             )
         }
         catch (error) {
@@ -62,12 +81,35 @@ export class BookRepository implements IBookRepository {
             return [];
         }
     }
+
+    async getAllByGenre(genre_id: number): Promise<Book[]>{
+         try {
+            const query = `
+                SELECT b.* 
+                FROM books b
+                JOIN book_genres bg ON b.id = bg.book_id
+                WHERE bg.genre_id = ?;
+            `;
+            const [rows] = await db.execute<RowDataPacket[]>(query, [genre_id]);
+
+            return rows.map(
+                (row) => new Book(row.id, row.title, row.author, row.summary, row.format, row.pages, row.script, row.binding, row.publlish_date, row.isbn, row.cover_image_url, row.created_at, row.views)
+            )
+        }
+        catch (error) {
+            console.error("Error getting all books: ", error);
+            return [];
+        }
+    }
+
     async update(book: Book): Promise<Book> {
         try {
-            const query = `UPDATE books SET title = ?, summary = ?, format = ?, pages = ?, script = ?, script = ?, binding = ?, publish_date = ?, isbn = ?, cover_image_url = ?, created_at = ?, views = ? WHERE id = ?`
+            console.log(book);
+            const query = `UPDATE books SET title = ?, author = ?, summary = ?, format = ?, pages = ?, script = ?, binding = ?, publish_date = ?, isbn = ?, cover_image_url = ?, created_at = ?, views = ? WHERE id = ?`
 
             const [result] = await db.execute<ResultSetHeader>(query, [
                 book.title,
+                book.author,
                 book.summary,
                 book.format,
                 book.pages,
@@ -77,7 +119,8 @@ export class BookRepository implements IBookRepository {
                 book.isbn,
                 book.cover_image_url,
                 book.created_at,
-                book.views
+                book.views,
+                book.id
             ]);
 
             if (result.affectedRows > 0) {

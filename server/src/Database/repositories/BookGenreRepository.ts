@@ -24,21 +24,22 @@ export class BookGenreRepository implements IBookGenreRepository {
             return new BookGenre();
         }
     }
-    async getByBookId(id: number): Promise<BookGenre> {
+    async getByBookId(id: number): Promise<BookGenre[]> {
         try {
             const query = `SELECT * FROM book_genres WHERE book_id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
             if (rows.length > 0) {
-                const row = rows[0];
-                return new BookGenre(row.book_id, row.genre_id);
+               return rows.map(
+                (row) => new BookGenre(row.book_id, row.genre_id)
+                );
             }
 
-            return new BookGenre();
+            return [];
         }
         catch {
-            return new BookGenre();
+            return [];
         }
     }
     async getByGenreId(id: number): Promise<BookGenre> {

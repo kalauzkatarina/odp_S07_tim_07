@@ -8,18 +8,19 @@ export class CommentService implements ICommentService{
 
     async getAllCommentsByBook(book_id: number): Promise<CommentDto[]> {
         const comments: Comment[] = await this.commentRepository.getByBookId(book_id);
+        console.log(comments);
         return comments.map(c => new CommentDto(
             c.id, c.content, c.user_id, c.book_id
         ));
     }
 
-    async createComment(comment: Comment): Promise<CommentDto> {
+    async createComment(content: string, book_id: number, user_id: number): Promise<CommentDto> {
         const newComment = await this.commentRepository.create(
             new Comment(
-                0, comment.content, comment.created_at, comment.user_id, comment.book_id
+                0, content, new Date(), user_id, book_id
             )
         );
-
+        console.log(newComment);
         return new CommentDto(
             newComment.id, newComment.content, newComment.user_id, newComment.book_id
         );

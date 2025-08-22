@@ -14,17 +14,15 @@ export class GenreController{
     }
 
     private initializeRoutes(): void {
-        this.router.get("/genres", this.getGenres.bind(this));
-        this.router.post("/genres", authenticate, authorize("editor"), this.createGenre.bind(this));
+        this.router.get("/genres/getGenres", this.getGenres.bind(this));
+        this.router.post("/genres/createGenre", authenticate, authorize("editor"), this.createGenre.bind(this));
+        this.router.delete("/genres/deleteGenre", authenticate, authorize("editor"), this.deleteGenre.bind(this));
     }
 
     private async getGenres(req: Request, res: Response){
         try{
-            const filters: {id?: number, name?: string} = {}
-            if(req.query.id) filters.id = Number(req.query.id);
-            if(req.query.name) filters.name = String(req.query.name);
-            const genres = await this.genreService.getAllGenres(filters);
-            res.status(201).json(genres);
+            const genres = await this.genreService.getAllGenres();
+            res.status(200).json(genres);
         }
         catch(error){
             res.status(500).json({success: false, message: error});
@@ -33,8 +31,21 @@ export class GenreController{
 
     private async createGenre(req: Request, res: Response){
         try{
-            const genre = await this.genreService.createGenre(req.body);
-            res.status(200).json(genre);
+            const { name } = req.body;
+            const genre = await this.genreService.createGenre(name);
+            console.log(genre);
+            res.status(201).json(genre);
+        }
+        catch(error){
+            res.status(500).json({success: false, message: error});
+        }
+    }
+
+     private async deleteGenre(req: Request, res: Response){
+        try{
+            const { id } = req.body;
+            const result = await this.genreService.deleteGenre(id);
+            res.status(result ? 200 : 404).json({success: result});
         }
         catch(error){
             res.status(500).json({success: false, message: error});
