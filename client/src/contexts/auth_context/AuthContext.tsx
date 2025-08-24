@@ -11,7 +11,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const decodeJWT = (token: string): JwtTokenClaims | null => {
     try {
         const decoded = jwtDecode<JwtTokenClaims>(token);
-        
+
         // Proveri da li token ima potrebna polja
         if (decoded.id && decoded.username && decoded.role) {
             return {
@@ -20,7 +20,7 @@ const decodeJWT = (token: string): JwtTokenClaims | null => {
                 role: decoded.role
             };
         }
-        
+
         return null;
     } catch (error) {
         console.error('Error while decoding JWT token:', error);
@@ -33,7 +33,7 @@ const isTokenExpired = (token: string): boolean => {
     try {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
-        
+
         return decoded.exp ? decoded.exp < currentTime : false;
     } catch {
         return true;
@@ -47,9 +47,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Učitaj token iz localStorage pri pokretanju
     useEffect(() => {
-        const savedToken = ReadValueByKey("authToken");
-        
-        if (savedToken) {
+        const savedToken = localStorage.getItem("authToken");
+        const savedUser = localStorage.getItem("authUser");
+
+        if (savedToken && savedUser) {
+            setToken(savedToken);
+            setUser(JSON.parse(savedUser));
+        }
+
+        setIsLoading(false);
+
+        /*const savedToken = ReadValueByKey("authToken");
+        const savedUser = localStorage.getItem("authUser");
+
+        if (savedToken && savedUser) {
             // Proveri da li je token istekao
             if (isTokenExpired(savedToken)) {
                 DeleteValueByKey("authToken");
@@ -70,12 +81,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             }
         }
         
-        setIsLoading(false);
+        setIsLoading(false);*/
     }, []);
+    const login = (user: AuthUser, token: string) => {
+        setUser(user);
+        setToken(token);
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("authUser", JSON.stringify(user));
+    };
 
-    const login = (newToken: string) => {
+    /*const login = (newToken: string) => {
         const claims = decodeJWT(newToken);
-        
+
         if (claims && !isTokenExpired(newToken)) {
             setToken(newToken);
             setUser({
@@ -87,30 +104,51 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         } else {
             console.error('Invalid or expired token');
         }
-    };
+    };*/
 
-    const logout = () => {
+    /*const logout = () => {
         setToken(null);
         setUser(null);
         DeleteValueByKey("authToken");
-    };
+    };*/
+    const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("authUser");
+  };
 
-    const isAuthenticated = !!user && !!token;
+    //const isAuthenticated = !!user && !!token;
 
-    const value: AuthContextType = {
+    /*const value: AuthContextType = {
         user,
         token,
         login,
         logout,
         isAuthenticated,
         isLoading
-    };
+    };*/
 
-    return (
+    /*return (
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
-    );
+    );*/
+
+    return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        login,
+        logout,
+        isAuthenticated: !!token,
+        isLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthContext;

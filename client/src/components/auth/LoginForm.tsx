@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormProps";
@@ -18,10 +18,11 @@ export function LoginForm({ authApi }: AuthFormProps) {
       setError(validation.message ?? "Invalid login information");
       return;
     }
-
+    const navigate = useNavigate();
     const response = await authApi.logIn(username, password);
     if (response.success && response.data) {
-      login(response.data);
+      login(response.data.user, response.data.token);
+      navigate(response.data.user.role === "editor" ? "/editor-dashboard" : "visitor-dashboard");
     } else {
       setError(response.message);
       setUsername("");
