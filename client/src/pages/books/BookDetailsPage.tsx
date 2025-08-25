@@ -40,7 +40,7 @@ export default function BookDetailsPage() {
   }
 
   const { user, token } = authContext;
-  // Funkcija za dodavanje komentara
+
   const handleAddComment = async () => {
     if (!book || newComment.trim() === "") return;
 
@@ -49,13 +49,13 @@ export default function BookDetailsPage() {
       return;
     }
 
-    const user_id = user.id; // uzimamo user_id iz konteksta
+    const user_id = user.id;
     const created = await commentsApi.createComment(newComment, book.id, user_id, token);
 
     if (created.id !== 0) {
       const refreshed = await commentsApi.getAllCommentsByBook(book.id);
-      setComments(refreshed); 
-      setNewComment(""); // očisti input
+      setComments(refreshed);
+      setNewComment("");
     }
   };
 
@@ -75,7 +75,6 @@ export default function BookDetailsPage() {
     if (success) {
       alert("Knjiga uspešno obrisana!");
       navigate("/books");
-      //window.location.href = "/books"; // ili navigate("/") ako koristiš react-router
     } else {
       alert("Brisanje nije uspelo.");
     }
@@ -114,6 +113,9 @@ export default function BookDetailsPage() {
         <div>
           <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
           <p className="text-xl text-gray-700 mb-2">Autor: {book.author}</p>
+          <p className="mb-4">
+            <b>Žanrovi:</b>{" "} {book.genres.length > 0 ? book.genres.map((g) => g.name).join(", ") : "Nema žanrova"}
+          </p>
           <p className="mb-4">{book.summary}</p>
 
           <ul className="text-sm text-gray-600">
@@ -131,7 +133,7 @@ export default function BookDetailsPage() {
       <section className="mt-10">
         <h2 className="text-2xl font-semibold mb-4">💬 Komentari</h2>
 
-      {user?.role === "editor" && (
+        {user?.role === "editor" && (
           <button
             onClick={handleDeleteBook}
             className="bg-red-500 text-white px-4 py-2 rounded mt-4"
@@ -140,9 +142,14 @@ export default function BookDetailsPage() {
           </button>
         )}
         <br />
+        <button
+          onClick={() => navigate(`/books/${book.id}/edit`)}
+          className="bg-yellow-500 text-white px-4 py-2 rounded"
+        >
+          Uredi knjigu
+        </button>
         <br />
 
-        {/* Forma za novi komentar */}
         <div className="mb-4">
           <input
             type="text"
@@ -161,7 +168,6 @@ export default function BookDetailsPage() {
           </button>
         </div>
 
-        {/* Lista komentara */}
         <ul>
           {comments.map((c) => (
             <li key={c.id} className="border-b py-2 flex justify-between items-center">

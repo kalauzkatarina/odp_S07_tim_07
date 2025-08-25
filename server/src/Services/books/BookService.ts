@@ -79,8 +79,8 @@ export class BookService implements IBookService {
         return await this.mapToDto(newBook);
     }
 
-    async updateBook(title: string, updates: Partial<BookDto>): Promise<BookDto> {
-        const existingBook = await this.bookRepository.getByTitle(title);
+    async updateBook(id: number, updates: Partial<BookDto>): Promise<BookDto> {
+        const existingBook = await this.bookRepository.getBookById(id);
         console.log(existingBook);
         if (existingBook.id === 0) return new BookDto();
 

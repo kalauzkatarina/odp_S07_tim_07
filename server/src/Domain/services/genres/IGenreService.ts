@@ -1,5 +1,4 @@
 import { GenreDto } from "../../DTOs/genres/GenreDto";
-import { Genre } from "../../models/Genre";
 
 export interface IGenreService{
     getAllGenres(filters?: {id?: number, name?: string}): Promise<GenreDto[]>;

@@ -91,8 +91,9 @@ export class BookController {
 
     private async updateBook(req: Request, res: Response) {
         try {
-            const { title } = req.body;
-            const updatedBook = await this.bookService.updateBook(title, req.body as Partial<BookDto>);
+            const id = Number(req.params.id);
+            const updates = req.body as Partial<BookDto>;
+            const updatedBook = await this.bookService.updateBook(id, updates);
             res.status(200).json(updatedBook);
         }
         catch (error) {

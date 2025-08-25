@@ -123,7 +123,6 @@ export default function AddBookPage() {
           className="border p-2 rounded"
         />
 
-        {/* Jednostavan unos žanrova (id-jevi odvojeni zarezom) */}
         <input
           type="text"
           placeholder="Žanrovi (unesi ID-jeve odvojene zarezom)"

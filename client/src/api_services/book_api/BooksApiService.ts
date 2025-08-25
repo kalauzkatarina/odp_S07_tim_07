@@ -92,10 +92,10 @@ export const booksApi: IBooksApiService = {
             return emptyBook;
         }
     },
-    async updateBook(token: string, title: string, updates: Partial<BookDto>): Promise<BookDto> {
+    async updateBook(token: string, id: number, updates: Partial<BookDto>): Promise<BookDto> {
         try {
             const res = await axios.put<BookDto>(
-                `${API_URL}s/title/${encodeURIComponent(title)}`,
+                `${API_URL}s/${id}`,
                 updates,
                 {
                     headers: {
