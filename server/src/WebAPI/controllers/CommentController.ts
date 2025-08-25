@@ -21,8 +21,8 @@ export class CommentController{
 
     private async getComments(req: Request, res: Response){
         try{
-            const { book_id } = req.params;
-            const comments = await this.commentService.getAllCommentsByBook(Number(book_id));
+            const { id } = req.params;
+            const comments = await this.commentService.getAllCommentsByBook(Number(id));
             res.status(200).json(comments);
         }
         catch(error){

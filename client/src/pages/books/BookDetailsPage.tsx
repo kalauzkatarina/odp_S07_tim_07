@@ -53,7 +53,8 @@ export default function BookDetailsPage() {
     const created = await commentsApi.createComment(newComment, book.id, user_id, token);
 
     if (created.id !== 0) {
-      setComments((prev) => [...prev, created]);
+      const refreshed = await commentsApi.getAllCommentsByBook(book.id);
+      setComments(refreshed); 
       setNewComment(""); // očisti input
     }
   };
@@ -130,6 +131,17 @@ export default function BookDetailsPage() {
       <section className="mt-10">
         <h2 className="text-2xl font-semibold mb-4">💬 Komentari</h2>
 
+      {user?.role === "editor" && (
+          <button
+            onClick={handleDeleteBook}
+            className="bg-red-500 text-white px-4 py-2 rounded mt-4"
+          >
+            Obriši knjigu
+          </button>
+        )}
+        <br />
+        <br />
+
         {/* Forma za novi komentar */}
         <div className="mb-4">
           <input
@@ -139,6 +151,8 @@ export default function BookDetailsPage() {
             onChange={(e) => setNewComment(e.target.value)}
             className="border p-2 w-full rounded mb-2"
           />
+          <br />
+          <br />
           <button
             onClick={handleAddComment}
             className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -146,15 +160,6 @@ export default function BookDetailsPage() {
             Dodaj komentar
           </button>
         </div>
-
-        {user?.role === "editor" && (
-          <button
-            onClick={handleDeleteBook}
-            className="bg-red-500 text-white px-4 py-2 rounded mt-4"
-          >
-            Obriši knjigu
-          </button>
-        )}
 
         {/* Lista komentara */}
         <ul>
