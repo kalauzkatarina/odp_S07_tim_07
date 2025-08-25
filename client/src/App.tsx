@@ -32,17 +32,21 @@ function App() {
       } />
 
       <Route path="/books" element={
-        <ProtectedRoute><BooksPage /></ProtectedRoute>
+        <ProtectedRoute>
+          <BooksPage />
+        </ProtectedRoute>
       } />
       <Route path="/books/:id" element={
-        <ProtectedRoute><BookDetailsPage /></ProtectedRoute>
+        <ProtectedRoute>
+          <BookDetailsPage />
+          </ProtectedRoute>
       } />
 
       {/* Samo editor 
       <Route path="/books/add" element={
         <ProtectedRoute roles={["editor"]}><AddBookPage /></ProtectedRoute>
       } />*/}
-      <Route path="/books/edit/:id" element={
+      <Route path="/books/:id/edit" element={
         <ProtectedRoute roles={["editor"]}><EditBookPage /></ProtectedRoute>
       } />
 

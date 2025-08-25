@@ -22,7 +22,7 @@ export class UserRepository implements IUserRepository {
 
             return new User();
         }
-        catch (error) {
+        catch (error: any) {
             console.error('Error creating user: ', error);
             return new User();
         }

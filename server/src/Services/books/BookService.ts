@@ -52,9 +52,15 @@ export class BookService implements IBookService {
         return new BookDto();
     }
 
-    async createBook(title: string, author: string,  summary: string, format: string, pages: number, script: string, 
-                    binding: string, publish_date: string, isbn: string, cover_image_url: string, genre_ids: number[]): Promise<BookDto> {
-                        
+    async getBookById(id: number): Promise<BookDto> {
+        const book = await this.bookRepository.getBookById(id);
+        if (book.id === 0) return new BookDto();
+        return this.mapToDto(book);
+    }
+
+    async createBook(title: string, author: string, summary: string, format: string, pages: number, script: string,
+        binding: string, publish_date: string, isbn: string, cover_image_url: string, genre_ids: number[]): Promise<BookDto> {
+
         const newBook = await this.bookRepository.create(
             new Book(
                 0, title, author, summary, format, pages, script, binding,
@@ -63,7 +69,7 @@ export class BookService implements IBookService {
         );
 
         //povezi zanrove
-        for(const genre_id of genre_ids) {
+        for (const genre_id of genre_ids) {
             await this.bookGenreRepository.create({
                 book_id: newBook.id,
                 genre_id: genre_id
@@ -80,18 +86,18 @@ export class BookService implements IBookService {
 
         const updatedBook = new Book(
             existingBook.id,
-            updates.title           || existingBook.title,
-            updates.author          || existingBook.author,
-            updates.summary         || existingBook.summary,
-            updates.format          || existingBook.format,
-            updates.pages           || existingBook.pages,
-            updates.script          || existingBook.script,
-            updates.binding         || existingBook.binding,
-            updates.publish_date    || existingBook.publish_date,
-            updates.isbn            || existingBook.isbn,
+            updates.title || existingBook.title,
+            updates.author || existingBook.author,
+            updates.summary || existingBook.summary,
+            updates.format || existingBook.format,
+            updates.pages || existingBook.pages,
+            updates.script || existingBook.script,
+            updates.binding || existingBook.binding,
+            updates.publish_date || existingBook.publish_date,
+            updates.isbn || existingBook.isbn,
             updates.cover_image_url || existingBook.cover_image_url,
             existingBook.created_at,
-            updates.views           || existingBook.views
+            updates.views || existingBook.views
         );
 
         const savedBook = await this.bookRepository.update(updatedBook);
@@ -103,9 +109,9 @@ export class BookService implements IBookService {
         return this.bookRepository.delete(id);
     }
 
-    async incrementViews(title: string): Promise<BookDto> {
-        const book = await this.bookRepository.getByTitle(title);
-        if (book.id === 0) return new BookDto();
+    async incrementViewsById(id: number): Promise<BookDto> {
+        const book = await this.bookRepository.getBookById(id);
+        if (!book) return new BookDto();
 
         book.views += 1;
         const updatedBook = await this.bookRepository.update(book);
@@ -118,10 +124,10 @@ export class BookService implements IBookService {
         const bookGenres = await this.bookGenreRepository.getByBookId(book.id);
         const genres: GenreDto[] = [];
 
-        for(const bg of Array.isArray(bookGenres) ? bookGenres : [bookGenres]){
-            if(bg.genre_id){
+        for (const bg of Array.isArray(bookGenres) ? bookGenres : [bookGenres]) {
+            if (bg.genre_id) {
                 const genre = await this.genreRepository.getById(bg.genre_id);
-                if(genre.id !== 0){
+                if (genre.id !== 0) {
                     genres.push(new GenreDto(genre.id, genre.name));
                 }
             }

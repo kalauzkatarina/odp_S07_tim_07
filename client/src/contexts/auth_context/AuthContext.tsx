@@ -1,17 +1,16 @@
 import React, { createContext, useState, useEffect, type ReactNode } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import type { AuthContextType } from '../../types/auth/AuthContext';
 import type { AuthUser } from '../../types/auth/AuthUser';
 import type { JwtTokenClaims } from '../../types/auth/JwtTokenClaims';
 import { DeleteValueByKey, ReadValueByKey, SaveValueByKey } from '../../helpers/local_storage';
-
+import { jwtDecode } from 'jwt-decode';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Helper funkcija za dekodiranje JWT tokena
 const decodeJWT = (token: string): JwtTokenClaims | null => {
     try {
         const decoded = jwtDecode<JwtTokenClaims>(token);
-        
+        console.log(decoded)
         // Proveri da li token ima potrebna polja
         if (decoded.id && decoded.username && decoded.role) {
             return {

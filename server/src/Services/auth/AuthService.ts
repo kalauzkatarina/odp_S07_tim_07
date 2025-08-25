@@ -33,7 +33,7 @@ export class AuthService implements IAuthService {
 
     async signUp(username: string, password: string, email: string, role: UserRole): Promise<UserAuthDataDto> {
         const existingUser = await this.userRepository.getByUsername(username);
-
+        //console.log("Existing user:" + existingUser)
         if(existingUser.id !== 0){
             return new UserAuthDataDto(); //korisnik vec postoji
         }

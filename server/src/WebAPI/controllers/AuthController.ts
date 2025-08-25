@@ -73,7 +73,7 @@ export class AuthContoller{
             }
 
             const resultAuth = await this.authService.signUp(username, password, email, role);
-
+            //console.log(resultAuth)
             //proveravamo da li je registracija uspesna
             if(resultAuth.id !== 0){
                 //kreiranje jwt tokena

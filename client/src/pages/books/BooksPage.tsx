@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { BookDto } from "../../models/books/BookDto";
 import { booksApi } from "../../api_services/book_api/BooksApiService";
+import { Link } from "react-router-dom";
 
 export default function BooksPage() {
     const [books, setBooks] = useState<BookDto[]>([]);
@@ -51,12 +52,9 @@ export default function BooksPage() {
                         <h2 className="text-lg font-semibold">{book.title}</h2>
                         <p className="text-gray-600">{book.author}</p>
                         <p className="text-sm mt-2">{book.summary.slice(0, 100)}...</p>
-                        <a
-                            href={`/books/${book.id}`}
-                            className="text-blue-600 mt-2 inline-block"
-                        >
+                        <Link to={`/books/${book.id}`} className="text-blue-600 mt-2 inline-block">
                             Detalji →
-                        </a>
+                        </Link>
                     </div>
                 ))}
             </div>

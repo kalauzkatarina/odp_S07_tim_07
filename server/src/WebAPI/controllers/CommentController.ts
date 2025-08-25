@@ -14,9 +14,9 @@ export class CommentController{
     }
 
     private initializeRoutes(): void {
-        this.router.get("/comments/getComments/:book_id", this.getComments.bind(this));
+        this.router.get("/comments/getComments/:id", this.getComments.bind(this));
         this.router.post("/comments/createComment", authenticate, this.createComment.bind(this));
-        this.router.delete("/comments/deleteComment", authenticate, authorize("editor"), this.deleteComment.bind(this));
+        this.router.delete("/comments/deleteComment/:id", authenticate, authorize("editor"), this.deleteComment.bind(this));
     }
 
     private async getComments(req: Request, res: Response){

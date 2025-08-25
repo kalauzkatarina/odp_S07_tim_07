@@ -8,7 +8,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState("visitor");
     const { login } = useAuth();
     const [error, setError] = useState("");
 

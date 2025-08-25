@@ -32,7 +32,7 @@ export const booksApi: IBooksApiService = {
     },
     async getAllBooksByGenre(genre_id: number): Promise<BookDto[]> {
         try {
-            const res = await axios.get<BookDto[]>(`${API_URL}/genre/${genre_id}`);
+            const res = await axios.get<BookDto[]>(`${API_URL}s/genre/${genre_id}`);
             return res.data;
         } catch {
             return [];
@@ -40,7 +40,7 @@ export const booksApi: IBooksApiService = {
     },
     async getBookByTitle(title: string): Promise<BookDto> {
         try {
-            const res = await axios.get<BookDto>(`${API_URL}/title/${encodeURIComponent(title)}`);
+            const res = await axios.get<BookDto>(`${API_URL}s/title/${encodeURIComponent(title)}`);
             return res.data;
         } catch {
             return emptyBook;
@@ -48,16 +48,26 @@ export const booksApi: IBooksApiService = {
     },
     async getBookByAuthor(author: string): Promise<BookDto> {
         try {
-            const res = await axios.get<BookDto>(`${API_URL}/author/${encodeURIComponent(author)}`);
+            const res = await axios.get<BookDto>(`${API_URL}s/author/${encodeURIComponent(author)}`);
             return res.data;
         } catch {
             return emptyBook;
         }
     },
+
+    async getBookById(id: number): Promise<BookDto> {
+        try {
+            const res = await axios.get<BookDto>(`${API_URL}s/${id}`);
+            return res.data;
+        } catch {
+            return emptyBook;
+        }
+    },
+
     async createBook(token: string, title: string, author: string, summary: string, format: string, pages: number, script: string, binding: string, publish_date: string, isbn: string, cover_image_url: string, genre_ids: number[]): Promise<BookDto> {
         try {
             const res = await axios.post<BookDto>(
-                `${API_URL}`,
+                `${API_URL}s`,
                 {
                     title,
                     author,
@@ -85,7 +95,7 @@ export const booksApi: IBooksApiService = {
     async updateBook(token: string, title: string, updates: Partial<BookDto>): Promise<BookDto> {
         try {
             const res = await axios.put<BookDto>(
-                `${API_URL}/title/${encodeURIComponent(title)}`,
+                `${API_URL}s/title/${encodeURIComponent(title)}`,
                 updates,
                 {
                     headers: {
@@ -100,7 +110,7 @@ export const booksApi: IBooksApiService = {
     },
     async deleteBook(token: string, id: number): Promise<boolean> {
         try {
-            await axios.delete(`${API_URL}/${id}`, {
+            await axios.delete(`${API_URL}s/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -110,12 +120,12 @@ export const booksApi: IBooksApiService = {
             return false;
         }
     },
-    async incrementViews(title: string): Promise<BookDto> {
-        try {
-            const res = await axios.patch<BookDto>(`${API_URL}/views/${encodeURIComponent(title)}`);
-            return res.data;
-        } catch {
-            return emptyBook;
-        }
+    async incrementViews(id: number): Promise<BookDto> {
+    try {
+        const res = await axios.patch<BookDto>(`${API_URL}s/${id}/views`);
+        return res.data;
+    } catch {
+        return emptyBook;
     }
+}
 }

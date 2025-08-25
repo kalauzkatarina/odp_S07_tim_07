@@ -5,9 +5,10 @@ export interface IBooksApiService{
     getAllBooksByGenre(genre_id: number): Promise<BookDto[]>;
     getBookByTitle(title: string): Promise<BookDto>;
     getBookByAuthor(author: string): Promise<BookDto>;
+    getBookById(id: number): Promise<BookDto>;
     createBook(token: string, title: string, author: string,  summary: string, format: string, pages: number, script: string, 
                     binding: string, publish_date: string, isbn: string, cover_image_url: string, genre_ids: number[]): Promise<BookDto>;
     updateBook(token: string, title: string, updates: Partial<BookDto>): Promise<BookDto>;
     deleteBook(token:string, id: number): Promise<boolean>;
-    incrementViews(title: string): Promise<BookDto>;
+    incrementViews(id: number): Promise<BookDto>;
 }

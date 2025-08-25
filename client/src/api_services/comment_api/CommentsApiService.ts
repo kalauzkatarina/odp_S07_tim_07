@@ -21,15 +21,12 @@ export const commentsApi: ICommentsApiService = {
             return [];
         }
     },
-    async createComment(content: string, book_id: number, user_id: number): Promise<CommentDto> {
+    async createComment(content: string, book_id: number, user_id: number, token: string): Promise<CommentDto> {
         try {
             const res = await axios.post<CommentDto>(
-                `${API_URL}s`,
-                {
-                    content,
-                    book_id,
-                    user_id
-                }
+                `${API_URL}s/createComment`,
+                { content, book_id, user_id },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             return res.data;
         } catch {
