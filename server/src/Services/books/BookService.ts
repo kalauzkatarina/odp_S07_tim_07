@@ -118,6 +118,17 @@ export class BookService implements IBookService {
         return this.mapToDto(updatedBook);
     }
 
+    async getTopViewedBooks(limit: number): Promise<BookDto[]> {
+        const books = await this.bookRepository.getTopViewed(limit);
+
+        const bookDtos: BookDto[] = [];
+        for (const b of books) {
+            bookDtos.push(await this.mapToDto(b));
+        }
+
+        return bookDtos;
+    }
+
     //mapiranje knjige u BookDto sa zanrovima
     private async mapToDto(book: Book): Promise<BookDto> {
         //nadji sve zanrove povezane sa knjigom

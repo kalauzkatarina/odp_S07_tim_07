@@ -24,6 +24,7 @@ export class BookController {
         this.router.put("/books/:id", authenticate, authorize("editor"), this.updateBook.bind(this));
         this.router.delete("/books/delete/:id", authenticate, authorize("editor"), this.deleteBook.bind(this));
         this.router.patch("/books/:id/views", this.incrementViews.bind(this));
+        this.router.get("/books/topViewed", this.getTopViewed.bind(this));
     }
 
     private async getBooks(req: Request, res: Response) {
@@ -117,6 +118,17 @@ export class BookController {
             const id = Number(req.params.id); // uzimamo id iz URL-a
             const book = await this.bookService.incrementViewsById(id); // koristimo novu servis metodu
             res.status(200).json(book);
+        } catch (error) {
+            res.status(500).json({ success: false, message: error });
+        }
+    }
+
+    private async getTopViewed(req: Request, res: Response) {
+        try {
+            const limit = Number(req.query.limit) || 3;
+            const books = await this.bookService.getTopViewedBooks(limit);
+            console.log(limit)
+            res.status(200).json(books);
         } catch (error) {
             res.status(500).json({ success: false, message: error });
         }

@@ -193,4 +193,33 @@ export class BookRepository implements IBookRepository {
         }
     }
 
+    async getTopViewed(limit: number): Promise<Book[]> {
+        try {
+            const query = `SELECT * FROM books ORDER BY views DESC LIMIT ${limit}`;
+            const [rows] = await db.execute<RowDataPacket[]>(query);
+
+            return rows.map(
+                (row) =>
+                    new Book(
+                        row.id,
+                        row.title,
+                        row.author,
+                        row.summary,
+                        row.format,
+                        row.pages,
+                        row.script,
+                        row.binding,
+                        row.publish_date,
+                        row.isbn,
+                        row.cover_image_url,
+                        row.created_at,
+                        row.views
+                    )
+            );
+        } catch (error) {
+            console.error("Error getting top viewed books: ", error);
+            return [];
+        }
+    }
+
 }

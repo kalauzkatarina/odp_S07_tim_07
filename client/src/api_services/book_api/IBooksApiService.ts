@@ -11,4 +11,5 @@ export interface IBooksApiService {
     updateBook(token: string, id: number, updates: Partial<BookDto>): Promise<BookDto>;
     deleteBook(token: string, id: number): Promise<boolean>;
     incrementViews(id: number): Promise<BookDto>;
+    getTopViewed(limit?: number): Promise<BookDto[]>;
 }

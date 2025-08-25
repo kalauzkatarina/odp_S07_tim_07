@@ -14,7 +14,7 @@ export default function SignUpPage({ authApi }: SignUpPageProps) {
 
     useEffect(() => {
         if (isAuthenticated && user)
-            navigate(`/${user.role}-dashboard`);
+            navigate("/");
     }, [isAuthenticated, navigate, user]);
 
     return (

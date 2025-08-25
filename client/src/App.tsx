@@ -11,6 +11,7 @@ import UnauthorizedPage from "./pages/common/UnauthorizedPage";
 import EditorDashboard from "./pages/dashboard/EditorDashboard";
 import VisitorDashboard from "./pages/dashboard/VisitorDashboard";
 import AddBookPage from "./pages/books/AddBookPage";
+import HomePage from "./pages/home/HomePage";
 
 function App() {
   return (
@@ -18,17 +19,13 @@ function App() {
       {/* Auth */}
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
       <Route path="/register" element={<SignUpPage authApi={authApi} />} />
-      <Route path="/" element={<Navigate to="/login" replace />} />
-
-      <Route path="/visitor-dashboard" element={
-        <ProtectedRoute roles={["visitor"]}>
-          <VisitorDashboard />
-        </ProtectedRoute>
-      } />
-
-      <Route path="/editor-dashboard" element={
-        <ProtectedRoute roles={["editor"]}>
-          <EditorDashboard />
+     
+      {/* Početna stranica */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      
+      <Route path="/home" element={
+        <ProtectedRoute>
+          <HomePage />
         </ProtectedRoute>
       } />
 
@@ -42,13 +39,17 @@ function App() {
           <BookDetailsPage />
           </ProtectedRoute>
       } />
-
-      
+ 
       <Route path="/books/add" element={
-        <ProtectedRoute roles={["editor"]}><AddBookPage /></ProtectedRoute>
+        <ProtectedRoute roles={["editor"]}>
+          <AddBookPage />
+        </ProtectedRoute>
       } />
+
       <Route path="/books/:id/edit" element={
-        <ProtectedRoute roles={["editor"]}><EditBookPage /></ProtectedRoute>
+        <ProtectedRoute roles={["editor"]}>
+          <EditBookPage />
+        </ProtectedRoute>
       } />
 
       <Route path="/unauthorized" element={<UnauthorizedPage />} />

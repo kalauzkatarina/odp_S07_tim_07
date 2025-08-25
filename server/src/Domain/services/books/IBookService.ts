@@ -10,4 +10,5 @@ export interface IBookService {
     updateBook(id: number, updates: Partial<BookDto>): Promise<BookDto>;
     deleteBook(id: number): Promise<boolean>;
     incrementViewsById(id: number): Promise<BookDto>;
+    getTopViewedBooks(limit: number): Promise<BookDto[]>;
 }

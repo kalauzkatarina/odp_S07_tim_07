@@ -10,4 +10,5 @@ export interface IBookRepository {
     update(book: Book): Promise<Book>;
     delete(id: number): Promise<boolean>;
     exists(id: number): Promise<boolean>;
+    getTopViewed(limit: number): Promise<Book[]>;
 }
