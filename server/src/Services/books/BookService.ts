@@ -120,7 +120,7 @@ export class BookService implements IBookService {
 
     async getTopViewedBooks(limit: number): Promise<BookDto[]> {
         const books = await this.bookRepository.getTopViewed(limit);
-
+        console.log(books)
         const bookDtos: BookDto[] = [];
         for (const b of books) {
             bookDtos.push(await this.mapToDto(b));
