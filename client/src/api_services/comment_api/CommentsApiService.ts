@@ -35,7 +35,7 @@ export const commentsApi: ICommentsApiService = {
     },
     async deleteComment(token: string, id: number): Promise<boolean> {
         try {
-            await axios.delete(`${API_URL}/${id}`, {
+            await axios.delete(`${API_URL}s/deleteComment/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

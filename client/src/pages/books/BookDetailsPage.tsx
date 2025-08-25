@@ -80,6 +80,25 @@ export default function BookDetailsPage() {
     }
   };
 
+  const handleDeleteComment = async (commentId: number) => {
+    if (!token || !user) {
+      alert("Morate biti ulogovani kao editor da biste obrisali komentar.");
+      return;
+    }
+
+    const confirmed = confirm("Da li ste sigurni da želite obrisati ovaj komentar?");
+    if (!confirmed) return;
+
+    const success = await commentsApi.deleteComment(token, commentId);
+
+    if (success) {
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+      alert("Komentar uspešno obrisan!");
+    } else {
+      alert("Brisanje komentara nije uspelo.");
+    }
+  };
+
   if (!book) return <p className="p-6">Učitavanje...</p>;
 
   return (
@@ -140,8 +159,18 @@ export default function BookDetailsPage() {
         {/* Lista komentara */}
         <ul>
           {comments.map((c) => (
-            <li key={c.id} className="border-b py-2">
-              {c.content} <span className="text-gray-500 text-sm">(User: {c.user_id})</span>
+            <li key={c.id} className="border-b py-2 flex justify-between items-center">
+              <span>
+                {c.content} <span className="text-gray-500 text-sm">(User: {c.user_id})</span>
+              </span>
+              {user?.role === "editor" && (
+                <button
+                  onClick={() => handleDeleteComment(c.id)}
+                  className="bg-red-500 text-white px-2 py-1 rounded ml-4"
+                >
+                  Obriši
+                </button>
+              )}
             </li>
           ))}
         </ul>
