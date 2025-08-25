@@ -8,7 +8,8 @@ export function LoginForm({ authApi }: AuthFormProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  const navigate = useNavigate();
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,11 +19,11 @@ export function LoginForm({ authApi }: AuthFormProps) {
       setError(validation.message ?? "Invalid login information");
       return;
     }
-    const navigate = useNavigate();
     const response = await authApi.logIn(username, password);
+    console.log(response);
     if (response.success && response.data) {
-      login(response.data.user, response.data.token);
-      navigate(response.data.user.role === "editor" ? "/editor-dashboard" : "visitor-dashboard");
+      login(response.data);
+      navigate(user?.role === "editor" ? "/editor-dashboard" : "visitor-dashboard");
     } else {
       setError(response.message);
       setUsername("");

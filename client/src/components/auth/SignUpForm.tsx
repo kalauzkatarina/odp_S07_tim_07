@@ -30,6 +30,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
             setError(response.message);
             setUsername("");
             setPassword("");
+            setEmail("");
         }
     };
     return (

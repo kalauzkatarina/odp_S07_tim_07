@@ -18,6 +18,7 @@ export const authApi: IAuthAPIService = {
             console.log(error);
             let message = "Error while logging in.";
             if (axios.isAxiosError(error)) {
+                console.log("Backend response:", error.response?.data);
                 message = error.response?.data?.message || message;
             }
             return {
@@ -40,6 +41,7 @@ export const authApi: IAuthAPIService = {
         } catch (error) {
             let message = "Error while signing up.";
             if (axios.isAxiosError(error)) {
+                console.log("Backend response:", error.response?.data);
                 message = error.response?.data?.message || message;
             }
             return {
