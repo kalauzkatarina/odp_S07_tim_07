@@ -20,11 +20,15 @@ function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       <Route path="/visitor-dashboard" element={
-        <ProtectedRoute roles={["visitor"]}><VisitorDashboard /></ProtectedRoute>
+        <ProtectedRoute roles={["visitor"]}>
+          <VisitorDashboard />
+        </ProtectedRoute>
       } />
 
       <Route path="/editor-dashboard" element={
-        <ProtectedRoute roles={["editor"]}><EditorDashboard /></ProtectedRoute>
+        <ProtectedRoute roles={["editor"]}>
+          <EditorDashboard />
+        </ProtectedRoute>
       } />
 
       <Route path="/books" element={

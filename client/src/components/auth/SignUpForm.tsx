@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormProps";
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import { useAuth } from "../../hooks/auth/useAuthHook";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function SignUpForm({ authApi }: AuthFormProps) {
     const [username, setUsername] = useState("");
@@ -11,7 +11,6 @@ export function SignUpForm({ authApi }: AuthFormProps) {
     const [role, setRole] = useState("");
     const { login } = useAuth();
     const [error, setError] = useState("");
-    const navigate = useNavigate();
 
     const submitForm = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,10 +21,10 @@ export function SignUpForm({ authApi }: AuthFormProps) {
             setError(validation.message ?? "Invalid information");
             return;
         }
+
         const response = await authApi.signUp(username, password, email, role);
         if (response.success && response.data) {
-            login(response.data.user, response.data.token);
-            navigate(response.data.user.role === "editor" ? "/editor-dashboard" : "/visitor-dashboard");
+            login(response.data);
         }
         else {
             setError(response.message);
@@ -82,5 +81,4 @@ export function SignUpForm({ authApi }: AuthFormProps) {
             </p>
         </div>
     );
-
 }
