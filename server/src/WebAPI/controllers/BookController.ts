@@ -22,7 +22,7 @@ export class BookController {
         this.router.get("/books/:id", this.getBookById.bind(this));
         this.router.post("/books/add", authenticate, authorize("editor"), this.createBook.bind(this));
         this.router.put("/books/:id", authenticate, authorize("editor"), this.updateBook.bind(this));
-        this.router.delete("/books/:id", authenticate, authorize("editor"), this.deleteBook.bind(this));
+        this.router.delete("/books/delete/:id", authenticate, authorize("editor"), this.deleteBook.bind(this));
         this.router.patch("/books/:id/views", this.incrementViews.bind(this));
     }
 
@@ -102,7 +102,7 @@ export class BookController {
 
     private async deleteBook(req: Request, res: Response) {
         try {
-            const { id } = req.body;
+            const id = Number(req.params.id);
             const result = await this.bookService.deleteBook(id);
             res.status(result ? 200 : 404).json({ success: result });
         }

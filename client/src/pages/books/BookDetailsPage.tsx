@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { BookDto } from "../../models/books/BookDto";
 import { booksApi } from "../../api_services/book_api/BooksApiService";
 import type { CommentDto } from "../../models/comments/CommentDto";
@@ -11,7 +11,7 @@ export default function BookDetailsPage() {
   const [book, setBook] = useState<BookDto | null>(null);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) return;
@@ -41,7 +41,6 @@ export default function BookDetailsPage() {
 
   const { user, token } = authContext;
   // Funkcija za dodavanje komentara
-
   const handleAddComment = async () => {
     if (!book || newComment.trim() === "") return;
 
@@ -56,6 +55,28 @@ export default function BookDetailsPage() {
     if (created.id !== 0) {
       setComments((prev) => [...prev, created]);
       setNewComment(""); // očisti input
+    }
+  };
+
+  const handleDeleteBook = async () => {
+    if (!book) return;
+
+    if (!token || !user) {
+      alert("Morate biti ulogovani kao editor da biste obrisali knjigu.");
+      return;
+    }
+
+    const confirmed = confirm(`Da li ste sigurni da želite obrisati "${book.title}"?`);
+    if (!confirmed) return;
+
+    const success = await booksApi.deleteBook(token, book.id);
+
+    if (success) {
+      alert("Knjiga uspešno obrisana!");
+      navigate("/books");
+      //window.location.href = "/books"; // ili navigate("/") ako koristiš react-router
+    } else {
+      alert("Brisanje nije uspelo.");
     }
   };
 
@@ -106,6 +127,15 @@ export default function BookDetailsPage() {
             Dodaj komentar
           </button>
         </div>
+
+        {user?.role === "editor" && (
+          <button
+            onClick={handleDeleteBook}
+            className="bg-red-500 text-white px-4 py-2 rounded mt-4"
+          >
+            Obriši knjigu
+          </button>
+        )}
 
         {/* Lista komentara */}
         <ul>

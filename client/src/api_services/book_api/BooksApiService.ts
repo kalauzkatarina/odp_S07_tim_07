@@ -110,7 +110,7 @@ export const booksApi: IBooksApiService = {
     },
     async deleteBook(token: string, id: number): Promise<boolean> {
         try {
-            await axios.delete(`${API_URL}s/${id}`, {
+            await axios.delete(`${API_URL}s/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
