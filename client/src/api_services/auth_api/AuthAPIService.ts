@@ -12,7 +12,7 @@ export const authApi: IAuthAPIService = {
                 password,
             });
 
-            
+
             return res.data;
         } catch (error) {
             console.log(error);

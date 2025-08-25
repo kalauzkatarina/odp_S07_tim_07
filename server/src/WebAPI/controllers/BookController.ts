@@ -20,7 +20,7 @@ export class BookController {
         this.router.get("/books", this.getBookByTitle.bind(this));
         this.router.get("/books", this.getBookByAuthor.bind(this));
         this.router.get("/books/:id", this.getBookById.bind(this));
-        this.router.post("/books", authenticate, authorize("editor"), this.createBook.bind(this));
+        this.router.post("/books/add", authenticate, authorize("editor"), this.createBook.bind(this));
         this.router.put("/books/:id", authenticate, authorize("editor"), this.updateBook.bind(this));
         this.router.delete("/books/:id", authenticate, authorize("editor"), this.deleteBook.bind(this));
         this.router.patch("/books/:id/views", this.incrementViews.bind(this));

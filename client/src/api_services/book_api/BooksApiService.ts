@@ -67,7 +67,7 @@ export const booksApi: IBooksApiService = {
     async createBook(token: string, title: string, author: string, summary: string, format: string, pages: number, script: string, binding: string, publish_date: string, isbn: string, cover_image_url: string, genre_ids: number[]): Promise<BookDto> {
         try {
             const res = await axios.post<BookDto>(
-                `${API_URL}s`,
+                `${API_URL}s/add`,
                 {
                     title,
                     author,
@@ -79,7 +79,7 @@ export const booksApi: IBooksApiService = {
                     publish_date,
                     isbn,
                     cover_image_url,
-                    genre_ids,
+                    genres: genre_ids,
                 },
                 {
                     headers: {
@@ -121,11 +121,11 @@ export const booksApi: IBooksApiService = {
         }
     },
     async incrementViews(id: number): Promise<BookDto> {
-    try {
-        const res = await axios.patch<BookDto>(`${API_URL}s/${id}/views`);
-        return res.data;
-    } catch {
-        return emptyBook;
+        try {
+            const res = await axios.patch<BookDto>(`${API_URL}s/${id}/views`);
+            return res.data;
+        } catch {
+            return emptyBook;
+        }
     }
-}
 }

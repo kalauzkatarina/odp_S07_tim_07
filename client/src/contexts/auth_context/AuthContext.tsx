@@ -19,7 +19,7 @@ const decodeJWT = (token: string): JwtTokenClaims | null => {
                 role: decoded.role
             };
         }
-        
+
         return null;
     } catch (error) {
         console.error('Error while decoding JWT token:', error);
@@ -32,7 +32,7 @@ const isTokenExpired = (token: string): boolean => {
     try {
         const decoded = jwtDecode(token);
         const currentTime = Date.now() / 1000;
-        
+
         return decoded.exp ? decoded.exp < currentTime : false;
     } catch {
         return true;
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Učitaj token iz localStorage pri pokretanju
     useEffect(() => {
         const savedToken = ReadValueByKey("authToken");
-        
+
         if (savedToken) {
             // Proveri da li je token istekao
             if (isTokenExpired(savedToken)) {
@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 setIsLoading(false);
                 return;
             }
-            
+
             const claims = decodeJWT(savedToken);
             if (claims) {
                 setToken(savedToken);
@@ -68,13 +68,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 DeleteValueByKey("authToken");
             }
         }
-        
+
         setIsLoading(false);
     }, []);
 
     const login = (newToken: string) => {
         const claims = decodeJWT(newToken);
-        
+
         if (claims && !isTokenExpired(newToken)) {
             setToken(newToken);
             setUser({

@@ -10,6 +10,7 @@ import EditBookPage from "./pages/books/EditBookPage";
 import UnauthorizedPage from "./pages/common/UnauthorizedPage";
 import EditorDashboard from "./pages/dashboard/EditorDashboard";
 import VisitorDashboard from "./pages/dashboard/VisitorDashboard";
+import AddBookPage from "./pages/books/AddBookPage";
 
 function App() {
   return (
@@ -42,10 +43,10 @@ function App() {
           </ProtectedRoute>
       } />
 
-      {/* Samo editor 
+      
       <Route path="/books/add" element={
         <ProtectedRoute roles={["editor"]}><AddBookPage /></ProtectedRoute>
-      } />*/}
+      } />
       <Route path="/books/:id/edit" element={
         <ProtectedRoute roles={["editor"]}><EditBookPage /></ProtectedRoute>
       } />

@@ -33,31 +33,31 @@ export default function BookDetailsPage() {
     });
   }, [book]);
 
-const authContext = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
-if (!authContext) {
-  throw new Error("AuthContext must be used within AuthProvider");
-}
+  if (!authContext) {
+    throw new Error("AuthContext must be used within AuthProvider");
+  }
 
-const { user, token } = authContext;
+  const { user, token } = authContext;
   // Funkcija za dodavanje komentara
 
-const handleAddComment = async () => {
-  if (!book || newComment.trim() === "") return;
+  const handleAddComment = async () => {
+    if (!book || newComment.trim() === "") return;
 
-  if (!token || !user) {
-    alert("Morate biti ulogovani da biste dodali komentar");
-    return;
-  }
+    if (!token || !user) {
+      alert("Morate biti ulogovani da biste dodali komentar");
+      return;
+    }
 
-  const user_id = user.id; // uzimamo user_id iz konteksta
-  const created = await commentsApi.createComment(newComment, book.id, user_id, token);
+    const user_id = user.id; // uzimamo user_id iz konteksta
+    const created = await commentsApi.createComment(newComment, book.id, user_id, token);
 
-  if (created.id !== 0) {
-    setComments((prev) => [...prev, created]);
-    setNewComment(""); // očisti input
-  }
-};
+    if (created.id !== 0) {
+      setComments((prev) => [...prev, created]);
+      setNewComment(""); // očisti input
+    }
+  };
 
   if (!book) return <p className="p-6">Učitavanje...</p>;
 
@@ -87,7 +87,7 @@ const handleAddComment = async () => {
         </div>
       </div>
 
-       <section className="mt-10">
+      <section className="mt-10">
         <h2 className="text-2xl font-semibold mb-4">💬 Komentari</h2>
 
         {/* Forma za novi komentar */}
