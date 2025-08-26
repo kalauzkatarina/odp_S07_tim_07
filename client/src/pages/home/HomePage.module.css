@@ -40,7 +40,6 @@ body {
   padding: 0.5rem;
   border-radius: 50px;
 }
-
 input[type="radio"] {
   display: none;
 }
@@ -79,7 +78,7 @@ input[type="radio"] {
   top: 0;
   left: 0;
   height: 100%;
-  width: 25%; /* 4 tabova */
+  width: 20%; 
   background-color: var(--color-copper-rust-300);
   border-radius: 50px;
   z-index: 1;
@@ -90,6 +89,7 @@ input[type="radio"] {
 #radio-2:checked ~ .glider { transform: translateX(100%); }
 #radio-3:checked ~ .glider { transform: translateX(200%); }
 #radio-4:checked ~ .glider { transform: translateX(300%); }
+#radio-5:checked ~ .glider { transform: translateX(400%); }
 
 @media (max-width: 700px) {
   .tabs {

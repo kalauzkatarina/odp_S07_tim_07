@@ -55,7 +55,7 @@ const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
         {/* Signup Form */}
         <div className={styles.signup}>
           <form onSubmit={handleSignup}>
-            <label htmlFor="chk" aria-hidden="true">Sign up</label>
+            <label htmlFor="chk">Sign up</label>
 
             <input
               type="text"
