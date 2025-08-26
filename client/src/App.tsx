@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./index.css";
 import { authApi } from "./api_services/auth_api/AuthAPIService";
 import LoginPage from "./pages/auth/LoginPage";
-import SignUpPage from "./pages/auth/SignUpPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BookDetailsPage from "./pages/books/BookDetailsPage";
 import BooksPage from "./pages/books/BooksPage";
@@ -16,7 +15,6 @@ function App() {
      <Routes>
       {/* Auth */}
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
-      <Route path="/register" element={<SignUpPage authApi={authApi} />} />
      
       {/* Početna stranica */}
       <Route path="/" element={<Navigate to="/home" replace />} />

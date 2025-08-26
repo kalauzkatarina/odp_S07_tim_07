@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import { booksApi } from "../../api_services/book_api/BooksApiService";
 import { useNavigate } from "react-router-dom";
+import type { GenreDto } from "../../models/genres/GenreDto";
+import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
 export default function AddBookPage() {
   const { token } = useAuth();
@@ -17,7 +19,24 @@ export default function AddBookPage() {
   const [publishDate, setPublishDate] = useState("");
   const [isbn, setIsbn] = useState("");
   const [coverImageUrl, setCoverImageUrl] = useState("");
-  const [genreIds, setGenreIds] = useState<number[]>([]);
+  const [genres, setGenres] = useState<GenreDto[]>([]);
+  const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      const data = await genresApi.getAllGenres();
+      setGenres(data);
+    };
+    fetchGenres();
+  }, []);
+
+  const handleGenreToggle = (genreId: number) => {
+    setSelectedGenreIds((prev) =>
+      prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId]
+    );
+  };
 
   const handleSubmit = async () => {
     if (!token) {
@@ -37,7 +56,7 @@ export default function AddBookPage() {
       publishDate,
       isbn,
       coverImageUrl,
-      genreIds
+      selectedGenreIds
     );
 
     if (created.id !== 0) {
@@ -123,19 +142,25 @@ export default function AddBookPage() {
           className="border p-2 rounded"
         />
 
-        <input
-          type="text"
-          placeholder="Žanrovi (unesi ID-jeve odvojene zarezom)"
-          onChange={(e) =>
-            setGenreIds(
-              e.target.value
-                .split(",")
-                .map((id) => parseInt(id.trim()))
-                .filter((id) => !isNaN(id))
-            )
-          }
-          className="border p-2 rounded"
-        />
+        <div className="p-4 border rounded-lg bg-gray-50">
+          <h2 className="font-semibold mb-2">Žanrovi:</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {genres.map((genre) => (
+              <label
+                key={genre.id}
+                className="flex items-center gap-2 cursor-pointer w-full"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedGenreIds.includes(genre.id)}
+                  onChange={() => handleGenreToggle(genre.id)}
+                  className="w-5 h-5 accent-pink-600 align-middle"
+                />
+                <span>{genre.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
 
         <button
           onClick={handleSubmit}

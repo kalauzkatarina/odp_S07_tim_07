@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+:root {
+  --color-copper-rust-50: #faf7ef;
+  --color-copper-rust-100: #f6eeed;
+  --color-copper-rust-200: #eee0dd;
+  --color-copper-rust-300: #dfc7c2;
+  --color-copper-rust-400: #cda59f;
+  --color-copper-rust-500: #b7827c;
+  --color-copper-rust-600: #9f635f;
+  --color-copper-rust-700: #8e5351;
+  --color-copper-rust-800: #704141;
+  --color-copper-rust-900: #613a3b;
+  --color-copper-rust-950: #341d1d;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--color-copper-rust-50);
+}
+
+.container {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.tabs {
+  display: flex;
+  position: relative;
+  background-color: var(--color-copper-rust-100);
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.05), 0 4px 8px 0 rgba(0,0,0,0.05);
+  padding: 0.5rem;
+  border-radius: 50px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  width: 200px;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 2;
+  color: var(--color-copper-rust-500);
+  transition: color 0.15s ease-in;
+}
+
+.tab:hover {
+  color: var(--color-copper-rust-800);
+}
+
+/* Checked styles */
+#radio-1:checked + label,
+#radio-2:checked + label,
+#radio-3:checked + label,
+#radio-4:checked + label {
+  color: var(--color-copper-rust-950);
+}
+
+/* Glider */
+.glider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 25%; /* 4 tabova */
+  background-color: var(--color-copper-rust-300);
+  border-radius: 50px;
+  z-index: 1;
+  transition: transform 0.25s ease-out;
+}
+
+#radio-1:checked ~ .glider { transform: translateX(0%); }
+#radio-2:checked ~ .glider { transform: translateX(100%); }
+#radio-3:checked ~ .glider { transform: translateX(200%); }
+#radio-4:checked ~ .glider { transform: translateX(300%); }
+
+@media (max-width: 700px) {
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  .tab {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .glider {
+    width: 100%;
+  }
+}

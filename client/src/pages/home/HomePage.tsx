@@ -3,23 +3,24 @@ import { Link } from "react-router-dom";
 import { booksApi } from "../../api_services/book_api/BooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
+import './HomePage.css';
 
 const HomePage: FC = () => {
     const [topViewed, setTopViewed] = useState<BookDto[]>([]);
     const [newBooks, setNewBooks] = useState<BookDto[]>([]);
     const [recommended, setRecommended] = useState<BookDto[]>([]);
+    const [activeTab, setActiveTab] = useState<"bestsellers" | "new" | "recommended" | "login">("bestsellers");
     const auth = useContext(AuthContext);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const top = await booksApi.getTopViewed(3);
-                console.log("Top viewed response:", top); // proveri ovde
+                const top = await booksApi.getTopViewed(6);
                 setTopViewed(Array.isArray(top) ? top : []);
 
                 const all = await booksApi.getAllBooks();
-                setNewBooks(all.slice(-5).reverse());
-                setRecommended(all.slice(0, 5));
+                setNewBooks(all.slice(-6).reverse());
+                setRecommended(all.slice(0, 6));
             } catch (error) {
                 console.error("Greška pri fetchovanju knjiga:", error);
             }
@@ -28,94 +29,83 @@ const HomePage: FC = () => {
         fetchData();
     }, []);
 
-    return (
-        <div className="p-6">
-
-            <header className="flex justify-end p-4 bg-gray-100 gap-4">
-                {auth?.user ? (
-                    <>
-                        <span className="mr-2">Zdravo, {auth.user.username}</span>
-                        <button
-                            onClick={() => {
-                                auth.logout();
-                            }}
-                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        >
-                            Logout
-                        </button>
-                    </>
-                ) : (
-                    <Link to="/login" className="px-4 py-2 bg-blue-500 text-white rounded">
-                        Login
+    const renderBooks = (books: BookDto[]) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+            {books.map(book => (
+                <div key={book.id} className="border rounded-lg shadow hover:shadow-lg transition p-3 bg-white">
+                    <img
+                        src={book.cover_image_url}
+                        alt={book.title}
+                        className="h-56 w-full object-cover mb-3 rounded"
+                    />
+                    <h3 className="font-bold text-sm">{book.title}</h3>
+                    <p className="text-xs text-gray-600">{book.author}</p>
+                    <Link
+                        to={`/books/${book.id}`}
+                        className="text-blue-600 hover:underline text-xs"
+                    >
+                        Detalji
                     </Link>
-                )}
+                </div>
+            ))}
+        </div>
+    );
+
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+
+            {/* Header */}
+            <header className="flex justify-between items-center px-6 py-4 bg-white shadow">
+                <h1 className="text-2xl font-bold text-gray-800">📚 Digitalni katalog</h1>
             </header>
 
-            <h1 className="text-2xl font-bold mb-6">Dobrodošli u digitalni katalog knjiga</h1>
-            {/* Opcija za urednike */}
-            {auth?.user?.role === "editor" && (
-                <div className="mb-6 flex gap-4">
-                    <Link
-                        to="/books/add"
-                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                    >
-                        Dodaj novu knjigu
-                    </Link>
-                </div>
-            )}
+            {/* Tabs + Login/User */}
+            <div className="container mx-auto mt-6 flex justify-center">
+                <div className="tabs relative">
 
-            {/* Bestselleri */}
-            <section className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">📚 Bestselleri</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {Array.isArray(topViewed) && topViewed.map(book => (
-                        <div key={book.id} className="border p-4 rounded shadow">
-                            <img src={book.cover_image_url} alt={book.title} className="h-48 w-full object-cover mb-2" />
-                            <h3 className="font-bold">{book.title}</h3>
-                            <p className="text-sm text-gray-600">{book.author}</p>
-                            <Link to={`/books/${book.id}`} className="text-blue-600 hover:underline text-sm">Detalji</Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                    <input type="radio" id="radio-1" name="tabs" checked={activeTab === "bestsellers"} onChange={() => setActiveTab("bestsellers")} />
+                    <label className="tab" htmlFor="radio-1">Bestselleri</label>
 
-            {/* Novi naslovi */}
-            <section className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">🆕 Novi naslovi</h2>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    {newBooks.map(book => (
-                        <div key={book.id} className="border p-4 rounded shadow">
-                            <img src={book.cover_image_url} alt={book.title} className="h-48 w-full object-cover mb-2" />
-                            <h3 className="font-bold">{book.title}</h3>
-                            <Link to={`/books/${book.id}`} className="text-blue-600 hover:underline text-sm">Detalji</Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                    <input type="radio" id="radio-2" name="tabs" checked={activeTab === "new"} onChange={() => setActiveTab("new")} />
+                    <label className="tab" htmlFor="radio-2">Novi naslovi</label>
 
-            {/* Preporuke */}
-            <section>
-                <h2 className="text-xl font-semibold mb-4">✨ Ne sudi knjigu po koricama</h2>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    {recommended.map(book => (
-                        <div key={book.id} className="border p-4 rounded shadow">
-                            <img src={book.cover_image_url} alt={book.title} className="h-48 w-full object-cover mb-2" />
-                            <h3 className="font-bold">{book.title}</h3>
-                            <Link to={`/books/${book.id}`} className="text-blue-600 hover:underline text-sm">Detalji</Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
+                    <input type="radio" id="radio-3" name="tabs" checked={activeTab === "recommended"} onChange={() => setActiveTab("recommended")} />
+                    <label className="tab" htmlFor="radio-3">Ne sudi knjigu po koricama</label>
 
-            <section className="mt-8 text-center">
+                    <input type="radio" id="radio-4" name="tabs" checked={activeTab === "login"} onChange={() => setActiveTab("login")} />
+                    <label className="tab" htmlFor="radio-4">
+                        <Link to={auth?.user ? "/user" : "/login"} className="w-full h-full flex items-center justify-center">
+                            {auth?.user ? auth.user.username : "Login"}
+                        </Link>
+                    </label>
+
+                    <span className="glider" />
+                </div>
+            </div>
+
+            {/* Content */}
+            <main className="flex-1 px-6">
+                {activeTab === "bestsellers" && renderBooks(topViewed)}
+                {activeTab === "new" && renderBooks(newBooks)}
+                {activeTab === "recommended" && renderBooks(recommended)}
+                {activeTab === "login" && (
+                    <div className="mt-6 text-center text-gray-700">
+                        {auth?.user
+                            ? `Dobrodošao, ${auth.user.username}!`
+                            : "Kliknite Login za pristup korisničkoj stranici."}
+                    </div>
+                )}
+            </main>
+
+            {/* Footer link */}
+            <section className="mt-10 mb-6 text-center">
                 <Link
                     to="/books"
                     className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
-                    📚 Pogledaj sve knjige
+                    📖 Pogledaj sve knjige
                 </Link>
             </section>
-
         </div>
     );
 };

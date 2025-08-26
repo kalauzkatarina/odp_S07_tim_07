@@ -4,6 +4,8 @@ import { useAuth } from "../../hooks/auth/useAuthHook";
 import type { BookDto } from "../../models/books/BookDto";
 
 import { booksApi } from "../../api_services/book_api/BooksApiService";
+import type { GenreDto } from "../../models/genres/GenreDto";
+import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
 export default function EditBookPage() {
   const { id } = useParams();
@@ -11,7 +13,17 @@ export default function EditBookPage() {
   const navigate = useNavigate();
 
   const [book, setBook] = useState<BookDto | null>(null);
-  const [genreIds, setGenreIds] = useState<number[]>([]);
+  const [genres, setGenres] = useState<GenreDto[]>([]);
+  const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+
+   useEffect(() => {
+    const fetchGenres = async () => {
+      const allGenres = await genresApi.getAllGenres();
+      setGenres(allGenres);
+    };
+
+    fetchGenres();
+  }, []);
 
   // Učitavanje knjige
   useEffect(() => {
@@ -19,17 +31,25 @@ export default function EditBookPage() {
     booksApi.getBookById(Number(id)).then((found) => {
       if (found && found.id !== 0) {
         setBook(found);
-        setGenreIds(found.genres.map((g) => g.id)); // inicijalizacija prethodnih žanrova
+        setSelectedGenreIds(found.genres.map((g) => g.id));
       }
     });
   }, [id]);
+
+  const handleGenreToggle = (genreId: number) => {
+    setSelectedGenreIds((prev) =>
+      prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId]
+    );
+  };
 
   const handleSave = async () => {
     if (book && token) {
       // Kreiraj update objekt sa genres kao niz GenreDto
       const updates = {
         ...book,
-        genres: genreIds.map((id) => ({ id, name: "" })), // backend gleda samo ID
+        genres: selectedGenreIds.map((id) => ({ id, name: "" })), // backend gleda samo ID
       };
 
       await booksApi.updateBook(token, book.id, updates);
@@ -124,20 +144,25 @@ export default function EditBookPage() {
           className="border p-2 rounded"
         />
 
-        <input
-          type="text"
-          value={genreIds.join(",")}
-          placeholder="Žanrovi (unesi ID-jeve odvojene zarezom)"
-          onChange={(e) =>
-            setGenreIds(
-              e.target.value
-                .split(",")
-                .map((id) => parseInt(id.trim()))
-                .filter((id) => !isNaN(id))
-            )
-          }
-          className="border p-2 rounded"
-        />
+        <div className="p-4 border rounded-lg bg-gray-50">
+          <h2 className="font-semibold mb-2">Žanrovi:</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {genres.map((genre) => (
+              <label
+                key={genre.id}
+                className="flex items-center gap-2 cursor-pointer w-full"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedGenreIds.includes(genre.id)}
+                  onChange={() => handleGenreToggle(genre.id)}
+                  className="w-4 h-4 accent-pink-600"
+                />
+                <span>{genre.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
 
         <button
           onClick={handleSave}
