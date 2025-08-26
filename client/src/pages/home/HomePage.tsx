@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, type FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { booksApi } from "../../api_services/book_api/BooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
@@ -13,6 +13,7 @@ const HomePage: FC = () => {
     const [recommended, setRecommended] = useState<BookDto[]>([]);
     const [activeTab, setActiveTab] = useState<TabType>("bestsellers");
     const auth = useContext(AuthContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,26 +64,61 @@ const HomePage: FC = () => {
             <div className={styles.homeContainer}>
                 <div className={styles.tabs}>
 
-                    <input type="radio" id="radio-1" name="tabs" checked={activeTab === "bestsellers"} onChange={() => setActiveTab("bestsellers")} />
-                    <label className={styles.tab} htmlFor="radio-1">Bestselleri</label>
+                    <label
+                        className={styles.tab}
+                        onClick={() => setActiveTab("bestsellers")}
+                    >
+                        Bestselleri
+                    </label>
 
-                    <input type="radio" id="radio-2" name="tabs" checked={activeTab === "new"} onChange={() => setActiveTab("new")} />
-                    <label className={styles.tab} htmlFor="radio-2">Novi naslovi</label>
+                    <label
+                        className={styles.tab}
+                        onClick={() => setActiveTab("new")}
+                    >
+                        Novi naslovi
+                    </label>
 
-                    <input type="radio" id="radio-3" name="tabs" checked={activeTab === "recommended"} onChange={() => setActiveTab("recommended")} />
-                    <label className={styles.tab} htmlFor="radio-3">Ne sudi knjigu po koricama</label>
+                    <label
+                        className={styles.tab}
+                        onClick={() => setActiveTab("recommended")}
+                    >
+                        Ne sudi knjigu po koricama
+                    </label>
 
-                    <input type="radio" id="radio-4" name="tabs" checked={activeTab === "allBooks"} onChange={() => setActiveTab("allBooks")} />
-                    <label className={styles.tab} htmlFor="radio-4">Pregledaj sve knjige</label>
+                    <label
+                        className={styles.tab}
+                        onClick={() => {
+                            setActiveTab("allBooks");
+                            navigate("/books");
+                        }}
+                    >
+                        Pregledaj sve knjige
+                    </label>
 
-                    <input type="radio" id="radio-5" name="tabs" checked={activeTab === "login"} onChange={() => setActiveTab("login")} />
-                    <label className={styles.tab} htmlFor="radio-5">
-                        <Link to={auth?.user ? "/user" : "/login"} className="w-full h-full flex items-center justify-center">
+                    <label className={styles.tab} onClick={() => setActiveTab("login")}>
+                        <Link
+                            to={auth?.user ? "/user" : "/login"}
+                            className="w-full h-full flex items-center justify-center"
+                        >
                             {auth?.user ? auth.user.username : "Login"}
                         </Link>
                     </label>
 
-                    <span className={styles.glider} />
+                    <span
+                        className={styles.glider}
+                        style={{
+                            transform: `translateX(${activeTab === "bestsellers"
+                                    ? 0
+                                    : activeTab === "new"
+                                        ? 100
+                                        : activeTab === "recommended"
+                                            ? 200
+                                            : activeTab === "allBooks"
+                                                ? 300
+                                                : 400
+                                }%)`,
+                        }}
+                    />
                 </div>
             </div>
 

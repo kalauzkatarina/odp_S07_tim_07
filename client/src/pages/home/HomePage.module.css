@@ -25,6 +25,10 @@ body {
   background-color: var(--color-copper-rust-50);
 }
 
+main {
+  min-height: 500px; /* ili koliko ti grid obično zauzima */
+}
+
 .container {
   width: 100%;
   margin-top: 1rem;
@@ -36,24 +40,23 @@ body {
   display: flex;
   position: relative;
   background-color: var(--color-copper-rust-100);
-  box-shadow: 0 0 2px 0 rgba(0,0,0,0.05), 0 4px 8px 0 rgba(0,0,0,0.05);
-  padding: 0.5rem;
-  border-radius: 50px;
-}
-input[type="radio"] {
-  display: none;
+  padding: 5px;        
+  border-radius: 30px;      
+  width: fit-content;     
+  height: 60px;
+  margin: 0 auto;         
 }
 
 .tab {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  width: 200px;
+  height: 100%;   /* niži tab */
+  width: 150px;   /* uži tab */
   font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  border-radius: 50px;
+  border-radius: 25px;
   cursor: pointer;
   z-index: 2;
   color: var(--color-copper-rust-500);
@@ -64,14 +67,6 @@ input[type="radio"] {
   color: var(--color-copper-rust-800);
 }
 
-/* Checked styles */
-#radio-1:checked + label,
-#radio-2:checked + label,
-#radio-3:checked + label,
-#radio-4:checked + label {
-  color: var(--color-copper-rust-950);
-}
-
 /* Glider */
 .glider {
   position: absolute;
@@ -80,25 +75,30 @@ input[type="radio"] {
   height: 100%;
   width: 20%; 
   background-color: var(--color-copper-rust-300);
-  border-radius: 50px;
+  border-radius: 25px;
   z-index: 1;
   transition: transform 0.25s ease-out;
 }
 
+/* Radio checked styles */
 #radio-1:checked ~ .glider { transform: translateX(0%); }
 #radio-2:checked ~ .glider { transform: translateX(100%); }
 #radio-3:checked ~ .glider { transform: translateX(200%); }
 #radio-4:checked ~ .glider { transform: translateX(300%); }
 #radio-5:checked ~ .glider { transform: translateX(400%); }
 
+
 @media (max-width: 700px) {
   .tabs {
     flex-direction: column;
     align-items: center;
+    height: auto;
+    padding: 5px;
   }
   .tab {
     width: 100%;
     margin-bottom: 0.5rem;
+    height: 50px;
   }
   .glider {
     width: 100%;
