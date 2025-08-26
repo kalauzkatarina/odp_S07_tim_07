@@ -13,18 +13,23 @@ export default function BookDetailsPage() {
   const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
 
+  const authContext = useContext(AuthContext);
+  if (!authContext) throw new Error("AuthContext must be used within AuthProvider");
+  const { user, token } = authContext;
+
+  // Učitavanje knjige
   useEffect(() => {
     if (!id) return;
 
     booksApi.getBookById(Number(id)).then((found) => {
-      if (found && found.id !== 0) {  // <-- dodaj found && 
+      if (found && found.id !== 0) {
         setBook(found);
         booksApi.incrementViews(found.id);
       }
     });
   }, [id]);
 
-  // Učitavanje komentara kada knjiga bude učitana
+  // Učitavanje komentara
   useEffect(() => {
     if (!book) return;
 
@@ -33,19 +38,11 @@ export default function BookDetailsPage() {
     });
   }, [book]);
 
-  const authContext = useContext(AuthContext);
-
-  if (!authContext) {
-    throw new Error("AuthContext must be used within AuthProvider");
-  }
-
-  const { user, token } = authContext;
-
   const handleAddComment = async () => {
     if (!book || newComment.trim() === "") return;
 
     if (!token || !user) {
-      alert("Morate biti ulogovani da biste dodali komentar");
+      alert("Morate biti ulogovani da biste dodali komentar.");
       return;
     }
 
@@ -71,7 +68,6 @@ export default function BookDetailsPage() {
     if (!confirmed) return;
 
     const success = await booksApi.deleteBook(token, book.id);
-
     if (success) {
       alert("Knjiga uspešno obrisana!");
       navigate("/books");
@@ -133,24 +129,25 @@ export default function BookDetailsPage() {
       <section className="mt-10">
         <h2 className="text-2xl font-semibold mb-4">💬 Komentari</h2>
 
+        {/* Dugme samo za editore */}
         {user?.role === "editor" && (
-          <button
-            onClick={handleDeleteBook}
-            className="bg-red-500 text-white px-4 py-2 rounded mt-4"
-          >
-            Obriši knjigu
-          </button>
+          <>
+            <button
+              onClick={handleDeleteBook}
+              className="bg-red-500 text-white px-4 py-2 rounded mt-4 mr-2"
+            >
+              Obriši knjigu
+            </button>
+            <button
+              onClick={() => navigate(`/books/${book.id}/edit`)}
+              className="bg-yellow-500 text-white px-4 py-2 rounded mt-4"
+            >
+              Uredi knjigu
+            </button>
+          </>
         )}
-        <br />
-        <button
-          onClick={() => navigate(`/books/${book.id}/edit`)}
-          className="bg-yellow-500 text-white px-4 py-2 rounded"
-        >
-          Uredi knjigu
-        </button>
-        <br />
 
-        <div className="mb-4">
+        <div className="mb-4 mt-4">
           <input
             type="text"
             placeholder="Napiši komentar..."
@@ -158,8 +155,6 @@ export default function BookDetailsPage() {
             onChange={(e) => setNewComment(e.target.value)}
             className="border p-2 w-full rounded mb-2"
           />
-          <br />
-          <br />
           <button
             onClick={handleAddComment}
             className="bg-blue-500 text-white px-4 py-2 rounded"
