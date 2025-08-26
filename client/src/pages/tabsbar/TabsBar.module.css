@@ -40,29 +40,34 @@ main {
   display: flex;
   position: relative;
   background-color: var(--color-copper-rust-100);
-  padding: 5px;        
-  border-radius: 30px;      
-  width: fit-content;     
+  padding: 5px;
+  border-radius: 30px;
+  width: 1500px;
   height: 60px;
-  margin: 0 auto;         
+  margin: 0 auto;
 }
 
 .tab {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;   /* niži tab */
-  width: 150px;   /* uži tab */
   font-family: "Inter", sans-serif;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 25px;
   cursor: pointer;
   z-index: 2;
   color: var(--color-copper-rust-500);
+  flex-grow: 1;
+  padding: 0 15px;
+  white-space: nowrap;
   transition: color 0.15s ease-in;
-}
+  width: 200px;
 
+  /* Dodaj ove dvije ključne linije: */
+  height: 100%;                /* Osiguraj da tab ispunjava visinu roditelja */
+  line-height: normal;         /* Resetuj ako je negdje postavljen line-height */
+}
 .tab:hover {
   color: var(--color-copper-rust-800);
 }
@@ -72,15 +77,15 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 20%; 
+  height: 100%; /* Ensure glider covers the full height of the tab */
+  width: calc(100% / 5); /* Each tab is 1/5th of the total width */
   background-color: var(--color-copper-rust-300);
   border-radius: 25px;
   z-index: 1;
   transition: transform 0.25s ease-out;
 }
 
-/* Radio checked styles */
+/* Radio checked styles (these are not used in your JS, but good to keep if you ever convert to radio inputs) */
 #radio-1:checked ~ .glider { transform: translateX(0%); }
 #radio-2:checked ~ .glider { transform: translateX(100%); }
 #radio-3:checked ~ .glider { transform: translateX(200%); }
@@ -90,17 +95,23 @@ main {
 
 @media (max-width: 700px) {
   .tabs {
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-    padding: 5px;
+    flex-direction: column; /* Stack tabs vertically */
+    align-items: stretch; /* Stretch items to fill the width */
+    height: auto; /* Adjust height dynamically */
+    padding: 5px; /* Keep padding */
+    width: 90%; /* Use more width on smaller screens */
+    max-width: 300px; /* Optional: limit max width even if screen is wider */
   }
   .tab {
-    width: 100%;
+    width: 100%; /* Take full width of parent */
     margin-bottom: 0.5rem;
     height: 50px;
+    flex-grow: 0; /* No need for flex-grow when stacked */
+  }
+  .tab:last-child {
+    margin-bottom: 0; /* Remove margin for the last tab */
   }
   .glider {
-    width: 100%;
+    display: none; /* Hide the glider in stacked mode as it doesn't make sense */
   }
 }
