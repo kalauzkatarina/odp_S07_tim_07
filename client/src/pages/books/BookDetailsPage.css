@@ -1,0 +1,86 @@
+.product {
+  width: 1100px;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #cda59f; /* ovdje je pozadina */
+  border-radius: 10px;    /* zaobljeni rubovi */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* lagana sjena */
+}
+
+.product__photo {
+  flex: 2;           /* zauzima 2/3 prostora */
+  max-width: 600px;  /* maksimalna širina slike */
+}
+
+.product__photo img {
+  width: 100%;       /* slika zauzima sav prostor u kontejneru */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.photo-main img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.product__info {
+  flex: 1;
+  display:flex;
+  flex-direction:column;
+  gap: 1rem;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.editor-buttons button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.description{
+    align-items: center;
+}
+
+.description input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.description button {
+  margin-bottom: 1rem;
+}
+
+.card-white.post {
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.post-heading .avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.post-heading .meta {
+  margin-left: 1rem;
+}
+
+.card-white.post{
+    background-color: #9f635f;
+    margin-bottom: 2px;
+}
+
+.post-description p {
+  margin: 0 0 0.5rem 0;
+}
+
+.post-description button {
+  margin-top: 0.5rem;
+}

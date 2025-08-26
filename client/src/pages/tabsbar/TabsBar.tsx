@@ -1,5 +1,5 @@
 import { useContext, type FC } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import styles from './TabsBar.module.css'
 
@@ -13,7 +13,6 @@ interface TabsBarProps {
 
 const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
   const auth = useContext(AuthContext);
-  const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
@@ -32,10 +31,7 @@ const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
 
         <div
           className={styles.tab}
-          onClick={() => {
-            onTabChange("allBooks");
-            navigate("/books");
-          }}
+          onClick={() => onTabChange("allBooks")}
         >
           Pregledaj sve knjige
         </div>

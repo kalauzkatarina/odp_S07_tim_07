@@ -1,7 +1,8 @@
 import { useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IAuthAPIService } from "../../api_services/auth_api/IAuthAPIService";
-import styles from './LoginPage.module.css'; // koristeći CSS module
+import styles from './LoginPage.module.css';
+import { useAuth } from "../../hooks/auth/useAuthHook";
 
 interface LoginPageProps {
   authApi: IAuthAPIService;
@@ -9,26 +10,35 @@ interface LoginPageProps {
 
 const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
   const navigate = useNavigate();
-
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const { login } = useAuth();
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [signupData, setSignupData] = useState({
     username: "",
     password: "",
     email: "",
     role: "visitor",
   });
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
     try {
-      await authApi.logIn(loginData.email, loginData.password);
-      alert("Login successful");
-      navigate("/home");
+      const response = await authApi.logIn(loginData.username, loginData.password);
+
+      if (response.success && response.data) {
+        login(response.data); // ažurira globalni auth state
+        navigate("/home"); // ide na home page
+      } else {
+        setError(response.message || "Login failed"); // prikazuje poruku greške
+      }
     } catch (err) {
       console.error(err);
-      alert("Login failed");
+      setError("Login failed due to server error" + error); // fallback greška
     }
   };
+
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,13 +88,28 @@ const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
               onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
               required
             />
-            <select
-              value={signupData.role}
-              onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
-            >
-              <option value="visitor">Visitor</option>
-              <option value="editor">Editor</option>
-            </select>
+            <div className={styles.roleSelection}>
+              <label className={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="visitor"
+                  checked={signupData.role === "visitor"}
+                  onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
+                />
+                Visitor
+              </label>
+              <label className={styles.radioLabel}>
+                <input
+                  type="radio"
+                  name="role"
+                  value="editor"
+                  checked={signupData.role === "editor"}
+                  onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
+                />
+                Editor
+              </label>
+            </div>
             <button type="submit">Sign up</button>
           </form>
         </div>
@@ -95,10 +120,10 @@ const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
             <label htmlFor="chk" aria-hidden="true">Login</label>
 
             <input
-              type="email"
-              placeholder="Email"
-              value={loginData.email}
-              onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+              type="text"
+              placeholder="Username"
+              value={loginData.username}
+              onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
               required
             />
             <input

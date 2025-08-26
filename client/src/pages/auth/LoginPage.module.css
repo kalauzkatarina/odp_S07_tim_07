@@ -151,3 +151,19 @@ button:hover {
 .chk:checked ~ .signup label {
   transform: scale(0.6);
 }
+
+.roleSelection {
+  display: flex;
+  gap: 1rem;
+  margin: -10px auto 10px auto; /* gornji margin smanjen */
+  justify-content: center;      /* centrira dugmad ispod input polja */
+}
+
+.radioLabel {
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+  cursor: pointer;
+}

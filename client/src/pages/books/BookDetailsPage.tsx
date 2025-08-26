@@ -5,6 +5,7 @@ import { booksApi } from "../../api_services/book_api/BooksApiService";
 import type { CommentDto } from "../../models/comments/CommentDto";
 import { commentsApi } from "../../api_services/comment_api/CommentsApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
+import "./BookDetailsPage.css"; // CSS za komentare i stranicu
 
 export default function BookDetailsPage() {
   const { id } = useParams();
@@ -12,15 +13,12 @@ export default function BookDetailsPage() {
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
   const navigate = useNavigate();
-
   const authContext = useContext(AuthContext);
   if (!authContext) throw new Error("AuthContext must be used within AuthProvider");
   const { user, token } = authContext;
 
-  // Učitavanje knjige
   useEffect(() => {
     if (!id) return;
-
     booksApi.getBookById(Number(id)).then((found) => {
       if (found && found.id !== 0) {
         setBook(found);
@@ -29,26 +27,18 @@ export default function BookDetailsPage() {
     });
   }, [id]);
 
-  // Učitavanje komentara
   useEffect(() => {
     if (!book) return;
-
-    commentsApi.getAllCommentsByBook(book.id).then((data) => {
-      setComments(data);
-    });
+    commentsApi.getAllCommentsByBook(book.id).then((data) => setComments(data));
   }, [book]);
 
   const handleAddComment = async () => {
     if (!book || newComment.trim() === "") return;
-
     if (!token || !user) {
       alert("Morate biti ulogovani da biste dodali komentar.");
       return;
     }
-
-    const user_id = user.id;
-    const created = await commentsApi.createComment(newComment, book.id, user_id, token);
-
+    const created = await commentsApi.createComment(newComment, book.id, user.id, token);
     if (created.id !== 0) {
       const refreshed = await commentsApi.getAllCommentsByBook(book.id);
       setComments(refreshed);
@@ -58,128 +48,118 @@ export default function BookDetailsPage() {
 
   const handleDeleteBook = async () => {
     if (!book) return;
-
     if (!token || !user) {
       alert("Morate biti ulogovani kao editor da biste obrisali knjigu.");
       return;
     }
-
     const confirmed = confirm(`Da li ste sigurni da želite obrisati "${book.title}"?`);
     if (!confirmed) return;
-
     const success = await booksApi.deleteBook(token, book.id);
-    if (success) {
-      alert("Knjiga uspešno obrisana!");
-      navigate("/books");
-    } else {
-      alert("Brisanje nije uspelo.");
-    }
+    if (success) navigate("/books");
   };
 
   const handleDeleteComment = async (commentId: number) => {
-    if (!token || !user) {
-      alert("Morate biti ulogovani kao editor da biste obrisali komentar.");
-      return;
-    }
-
+    if (!token || !user) return;
     const confirmed = confirm("Da li ste sigurni da želite obrisati ovaj komentar?");
     if (!confirmed) return;
-
     const success = await commentsApi.deleteComment(token, commentId);
+    if (success) setComments((prev) => prev.filter((c) => c.id !== commentId));
+  };
 
-    if (success) {
-      setComments((prev) => prev.filter((c) => c.id !== commentId));
-      alert("Komentar uspešno obrisan!");
-    } else {
-      alert("Brisanje komentara nije uspelo.");
-    }
+  const getUsername = (commentUserId: number) => {
+    if (user && user.id === commentUserId) return user.username; 
+    return `User #${commentUserId}`; 
   };
 
   if (!book) return <p className="p-6">Učitavanje...</p>;
 
   return (
-    <main className="p-6">
-      <div className="grid md:grid-cols-2 gap-6">
-        <img
-          src={book.cover_image_url}
-          alt={book.title}
-          className="w-full h-[400px] object-cover rounded shadow"
-        />
-
-        <div>
-          <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
-          <p className="text-xl text-gray-700 mb-2">Autor: {book.author}</p>
-          <p className="mb-4">
-            <b>Žanrovi:</b>{" "} {book.genres.length > 0 ? book.genres.map((g) => g.name).join(", ") : "Nema žanrova"}
-          </p>
-          <p className="mb-4">{book.summary}</p>
-
-          <ul className="text-sm text-gray-600">
-            <li><b>Format:</b> {book.format}</li>
-            <li><b>Broj strana:</b> {book.pages}</li>
-            <li><b>Pismo:</b> {book.script}</li>
-            <li><b>Povez:</b> {book.binding}</li>
-            <li><b>Datum izdanja:</b> {book.publish_date}</li>
-            <li><b>ISBN:</b> {book.isbn}</li>
-            <li><b>Pregleda:</b> {book.views}</li>
-          </ul>
-        </div>
-      </div>
-
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold mb-4">💬 Komentari</h2>
-
-        {/* Dugme samo za editore */}
-        {user?.role === "editor" && (
-          <>
-            <button
-              onClick={handleDeleteBook}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-4 mr-2"
-            >
-              Obriši knjigu
-            </button>
-            <button
-              onClick={() => navigate(`/books/${book.id}/edit`)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-4"
-            >
-              Uredi knjigu
-            </button>
-          </>
-        )}
-
-        <div className="mb-4 mt-4">
-          <input
-            type="text"
-            placeholder="Napiši komentar..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="border p-2 w-full rounded mb-2"
-          />
-          <button
-            onClick={handleAddComment}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Dodaj komentar
-          </button>
+    <main className="book-details container mt-4">
+      <section className="product row">
+        <div className="col-md-5 product__photo">
+          <div className="photo-container">
+            <div className="photo-main">
+              <img src={book.cover_image_url} alt={book.title} className="img-fluid" />
+            </div>
+          </div>
         </div>
 
-        <ul>
-          {comments.map((c) => (
-            <li key={c.id} className="border-b py-2 flex justify-between items-center">
-              <span>
-                {c.content} <span className="text-gray-500 text-sm">(User: {c.user_id})</span>
-              </span>
-              {user?.role === "editor" && (
-                <button
-                  onClick={() => handleDeleteComment(c.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded ml-4"
-                >
-                  Obriši
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
+        <div className="col-md-7 product__info">
+          <div className="title mb-2">
+            <h1>{book.title}</h1>
+            <span>ISBN: {book.isbn}</span>
+          </div>
+
+          <div className="price mb-3">
+            <span>Pregleda: {book.views}</span>
+          </div>
+
+          <div className="variant mb-3">
+            <h3>Detalji knjige</h3>
+            <ul>
+              <li><b>Autor:</b> {book.author}</li>
+              <li><b>Žanrovi:</b> {book.genres.map(g => g.name).join(", ") || "Nema žanrova"}</li>
+              <li><b>Format:</b> {book.format}</li>
+              <li><b>Broj strana:</b> {book.pages}</li>
+              <li><b>Pismo:</b> {book.script}</li>
+              <li><b>Povez:</b> {book.binding}</li>
+              <li><b>Datum izdanja:</b> {book.publish_date}</li>
+            </ul>
+          </div>
+
+          {user?.role === "editor" && (
+            <div className="editor-buttons mb-3">
+              <button className="btn btn-danger mr-2" onClick={handleDeleteBook}>Obriši knjigu</button>
+              <button className="btn btn-secondary" onClick={() => navigate(`/books/${book.id}/edit`)}>Uredi knjigu</button>
+            </div>
+          )}
+
+          <div className="description">
+            <h3>Komentari</h3>
+            <div className="mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Napiši komentar..."
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+              />
+              <button
+                className="btn btn-primary mt-2"
+                onClick={handleAddComment}
+              >
+                Dodaj komentar
+              </button>
+            </div>
+
+            <ul className="comments-list">
+              {comments.map(c => (
+                <li className="card card-white post mb-3" key={c.id}>
+                  <div className="post-heading d-flex align-items-center">
+                    <div className="avatar-placeholder"></div>
+                    <div className="float-left meta ml-3">
+                      <div className="title h5">
+                        <b>{getUsername(c.user_id)}</b> 
+                      </div>
+                    </div>
+                  </div>
+                  <div className="post-description mt-2">
+                    <p>{c.content}</p>
+                    {user?.role === "editor" && (
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => handleDeleteComment(c.id)}
+                      >
+                        Obriši
+                      </button>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+          </div>
+        </div>
       </section>
     </main>
   );
