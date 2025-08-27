@@ -248,6 +248,8 @@ const HomePage = () => {
           </div>
         )}
 
+        <div className="section-header">
+
         {activeTab === "allBooks" && (
           <div>
             <input
@@ -256,7 +258,7 @@ const HomePage = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="input input-full mb-4"
-            />
+              />
 
             <div className="row gap-4 mb-4">
               <select
@@ -265,7 +267,7 @@ const HomePage = () => {
                   setSelectedGenre(Number(e.target.value) || "")
                 }
                 className="select select-wide"
-              >
+                >
                 <option value="">Svi žanrovi</option>
                 {genres.map((g) => (
                   <option key={g.id} value={g.id}>
@@ -279,14 +281,15 @@ const HomePage = () => {
 
             {auth?.user?.role === "editor" && (
               <button
-                onClick={() => navigate("/books/add")}
-                className="btn btn-blue btn-wide mt-4"
+              onClick={() => navigate("/books/add")}
+              className="btn btn-blue btn-wide mt-4"
               >
                 Dodaj novu knjigu
               </button>
             )}
           </div>
         )}
+        </div>
       </main>
     </div>
   );
