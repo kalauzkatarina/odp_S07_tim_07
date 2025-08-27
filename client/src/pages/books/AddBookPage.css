@@ -65,3 +65,56 @@
 .addbook-form button:hover {
   background-color: rgba(255,255,255,0.2);
 }
+
+.product__info .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* dva inputa po redu */
+  gap: 1rem;
+}
+
+.product__info .form-grid textarea {
+  grid-column: 1 / -1; /* zauzima ceo red */
+}
+
+.product__info .form-grid .genres {
+  grid-column: 1 / -1; /* žanrovi takođe ceo red */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+/* Container manji i centriran */
+.product-add {
+  max-width: 500px; /* uži container */
+  margin: 2rem auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column; /* slika gore, forma dole */
+  gap: 2rem;
+}
+
+/* Slika zauzima ceo width container-a */
+.product-add .photo-top img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Forma ispod slike */
+.product-add .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Textarea i žanrovi zauzimaju ceo red */
+.product-add .form-grid textarea,
+.product-add .form-grid .genres {
+  grid-column: 1 / -1;
+}
+
+/* Dugme zauzima ceo red */
+.product-add button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+}
