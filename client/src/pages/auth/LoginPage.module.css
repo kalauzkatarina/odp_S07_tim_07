@@ -154,9 +154,8 @@ button:hover {
 
 .roleSelection {
   display: flex;
-  gap: 1rem;
-  margin: -10px auto 10px auto; /* gornji margin smanjen */
-  justify-content: center;      /* centrira dugmad ispod input polja */
+  margin: -40px auto 20px auto; 
+  justify-content: center;    
 }
 
 .radioLabel {

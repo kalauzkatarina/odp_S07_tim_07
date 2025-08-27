@@ -69,7 +69,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
                 {error && <p className="text-md text-center text-red-700/80 font-medium">{error}</p>}
                 <button
                     type="submit"
-                    className="w-full  bg-blue-700/70 hover:bg-blue-700/90 text-white py-2 rounded-xl  transition"
+                    className="w-full bg-blue-700/70 hover:bg-blue-700/90 text-white py-2 rounded-xl  transition"
                 >
                     Sign up
                 </button>

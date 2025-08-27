@@ -14,7 +14,7 @@ export class GenreController{
     }
 
     private initializeRoutes(): void {
-        this.router.get("/genres", this.getGenres.bind(this));
+        this.router.get("/genres/get", this.getGenres.bind(this));
         this.router.post("/genres", authenticate, authorize("editor"), this.createGenre.bind(this));
         this.router.delete("/genres", authenticate, authorize("editor"), this.deleteGenre.bind(this));
     }

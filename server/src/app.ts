@@ -55,7 +55,7 @@ const featuredBookRepository: IFeaturedBooksRepository = new FeaturedBooksReposi
 //Services
 const authService: IAuthService = new AuthService(userRepository);
 const userService: IUserService = new UserService(userRepository);
-const commentService: ICommentService = new CommentService(commentRepository);
+const commentService: ICommentService = new CommentService(commentRepository, userRepository);
 const genreService: IGenreService = new GenreService(genreRepository);
 const bookService: IBookService = new BookService(bookRepository, bookGenreRepository, genreRepository);
 const featuredBookService: IFeaturedBookService = new FeaturedBookService(featuredBookRepository, bookRepository);

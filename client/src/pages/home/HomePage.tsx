@@ -6,6 +6,8 @@ import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
 import TabsBar from "../tabsbar/TabsBar";
 import "./Cards.css";
+import type { GenreDto } from "../../models/genres/GenreDto";
+import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -18,6 +20,8 @@ const HomePage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("bestsellers");
   const [isEditing, setIsEditing] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<number | "">("");
+  const [genres, setGenres] = useState<GenreDto[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<number | "">("");
 
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
@@ -32,6 +36,9 @@ const HomePage = () => {
         const all = await booksApi.getAllBooks();
         setAllBooks(all);
         setNewBooks(all.slice(-6).reverse());
+
+        const allGenres = await genresApi.getAllGenres();
+        setGenres(allGenres);
 
         const featured = await featuredBooksApi.getAllFeaturedBooks();
         setRecommended(featured.slice(0, 5));
@@ -53,6 +60,13 @@ const HomePage = () => {
         (b) =>
           b.title.toLowerCase().includes(search.toLowerCase()) ||
           b.author.toLowerCase().includes(search.toLowerCase())
+      );
+
+  const genreFilteredBooks =
+    selectedGenre === ""
+      ? filteredBooks
+      : filteredBooks.filter((b) =>
+        b.genres?.some((g) => g.id === selectedGenre)
       );
 
   const renderBooks = (books: BookDto[]) => (
@@ -243,7 +257,38 @@ const HomePage = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="border rounded w-full max-w-lg mb-4 p-2"
             />
-            {renderBooks(filteredBooks)}
+
+            <div className="mb-4 flex gap-4 items-center">
+
+              <select
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(Number(e.target.value) || "")}
+                className="w-64 h-10 border rounded p-2"
+                style={{ width: "250px", height: "42px" }}
+
+              >
+                <option value="">Svi žanrovi</option>
+                {genres.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.name}
+                  </option>
+                ))}
+              </select>
+
+            </div>
+
+            {renderBooks(genreFilteredBooks)}
+
+            {auth?.user?.role === "editor" && (
+              <button
+                onClick={() => navigate("/books/add")}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                style={{ width: "250px", height: "42px" }}
+              >
+                Dodaj novu knjigu
+              </button>
+            )}
+
           </div>
         )}
       </main>

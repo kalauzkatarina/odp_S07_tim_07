@@ -12,7 +12,7 @@ const emptyGenre: GenreDto = {
 export const genresApi: IGenresApiService = {
     async getAllGenres(): Promise<GenreDto[]> {
         try {
-            const res = await axios.get<GenreDto[]>(`${API_URL}s`);
+            const res = await axios.get<GenreDto[]>(`${API_URL}s/get`);
             return res.data;
         }
         catch {

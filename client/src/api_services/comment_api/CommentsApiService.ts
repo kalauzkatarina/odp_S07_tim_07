@@ -8,13 +8,15 @@ const emptyComment: CommentDto = {
     id: 0,
     content: "",
     user_id: 0,
-    book_id: 0
+    book_id: 0,
+    username: ""
 };
 
 export const commentsApi: ICommentsApiService = {
     async getAllCommentsByBook(book_id: number): Promise<CommentDto[]> {
         try {
             const res = await axios.get<CommentDto[]>(`${API_URL}s/getComments/${book_id}`);
+            console.log(res);
             return res.data;
         }
         catch {

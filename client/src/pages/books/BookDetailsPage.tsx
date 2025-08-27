@@ -66,10 +66,6 @@ export default function BookDetailsPage() {
     if (success) setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
-  const getUsername = (commentUserId: number) => {
-    if (user && user.id === commentUserId) return user.username; 
-    return `User #${commentUserId}`; 
-  };
 
   if (!book) return <p className="p-6">Učitavanje...</p>;
 
@@ -139,7 +135,7 @@ export default function BookDetailsPage() {
                     <div className="avatar-placeholder"></div>
                     <div className="float-left meta ml-3">
                       <div className="title h5">
-                        <b>{getUsername(c.user_id)}</b> 
+                        <b>{c.username || `User #${c.user_id}`}</b> 
                       </div>
                     </div>
                   </div>

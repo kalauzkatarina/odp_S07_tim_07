@@ -61,6 +61,19 @@ export class UserRepository implements IUserRepository {
             return new User();
         }
     }
+
+     async getUsernameById(userId: number): Promise<string> {
+        try {
+            const query = `SELECT username FROM users WHERE id = ?`;
+            const [rows] = await db.execute<RowDataPacket[]>(query, [userId]);
+            if (rows.length > 0) return rows[0].username;
+            return `User #${userId}`; // fallback
+        } catch (error) {
+            console.error("Error fetching username:", error);
+            return `User #${userId}`;
+        }
+    }
+
     async getByEmail(email: string): Promise<User> {
         try {
             const query = `SELECT * FROM users WHERE email = ?`;

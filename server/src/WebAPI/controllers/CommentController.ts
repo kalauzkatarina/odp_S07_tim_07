@@ -19,16 +19,15 @@ export class CommentController{
         this.router.delete("/comments/deleteComment/:id", authenticate, authorize("editor"), this.deleteComment.bind(this));
     }
 
-    private async getComments(req: Request, res: Response){
-        try{
-            const { id } = req.params;
-            const comments = await this.commentService.getAllCommentsByBook(Number(id));
-            res.status(200).json(comments);
-        }
-        catch(error){
-            res.status(500).json({success: false, message: error});
-        }
+    private async getComments(req: Request, res: Response) {
+    try {
+        const { id } = req.params;
+        const comments = await this.commentService.getAllCommentsByBook(Number(id));
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json({ success: false, message: error });
     }
+}
 
     private async createComment(req: Request, res: Response){
         try{
