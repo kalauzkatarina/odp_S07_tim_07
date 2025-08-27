@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
-import "./BookDetailsPage.css"; // koristimo isti CSS
+import "./AddBookPage.css"; // koristimo isti CSS
 
 export default function AddBookPage() {
   const { token } = useAuth();
@@ -91,8 +91,11 @@ export default function AddBookPage() {
           </div>
 
           <div className="form-grid">
-            <input type="text" placeholder="Naslov" value={title} onChange={e => setTitle(e.target.value)} />
-            <input type="text" placeholder="Autor" value={author} onChange={e => setAuthor(e.target.value)} />
+            <div className="row two-columns">
+              <input type="text" placeholder="Naslov" value={title} onChange={e => setTitle(e.target.value)} />
+              <input type="text" placeholder="Autor" value={author} onChange={e => setAuthor(e.target.value)} />
+            </div>
+
             <textarea placeholder="Sažetak" value={summary} onChange={e => setSummary(e.target.value)} />
 
             <input type="text" placeholder="Format" value={format} onChange={e => setFormat(e.target.value)} />
@@ -119,6 +122,7 @@ export default function AddBookPage() {
               ))}
             </div>
           </div>
+
 
           <button className="btn-edit" onClick={handleSubmit}>Dodaj knjigu</button>
         </div>

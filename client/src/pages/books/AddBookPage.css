@@ -82,25 +82,29 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-/* Container manji i centriran */
 .product-add {
-  max-width: 500px; /* uži container */
+  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   display: flex;
   flex-direction: column; /* slika gore, forma dole */
+  align-items: center; /* Centriraj decu horizontalno */
   gap: 2rem;
 }
 
-/* Slika zauzima ceo width container-a */
+/* Slika da zauzima 100% širine kontejnera i centrirana */
 .product-add .photo-top img {
   width: 100%;
+  max-width: 400px; /* max širina za lepu proporciju */
   border-radius: 10px;
   object-fit: cover;
+  display: block;
+  margin: 0 auto; /* centriraj sliku */
 }
 
 /* Forma ispod slike */
 .product-add .form-grid {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -112,9 +116,23 @@
   grid-column: 1 / -1;
 }
 
-/* Dugme zauzima ceo red */
+/* Naslov i autor da budu u istom redu, po pola širine */
+.product-add .title-author-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 .product-add button {
   margin-top: 1rem;
   width: 100%;
   padding: 0.75rem;
 }
+.row.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  grid-column: 1 / -1; 
+}
+

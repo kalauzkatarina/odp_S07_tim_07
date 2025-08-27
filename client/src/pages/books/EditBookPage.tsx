@@ -6,7 +6,7 @@ import { genresApi } from "../../api_services/genre_api/GenresApiService";
 import type { BookDto } from "../../models/books/BookDto";
 import type { GenreDto } from "../../models/genres/GenreDto";
 
-import "./BookDetailsPage.css"; // koristi isti CSS kao AddBookPage
+import "./EditBookPage.css"; 
 
 export default function EditBookPage() {
   const { token } = useAuth();
