@@ -25,6 +25,11 @@ import { BookService } from './Services/books/BookService';
 import { IBookGenreRepository } from './Domain/repositories/IBookGenreRepository';
 import { BookGenreRepository } from './Database/repositories/BookGenreRepository';
 import { BookController } from './WebAPI/controllers/BookController';
+import { IFeaturedBookService } from './Domain/services/featuredBooks/IFeaturedBookService';
+import { IFeaturedBooksRepository } from './Domain/repositories/IFeaturedBooksRepository';
+import { FeaturedBooksRepository } from './Database/repositories/FeaturedBooksRepository';
+import { FeaturedBookService } from './Services/featuredBooks/FeaturedBookService';
+import { FeaturedBookController } from './WebAPI/controllers/FeaturedBookController';
 
 require('dotenv').config();
 
@@ -45,6 +50,7 @@ const commentRepository: ICommentRepository = new CommentRepository();
 const genreRepository: IGenreRepository = new GenreRepository();
 const bookRepository: IBookRepository = new BookRepository();
 const bookGenreRepository: IBookGenreRepository = new BookGenreRepository();
+const featuredBookRepository: IFeaturedBooksRepository = new FeaturedBooksRepository();
 
 //Services
 const authService: IAuthService = new AuthService(userRepository);
@@ -52,6 +58,7 @@ const userService: IUserService = new UserService(userRepository);
 const commentService: ICommentService = new CommentService(commentRepository);
 const genreService: IGenreService = new GenreService(genreRepository);
 const bookService: IBookService = new BookService(bookRepository, bookGenreRepository, genreRepository);
+const featuredBookService: IFeaturedBookService = new FeaturedBookService(featuredBookRepository, bookRepository);
 
 //WebAPI routes
 const authController = new AuthContoller(authService);
@@ -59,6 +66,7 @@ const userController = new UserController(userService);
 const commentController = new CommentController(commentService);
 const genreController = new GenreController(genreService);
 const bookController = new BookController(bookService);
+const featuredBookController = new FeaturedBookController(featuredBookService);
 
 // Registering routes
 app.use('/api/v1', authController.getRouter());
@@ -66,5 +74,6 @@ app.use('/api/v1', userController.getRouter());
 app.use('/api/v1', commentController.getRouter());
 app.use('/api/v1', genreController.getRouter());
 app.use('/api/v1', bookController.getRouter());
+app.use('/api/v1', featuredBookController.getRouter());
 
 export default app;
