@@ -25,16 +25,13 @@ export class FeaturedBookService implements IFeaturedBookService {
     }
 
     async addFeaturedBook(bookId: number, editorId: number): Promise<FeaturedBookDto> {
-        // Proveri da li knjiga već postoji
         const exists = await this.featuredBookRepository.getByBookId(bookId);
         if (exists && exists.id) {
             throw new Error("Ova knjiga je već dodata u featured.");
         }
 
-        // Kreiraj featured book u bazi
         const newFb = await this.featuredBookRepository.create(new FeaturedBooks(0, bookId, editorId));
 
-        // Dohvati book iz repozitorijuma
         const book = await this.bookRepository.getBookById(bookId);
         if (!book || !book.id) {
             throw new Error("Book nije pronađen.");
@@ -42,8 +39,6 @@ export class FeaturedBookService implements IFeaturedBookService {
 
         return new FeaturedBookDto(newFb.id, newFb.book_id, newFb.editor_id, book);
     }
-
-
 
     async removeFeaturedBook(id: number): Promise<boolean> {
         return await this.featuredBookRepository.delete(id);

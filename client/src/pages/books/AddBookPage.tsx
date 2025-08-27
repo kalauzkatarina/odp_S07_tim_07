@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
-import "./AddBookPage.css"; // koristimo isti CSS
+import "./AddBookPage.css"; 
 
 export default function AddBookPage() {
   const { token } = useAuth();
@@ -42,7 +42,7 @@ export default function AddBookPage() {
 
   const handleSubmit = async () => {
     if (!token) {
-      alert("Morate biti ulogovani kao urednik da biste dodali knjigu!");
+      alert("You have to be logged in/signed in as the Editor to add a new book!");
       return;
     }
 
@@ -62,52 +62,50 @@ export default function AddBookPage() {
     );
 
     if (created.id !== 0) {
-      alert("Knjiga uspješno dodana!");
+      alert("Book succesfully added!");
       navigate(`/books/${created.id}`);
     } else {
-      alert("Greška pri dodavanju knjige!");
+      alert("Error while adding a new book!");
     }
   };
 
   return (
     <main className="book-details">
       <section className="product product-add">
-        {/* Slika na vrhu */}
         <div className="product__photo photo-top">
           <div className="photo-container">
             <div className="photo-main">
               <img
                 src={coverImageUrl || "https://via.placeholder.com/400x600?text=Korice"}
-                alt="Korice knjige"
+                alt="Book Cover"
               />
             </div>
           </div>
         </div>
 
-        {/* Forma ispod slike */}
         <div className="product__info info-bottom">
           <div className="title">
-            <h1>➕ Dodaj novu knjigu</h1>
+            <h1>➕ Add new book</h1>
           </div>
 
           <div className="form-grid">
             <div className="row two-columns">
-              <input type="text" placeholder="Naslov" value={title} onChange={e => setTitle(e.target.value)} />
-              <input type="text" placeholder="Autor" value={author} onChange={e => setAuthor(e.target.value)} />
+              <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
+              <input type="text" placeholder="Author" value={author} onChange={e => setAuthor(e.target.value)} />
             </div>
 
-            <textarea placeholder="Sažetak" value={summary} onChange={e => setSummary(e.target.value)} />
+            <textarea placeholder="Summary" value={summary} onChange={e => setSummary(e.target.value)} />
 
             <input type="text" placeholder="Format" value={format} onChange={e => setFormat(e.target.value)} />
-            <input type="text" placeholder="Povez" value={binding} onChange={e => setBinding(e.target.value)} />
+            <input type="text" placeholder="Binding" value={binding} onChange={e => setBinding(e.target.value)} />
 
-            <input type="number" placeholder="Broj strana" value={pages} onChange={e => setPages(Number(e.target.value))} />
-            <input type="text" placeholder="Pismo" value={script} onChange={e => setScript(e.target.value)} />
+            <input type="number" placeholder="Number of Pages" value={pages} onChange={e => setPages(Number(e.target.value))} />
+            <input type="text" placeholder="Script" value={script} onChange={e => setScript(e.target.value)} />
 
-            <input type="text" placeholder="Datum izdanja" value={publishDate} onChange={e => setPublishDate(e.target.value)} />
+            <input type="text" placeholder="Publish Date" value={publishDate} onChange={e => setPublishDate(e.target.value)} />
             <input type="text" placeholder="ISBN" value={isbn} onChange={e => setIsbn(e.target.value)} />
 
-            <input type="text" placeholder="URL korica" value={coverImageUrl} onChange={e => setCoverImageUrl(e.target.value)} />
+            <input type="text" placeholder="Cover Image URL" value={coverImageUrl} onChange={e => setCoverImageUrl(e.target.value)} />
 
             <div className="genres">
               {genres.map(genre => (
@@ -124,7 +122,7 @@ export default function AddBookPage() {
           </div>
 
 
-          <button className="btn-edit" onClick={handleSubmit}>Dodaj knjigu</button>
+          <button className="btn-edit" onClick={handleSubmit}>Add Book</button>
         </div>
       </section>
     </main>

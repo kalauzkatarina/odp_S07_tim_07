@@ -3,7 +3,6 @@ import type { FeaturedBooksDto } from "../../models/featured_books/FeaturedBooks
 import type { IFeaturedBooksService } from "./IFeaturedBooksApiService";
 import type { BookDto } from "../../models/books/BookDto";
 
-// API_URL treba da bude nešto poput "http://localhost:4000/api/v1/"
 const API_URL: string = import.meta.env.VITE_API_URL + "featuredBooks";
 
 const emptyBook: BookDto = {

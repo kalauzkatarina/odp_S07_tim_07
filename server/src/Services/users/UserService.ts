@@ -19,17 +19,15 @@ export class UserService implements IUserService{
         return usersDto;
     }
 
-    //getUserById služi da dohvatiš podatke o korisniku (npr. kod komentara da se prikaže ime).
     async getUserById(id: number): Promise<UserDto> {
         const user = await this.userRepository.getById(id);
         
         if(user.id !== 0){
             return new UserDto(user.id, user.username, user.email, user.role);
         }
-        return new UserDto(); //nije nasao user
+        return new UserDto();
     }
 
-    //updateUser daje korisniku mogućnost da menja podatke (ili admin da menja role).
     async updateUser(id: number, updates: { username?: string; email?: string; password?: string; role?: UserRole; }): Promise<UserDto> {
         const existingUser = await this.userRepository.getById(id);
         
@@ -37,7 +35,6 @@ export class UserService implements IUserService{
             return new UserDto();
         }
 
-        //ako se menja lozinka, hash-uje se
         if(updates.password){
             updates.password = await bcrypt.hash(updates.password, this.saltRounds);
         }

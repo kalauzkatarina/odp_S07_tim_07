@@ -25,7 +25,6 @@ export class FeaturedBookController {
         const limit = 5;
         const featuredBooks = await this.featuredBookService.getAllFeaturedBooks(limit);
 
-        // Mapiramo svaki featuredBook da uključi stvarni book objekat
         const featuredBooksWithDetails = featuredBooks.map(fb => ({
             id: fb.id,
             book_id: fb.book_id,

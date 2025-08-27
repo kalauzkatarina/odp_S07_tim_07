@@ -39,7 +39,7 @@ export default function EditBookPage() {
 
   const handleSubmit = async () => {
     if (!token || !book) {
-      alert("Morate biti ulogovani kao urednik!");
+      alert("You need to be logged in as the Editor!");
       return;
     }
 
@@ -60,51 +60,49 @@ export default function EditBookPage() {
     });
 
     if (updated.id !== 0) {
-      alert("✅ Knjiga uspešno izmenjena!");
+      alert("✅ Book succesfully edited!");
       navigate(`/books/${updated.id}`);
     } else {
-      alert("❌ Greška pri izmeni knjige!");
+      alert("❌ Error while editing the book!");
     }
   };
 
-  if (!book) return <p className="loading-text">Učitavanje knjige...</p>;
+  if (!book) return <p className="loading-text">Reading the book...</p>;
 
   return (
     <main className="book-details">
       <section className="product product-add">
-        {/* Slika na vrhu */}
         <div className="product__photo photo-top">
           <div className="photo-container">
             <div className="photo-main">
               <img
                 src={book.cover_image_url || "https://via.placeholder.com/400x600?text=Korice"}
-                alt="Korice knjige"
+                alt="Book Cover"
               />
             </div>
           </div>
         </div>
 
-        {/* Forma ispod slike */}
         <div className="product__info info-bottom">
           <div className="title">
-            <h1>✏️ Izmeni knjigu</h1>
+            <h1>✏️ Edit the Book</h1>
           </div>
 
           <div className="form-grid">
             <input
               type="text"
-              placeholder="Naslov"
+              placeholder="Title"
               value={book.title}
               onChange={e => setBook({ ...book, title: e.target.value })}
             />
             <input
               type="text"
-              placeholder="Autor"
+              placeholder="Author"
               value={book.author}
               onChange={e => setBook({ ...book, author: e.target.value })}
             />
             <textarea
-              placeholder="Sažetak"
+              placeholder="Summary"
               value={book.summary}
               onChange={e => setBook({ ...book, summary: e.target.value })}
             />
@@ -116,25 +114,25 @@ export default function EditBookPage() {
             />
             <input
               type="text"
-              placeholder="Povez"
+              placeholder="Binding"
               value={book.binding}
               onChange={e => setBook({ ...book, binding: e.target.value })}
             />
             <input
               type="number"
-              placeholder="Broj strana"
+              placeholder="Page Number"
               value={book.pages}
               onChange={e => setBook({ ...book, pages: Number(e.target.value) })}
             />
             <input
               type="text"
-              placeholder="Pismo"
+              placeholder="Script"
               value={book.script}
               onChange={e => setBook({ ...book, script: e.target.value })}
             />
             <input
               type="text"
-              placeholder="Datum izdanja"
+              placeholder="Publish Date"
               value={book.publish_date}
               onChange={e => setBook({ ...book, publish_date: e.target.value })}
             />
@@ -146,7 +144,7 @@ export default function EditBookPage() {
             />
             <input
               type="text"
-              placeholder="URL korica"
+              placeholder="Cover Image URL"
               value={book.cover_image_url}
               onChange={e => setBook({ ...book, cover_image_url: e.target.value })}
             />
@@ -166,7 +164,7 @@ export default function EditBookPage() {
           </div>
 
           <button className="btn-edit" onClick={handleSubmit}>
-            Sačuvaj izmene
+            Save changes
           </button>
         </div>
       </section>

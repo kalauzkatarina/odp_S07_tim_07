@@ -68,7 +68,6 @@ export class BookService implements IBookService {
             )
         );
 
-        //povezi zanrove
         for (const genre_id of genre_ids) {
             await this.bookGenreRepository.create({
                 book_id: newBook.id,
@@ -129,9 +128,7 @@ export class BookService implements IBookService {
         return bookDtos;
     }
 
-    //mapiranje knjige u BookDto sa zanrovima
     private async mapToDto(book: Book): Promise<BookDto> {
-        //nadji sve zanrove povezane sa knjigom
         const bookGenres = await this.bookGenreRepository.getByBookId(book.id);
         const genres: GenreDto[] = [];
 
@@ -144,7 +141,6 @@ export class BookService implements IBookService {
             }
         }
 
-        //vrati kompletan DTO
         return new BookDto(
             book.id, book.title, book.author, book.summary, book.format, book.pages, book.script, book.binding,
             book.publish_date, book.isbn, book.cover_image_url, book.views, genres

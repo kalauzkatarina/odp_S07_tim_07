@@ -1,4 +1,3 @@
-/* Glavni kontejner kartice */
 .book-card {
   width: 800px;
   margin: 2rem auto;
@@ -6,20 +5,18 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
-  background-color: #cda59f; /* pozadina kartice */
+  background-color: #cda59f; 
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
 }
 
-/* Naslov forme */
 .book-card h1 {
   font-size: 2rem;
   text-align: center;
   margin-bottom: 1rem;
 }
 
-/* Polja unutar forme */
 .book-card input,
 .book-card textarea,
 .book-card select {
@@ -32,7 +29,6 @@
   box-sizing: border-box;
 }
 
-/* Fokus na input polju */
 .book-card input:focus,
 .book-card textarea:focus,
 .book-card select:focus {
@@ -41,7 +37,6 @@
   box-shadow: 0 0 0 2px rgba(159, 99, 95, 0.2);
 }
 
-/* Dugme za submit */
 .book-card button {
   padding: 0.75rem 1.5rem;
   background-color: #9f635f;
@@ -57,7 +52,6 @@
   background-color: #7a4943;
 }
 
-/* Za checkbox listu žanrova */
 .genres {
   display: flex;
   flex-wrap: wrap;
@@ -76,10 +70,9 @@
 }
 
 .genres input {
-  accent-color: #9f635f; /* boja checkboxa */
+  accent-color: #9f635f; 
 }
 
-/* Sekcija sa više polja u redu */
 .row {
   display: flex;
   gap: 1rem;
@@ -89,7 +82,6 @@
   flex: 1;
 }
 
-/* Za textarea sa sažetkom */
 .book-card textarea {
   min-height: 80px;
   resize: vertical;

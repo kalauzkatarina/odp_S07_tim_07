@@ -28,14 +28,14 @@ const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
       const response = await authApi.logIn(loginData.username, loginData.password);
 
       if (response.success && response.data) {
-        login(response.data); // ažurira globalni auth state
-        navigate("/home"); // ide na home page
+        login(response.data); 
+        navigate("/home");
       } else {
-        setError(response.message || "Login failed"); // prikazuje poruku greške
+        setError(response.message || "Login failed"); 
       }
     } catch (err) {
       console.error(err);
-      setError("Login failed due to server error" + error); // fallback greška
+      setError("Login failed due to server error" + error);
     }
   };
 

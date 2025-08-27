@@ -15,14 +15,9 @@ export class UserController {
     }
 
      private initializeRoutes(): void {
-        // ostale metode, npr. /api/v1/user/1 <--- user po ID-ju 1
         this.router.get("/users", authenticate, authorize("editor"), this.users.bind(this));
     }
 
-    /**
-   * GET /api/v1/users
-   * Svi korisnici
-   */
 
     private async users(req: Request, res: Response): Promise<void> {
         try {
@@ -36,9 +31,6 @@ export class UserController {
         }
     }
 
-    /**
-   * Getter za router
-   */
     public getRouter(): Router {
         return this.router;
     }

@@ -30,12 +30,12 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const top = await booksApi.getTopViewed(6);
+        const top = await booksApi.getTopViewed(3);
         setTopViewed(Array.isArray(top) ? top : []);
 
         const all = await booksApi.getAllBooks();
         setAllBooks(all);
-        setNewBooks(all.slice(-6).reverse());
+        setNewBooks(all.slice(-5).reverse());
 
         const allGenres = await genresApi.getAllGenres();
         setGenres(allGenres);
@@ -43,7 +43,7 @@ const HomePage = () => {
         const featured = await featuredBooksApi.getAllFeaturedBooks();
         setRecommended(featured.slice(0, 5));
       } catch (error) {
-        console.error("Greška pri fetchovanju knjiga:", error);
+        console.error("Error while fetching the books:", error);
       }
     };
     fetchData();
@@ -88,7 +88,7 @@ const HomePage = () => {
                 onClick={() => handleClick(book.id)}
                 className="btn btn-outline btn-details"
               >
-                Detalji
+                Details
               </button>
             </div>
           </div>
@@ -111,7 +111,12 @@ const HomePage = () => {
     if (!auth?.token || !auth.user || !selectedBookId) return;
 
     if (recommended.some((b) => b.id === selectedBookId)) {
-      alert("Ova knjiga je već u recommended sekciji!");
+      alert("This book is already in the recommended section!");
+      return;
+    }
+
+    if (recommended.length >= 5) {
+      alert(`Max number of recommended books is ${5}. Remove one of the books first.`);
       return;
     }
 
@@ -123,30 +128,29 @@ const HomePage = () => {
       );
 
       if (newFeatured.book) {
-        setRecommended((prev) => [...prev, newFeatured.book]);
+        setRecommended((prev) => [...prev, newFeatured.book].slice(0, 5));
         setSelectedBookId("");
       } else {
         console.warn(
-          "API nije vratio book objekat unutar FeaturedBookDto, dodajemo book iz allBooks"
+          "API did not return book object in FeaturedBookDto, adding books from allBooks"
         );
         const book = allBooks.find((b) => b.id === selectedBookId);
         if (book) {
           setRecommended((prev) => [...prev, book]);
-          setSelectedBookId("");
         }
       }
 
       setSelectedBookId("");
       recommendedRef.current?.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
-      console.error("Greška pri dodavanju featured knjige:", err);
+      console.error("Error while adding featured books:", err);
     }
   };
 
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1 className="app-title">Bukvarijum</h1>
+        <h1 className="app-title">Bookvarium</h1>
       </header>
 
       <div className="tabs-sticky">
@@ -158,11 +162,11 @@ const HomePage = () => {
         {activeTab === "new" && renderBooks(newBooks)}
 
         {activeTab === "recommended" && (
-          <section ref={recommendedRef} className="section">
-            <div className="row between center mb-4">
+          <section ref={recommendedRef} className="section section--recommended">
+            <div className="row row-between row-center spacing-mb">
               {auth?.user?.role === "editor" && (
                 <button
-                  className={`btn btn-primary btn-edit`}
+                  className="btn btn-primary btn-edit"
                   onClick={() => {
                     if (isEditing) {
                       recommendedRef.current?.scrollIntoView({
@@ -172,7 +176,7 @@ const HomePage = () => {
                     setIsEditing(!isEditing);
                   }}
                 >
-                  {isEditing ? "Završi" : "Uredi"}
+                  {isEditing ? "End" : "Edit"}
                 </button>
               )}
             </div>
@@ -195,7 +199,7 @@ const HomePage = () => {
                         onClick={() => handleClick(book.id)}
                         className="btn btn-outline btn-details"
                       >
-                        Detalji
+                        Details
                       </button>
                     </div>
                   </div>
@@ -204,8 +208,8 @@ const HomePage = () => {
                     <button
                       className="btn btn-danger btn-remove-featured"
                       onClick={() => handleRemoveFeatured(book.id)}
-                      aria-label="Ukloni iz featured"
-                      title="Ukloni iz featured"
+                      aria-label="Remove from featured"
+                      title="Remove from featured"
                     >
                       ×
                     </button>
@@ -215,13 +219,13 @@ const HomePage = () => {
             </ul>
 
             {isEditing && (
-              <div className="row gap-2 mt-4">
+              <div className="row row-gap spacing-mt">
                 <select
                   value={selectedBookId}
                   onChange={(e) => setSelectedBookId(Number(e.target.value))}
-                  className="select select-wide"
+                  className="form-select"
                 >
-                  <option value="">Izaberi knjigu</option>
+                  <option value="">Select a book</option>
                   {allBooks.map((b) => (
                     <option key={b.id} value={b.id}>
                       {b.title}
@@ -233,7 +237,7 @@ const HomePage = () => {
                   onClick={handleAddFeatured}
                   disabled={!selectedBookId}
                 >
-                  Dodaj novu featured knjigu
+                  Add a new featured book
                 </button>
               </div>
             )}
@@ -241,55 +245,50 @@ const HomePage = () => {
         )}
 
         {activeTab === "login" && (
-          <div className="mt-4 text-center text-muted">
-            {auth?.user
-              ? `Dobrodošao, ${auth.user.username}!`
-              : "Kliknite Login za pristup korisničkoj stranici."}
+          <div className="spacing-mt text-muted text-center">
+            {auth?.user ? `Welcome, ${auth.user.username}!` : "Click Login to access the user page."}
           </div>
         )}
-
-        <div className="section-header">
 
         {activeTab === "allBooks" && (
           <div>
             <input
               type="text"
-              placeholder="Pretraga po naslovu ili autoru"
+              placeholder="Search by the title or author..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input input-full mb-4"
-              />
+              className="form-input spacing-mb"
+            />
 
-            <div className="row gap-4 mb-4">
-              <select
-                value={selectedGenre}
-                onChange={(e) =>
-                  setSelectedGenre(Number(e.target.value) || "")
-                }
-                className="select select-wide"
+            <div className="section-header">
+              <div className="row row-gap spacing-mb">
+                <select
+                  value={selectedGenre}
+                  onChange={(e) => setSelectedGenre(Number(e.target.value) || "")}
+                  className="form-select"
                 >
-                <option value="">Svi žanrovi</option>
-                {genres.map((g) => (
-                  <option key={g.id} value={g.id}>
-                    {g.name}
-                  </option>
-                ))}
-              </select>
+                  <option value="">Genres</option>
+                  {genres.map((g) => (
+                    <option key={g.id} value={g.id}>
+                      {g.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {renderBooks(genreFilteredBooks)}
+
+              {auth?.user?.role === "editor" && (
+                <button
+                  onClick={() => navigate("/books/add")}
+                  className="btn btn-blue btn-wide spacing-mt"
+                >
+                  Add new book
+                </button>
+              )}
             </div>
-
-            {renderBooks(genreFilteredBooks)}
-
-            {auth?.user?.role === "editor" && (
-              <button
-              onClick={() => navigate("/books/add")}
-              className="btn btn-blue btn-wide mt-4"
-              >
-                Dodaj novu knjigu
-              </button>
-            )}
           </div>
         )}
-        </div>
       </main>
     </div>
   );

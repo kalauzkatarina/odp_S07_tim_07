@@ -35,7 +35,7 @@ export default function BookDetailsPage() {
   const handleAddComment = async () => {
     if (!book || newComment.trim() === "") return;
     if (!token || !user) {
-      alert("Morate biti ulogovani da biste dodali komentar.");
+      alert("You need to be logged in/signed in to leave a comment!");
       return;
     }
     const created = await commentsApi.createComment(newComment, book.id, user.id, token);
@@ -49,10 +49,10 @@ export default function BookDetailsPage() {
   const handleDeleteBook = async () => {
     if (!book) return;
     if (!token || !user) {
-      alert("Morate biti ulogovani kao editor da biste obrisali knjigu.");
+      alert("You need to be logged in/signed in as the Editor to delete a book!");
       return;
     }
-    const confirmed = confirm(`Da li ste sigurni da želite obrisati "${book.title}"?`);
+    const confirmed = confirm(`Are you sure you want to delete "${book.title}"?`);
     if (!confirmed) return;
     const success = await booksApi.deleteBook(token, book.id);
     if (success) navigate("/books");
@@ -60,13 +60,13 @@ export default function BookDetailsPage() {
 
   const handleDeleteComment = async (commentId: number) => {
     if (!token || !user) return;
-    const confirmed = confirm("Da li ste sigurni da želite obrisati ovaj komentar?");
+    const confirmed = confirm("Are you sure you want to delete this comment?");
     if (!confirmed) return;
     const success = await commentsApi.deleteComment(token, commentId);
     if (success) setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
-  if (!book) return <p className="loading-text">Učitavanje...</p>;
+  if (!book) return <p className="loading-text">Loading...</p>;
 
   return (
     <main className="book-details">
@@ -86,39 +86,39 @@ export default function BookDetailsPage() {
           </div>
 
           <div className="views">
-            <span>Pregleda: {book.views}</span>
+            <span>Views: {book.views}</span>
           </div>
 
           <div className="details">
-            <h3>Detalji knjige</h3>
+            <h3>Book Details</h3>
             <ul>
-              <li><b>Autor:</b> {book.author}</li>
-              <li><b>Žanrovi:</b> {book.genres.map(g => g.name).join(", ") || "Nema žanrova"}</li>
+              <li><b>Author:</b> {book.author}</li>
+              <li><b>Genres:</b> {book.genres.map(g => g.name).join(", ") || "No Genres"}</li>
               <li><b>Format:</b> {book.format}</li>
-              <li><b>Broj strana:</b> {book.pages}</li>
-              <li><b>Pismo:</b> {book.script}</li>
-              <li><b>Povez:</b> {book.binding}</li>
-              <li><b>Datum izdanja:</b> {book.publish_date}</li>
+              <li><b>Page Number:</b> {book.pages}</li>
+              <li><b>Script:</b> {book.script}</li>
+              <li><b>Binding:</b> {book.binding}</li>
+              <li><b>Publish Date:</b> {book.publish_date}</li>
             </ul>
           </div>
 
           {user?.role === "editor" && (
             <div className="editor-buttons">
-              <button className="btn-delete" onClick={handleDeleteBook}>Obriši knjigu</button>
-              <button className="btn-edit" onClick={() => navigate(`/books/${book.id}/edit`)}>Uredi knjigu</button>
+              <button className="btn-delete" onClick={handleDeleteBook}>Delete book</button>
+              <button className="btn-edit" onClick={() => navigate(`/books/${book.id}/edit`)}>Edit book</button>
             </div>
           )}
 
           <div className="comments">
-            <h3>Komentari</h3>
+            <h3>Comments</h3>
             <div className="new-comment">
               <input
                 type="text"
-                placeholder="Napiši komentar..."
+                placeholder="Leave a comment..."
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
               />
-              <button className="btn-add-comment" onClick={handleAddComment}>Dodaj komentar</button>
+              <button className="btn-add-comment" onClick={handleAddComment}>Add comment</button>
             </div>
 
             <ul className="comments-list">
@@ -135,7 +135,7 @@ export default function BookDetailsPage() {
                   <div className="comment-body">
                     <p>{c.content}</p>
                     {user?.role === "editor" && (
-                      <button className="btn-comment-delete" onClick={() => handleDeleteComment(c.id)}>Obriši</button>
+                      <button className="btn-comment-delete" onClick={() => handleDeleteComment(c.id)}>Delete comment</button>
                     )}
                   </div>
                 </li>

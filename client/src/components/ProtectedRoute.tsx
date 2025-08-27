@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
-  roles?: string[]; // dozvoljene role
+  roles?: string[]; 
 }
 
 export default function ProtectedRoute({ children, roles }: ProtectedRouteProps) {

@@ -1,4 +1,3 @@
-/* Osnovni stil forme */
 .addbook-form {
   font-family: sans-serif;
   color: white;
@@ -9,7 +8,6 @@
   border-radius: 0.5rem;
 }
 
-/* Sekcije */
 .addbook-form .section {
   border-bottom: 1px solid rgba(255,255,255,0.1);
   padding-bottom: 2rem;
@@ -27,7 +25,6 @@
   margin-top: 0.25rem;
 }
 
-/* Polja */
 .addbook-form .field {
   margin-top: 1.5rem;
 }
@@ -52,7 +49,6 @@
   resize: none;
 }
 
-/* Buttons */
 .addbook-form button {
   background-color: rgba(255,255,255,0.1);
   color: white;
@@ -68,16 +64,16 @@
 
 .product__info .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* dva inputa po redu */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 1rem;
 }
 
 .product__info .form-grid textarea {
-  grid-column: 1 / -1; /* zauzima ceo red */
+  grid-column: 1 / -1; 
 }
 
 .product__info .form-grid .genres {
-  grid-column: 1 / -1; /* žanrovi takođe ceo red */
+  grid-column: 1 / -1; 
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -87,22 +83,20 @@
   margin: 2rem auto;
   padding: 2rem;
   display: flex;
-  flex-direction: column; /* slika gore, forma dole */
-  align-items: center; /* Centriraj decu horizontalno */
+  flex-direction: column; 
+  align-items: center; 
   gap: 2rem;
 }
 
-/* Slika da zauzima 100% širine kontejnera i centrirana */
 .product-add .photo-top img {
   width: 100%;
-  max-width: 400px; /* max širina za lepu proporciju */
+  max-width: 400px; 
   border-radius: 10px;
   object-fit: cover;
   display: block;
-  margin: 0 auto; /* centriraj sliku */
+  margin: 0 auto; 
 }
 
-/* Forma ispod slike */
 .product-add .form-grid {
   width: 100%;
   display: grid;
@@ -110,13 +104,11 @@
   gap: 1rem;
 }
 
-/* Textarea i žanrovi zauzimaju ceo red */
 .product-add .form-grid textarea,
 .product-add .form-grid .genres {
   grid-column: 1 / -1;
 }
 
-/* Naslov i autor da budu u istom redu, po pola širine */
 .product-add .title-author-row {
   grid-column: 1 / -1;
   display: grid;

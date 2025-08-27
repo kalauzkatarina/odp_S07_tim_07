@@ -2,7 +2,6 @@ import { useContext } from "react";
 import type { AuthContextType } from "../../types/auth/AuthContext";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 
-// Hook za korišćenje AuthContext-a
 export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (context === undefined) {

@@ -18,10 +18,6 @@ export class AuthContoller{
         this.router.post('/auth/register', this.register.bind(this));
     }
 
-    /**
-   * POST /api/v1/auth/login
-   * Prijava korisnika
-   */
     private async login(req: Request, res: Response): Promise<void> {
         try{
             const { username, password} = req.body;
@@ -35,9 +31,7 @@ export class AuthContoller{
 
             const resultAuth = await this.authService.logIn(username, password);
 
-            //proveravamo da li je prijava uspesna
             if(resultAuth.id !== 0){
-                //kreiranje jwt tokena
                 const token = jwt.sign(
                     {
                         id: resultAuth.id,
@@ -58,10 +52,6 @@ export class AuthContoller{
         }
     }
 
-    /**
-   * POST /api/v1/auth/register
-   * Registracija novog korisnika
-   */
     private async register(req: Request, res: Response): Promise<void> {
         try{
             const { username, password, email, role} = req.body;
@@ -73,10 +63,7 @@ export class AuthContoller{
             }
 
             const resultAuth = await this.authService.signUp(username, password, email, role);
-            //console.log(resultAuth)
-            //proveravamo da li je registracija uspesna
             if(resultAuth.id !== 0){
-                //kreiranje jwt tokena
                 const token = jwt.sign(
                     {
                         id: resultAuth.id,
@@ -95,9 +82,6 @@ export class AuthContoller{
         }
     }
 
-   /**
-   * Getter za router
-   */
   public getRouter(): Router {
     return this.router;
   }

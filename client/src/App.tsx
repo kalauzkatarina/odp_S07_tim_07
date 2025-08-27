@@ -12,10 +12,8 @@ import HomePage from "./pages/home/HomePage";
 function App() {
   return (
      <Routes>
-      {/* Auth */}
       <Route path="/login" element={<LoginPage authApi={authApi} />} />
      
-      {/* Početna stranica */}
       <Route path="/" element={<Navigate to="/home" replace />} />
       
       <Route path="/home" element={<HomePage />} />

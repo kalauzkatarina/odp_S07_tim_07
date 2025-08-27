@@ -1,16 +1,3 @@
-:root {
-  --color-copper-rust-50: #faf7ef;
-  --color-copper-rust-100: #f6eeed;
-  --color-copper-rust-200: #eee0dd;
-  --color-copper-rust-300: #dfc7c2;
-  --color-copper-rust-400: #cda59f;
-  --color-copper-rust-500: #b7827c;
-  --color-copper-rust-600: #9f635f;
-  --color-copper-rust-700: #8e5351;
-  --color-copper-rust-800: #704141;
-  --color-copper-rust-900: #613a3b;
-  --color-copper-rust-950: #341d1d;
-}
 
 .container {
   display: flex;
@@ -77,8 +64,8 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: var(--color-copper-rust-50); /* boja pozadine */
-  color: var(--color-copper-rust-900);    /* boja teksta */
+  background: var(--color-copper-rust-50); 
+  color: var(--color-copper-rust-900);    
   border-radius: 5px;
   padding: 12px;
   transition: 0.2s ease-in;

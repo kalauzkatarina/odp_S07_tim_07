@@ -44,7 +44,6 @@ app.get<{}, { data: string }>('/', (req, res) => {
   });
 });
 
-//Repositories
 const userRepository: IUserRepository = new UserRepository();
 const commentRepository: ICommentRepository = new CommentRepository();
 const genreRepository: IGenreRepository = new GenreRepository();
@@ -52,7 +51,6 @@ const bookRepository: IBookRepository = new BookRepository();
 const bookGenreRepository: IBookGenreRepository = new BookGenreRepository();
 const featuredBookRepository: IFeaturedBooksRepository = new FeaturedBooksRepository();
 
-//Services
 const authService: IAuthService = new AuthService(userRepository);
 const userService: IUserService = new UserService(userRepository);
 const commentService: ICommentService = new CommentService(commentRepository, userRepository);
@@ -60,7 +58,6 @@ const genreService: IGenreService = new GenreService(genreRepository);
 const bookService: IBookService = new BookService(bookRepository, bookGenreRepository, genreRepository);
 const featuredBookService: IFeaturedBookService = new FeaturedBookService(featuredBookRepository, bookRepository);
 
-//WebAPI routes
 const authController = new AuthContoller(authService);
 const userController = new UserController(userService);
 const commentController = new CommentController(commentService);
@@ -68,7 +65,6 @@ const genreController = new GenreController(genreService);
 const bookController = new BookController(bookService);
 const featuredBookController = new FeaturedBookController(featuredBookService);
 
-// Registering routes
 app.use('/api/v1', authController.getRouter());
 app.use('/api/v1', userController.getRouter());
 app.use('/api/v1', commentController.getRouter());

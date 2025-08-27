@@ -115,8 +115,8 @@ export class BookController {
 
     private async incrementViews(req: Request, res: Response) {
         try {
-            const id = Number(req.params.id); // uzimamo id iz URL-a
-            const book = await this.bookService.incrementViewsById(id); // koristimo novu servis metodu
+            const id = Number(req.params.id);
+            const book = await this.bookService.incrementViewsById(id); 
             res.status(200).json(book);
         } catch (error) {
             res.status(500).json({ success: false, message: error });

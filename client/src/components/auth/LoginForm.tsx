@@ -20,7 +20,6 @@ export function LoginForm({ authApi }: AuthFormProps) {
       return;
     }
     const response = await authApi.logIn(username, password);
-    console.log(response);
     if (response.success && response.data) {
       login(response.data);
       navigate("/home");
@@ -32,34 +31,31 @@ export function LoginForm({ authApi }: AuthFormProps) {
   };
 
   return (
-    <div className="bg-white/30 backdrop-blur-lg shadow-md rounded-2xl p-10 w-full max-w-md border border-blue-400">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Пријава</h1>
-      <form onSubmit={submitForm} className="space-y-4">
+    <div className="auth-container">
+      <h1 className="auth-title">Пријава</h1>
+      <form onSubmit={submitForm} className="auth-form">
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="auth-input"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full bg-white/40 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="auth-input"
         />
-        {error && <p className="text-md text-center text-red-700/80 font-medium">{error}</p>}
-        <button
-          type="submit"
-          className="w-full bg-blue-700/70 hover:bg-blue-700/90 text-white py-2 rounded-xl transition"
-        >
+        {error && <p className="auth-error">{error}</p>}
+        <button type="submit" className="auth-button">
           Log in
         </button>
       </form>
-      <p className="text-center text-sm mt-4">
+      <p className="auth-footer">
         Don't have an account?{" "}
-        <Link to="/register" className="text-blue-700 hover:underline">
+        <Link to="/register" className="auth-link">
           Sign up
         </Link>
       </p>

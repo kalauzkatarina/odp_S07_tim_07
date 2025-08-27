@@ -18,22 +18,22 @@ const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
     <div className={styles.container}>
       <div className={styles.tabs}>
         <div className={styles.tab} onClick={() => onTabChange("bestsellers")}>
-          Bestselleri
+          Bestsellers
         </div>
 
         <div className={styles.tab} onClick={() => onTabChange("new")}>
-          Novi naslovi
+          New Titles
         </div>
 
         <div className={styles.tab} onClick={() => onTabChange("recommended")}>
-          Ne sudi knjigu po koricama
+          Do Not Judge a Book by Its Cover
         </div>
 
         <div
           className={styles.tab}
           onClick={() => onTabChange("allBooks")}
         >
-          Pregledaj sve knjige
+          Library
         </div>
 
         <Link
