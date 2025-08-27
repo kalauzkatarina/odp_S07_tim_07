@@ -2,7 +2,8 @@ import { useState } from "react";
 import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormProps";
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import { useAuth } from "../../hooks/auth/useAuthHook";
-import { Link } from "react-router-dom";
+
+import styles from "../../pages/auth/LoginPage.module.css"
 
 export function SignUpForm({ authApi }: AuthFormProps) {
   const [username, setUsername] = useState("");
@@ -16,7 +17,6 @@ export function SignUpForm({ authApi }: AuthFormProps) {
     e.preventDefault();
 
     const validation = validationOfDatasAuth(username, password);
-
     if (!validation.success) {
       setError(validation.message ?? "Invalid information");
       return;
@@ -32,50 +32,58 @@ export function SignUpForm({ authApi }: AuthFormProps) {
       setEmail("");
     }
   };
+
   return (
-    <div className="auth-container">
-      <h1 className="auth-title">Registration</h1>
-      <form onSubmit={submitForm} className="auth-form">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="auth-input"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="auth-input"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="auth-input"
-        />
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="auth-input"
-        >
-          <option value="visitor">Visitor</option>
-          <option value="editor">Editor</option>
-        </select>
-        {error && <p className="auth-error">{error}</p>}
-        <button type="submit" className="auth-button">
-          Sign up
-        </button>
-      </form>
-      <p className="auth-footer">
-        Already have an account?{" "}
-        <Link to="/login" className="auth-link">
-          Log in
-        </Link>
-      </p>
-    </div>
+    <form onSubmit={submitForm}>
+      <label htmlFor="chk">Sign up</label>
+
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+
+       <div className={styles.roleSelection}>
+        <label className={styles.radioLabel}>
+          <input
+            type="radio"
+            name="role"
+            value="visitor"
+            checked={role === "visitor"}
+            onChange={(e) => setRole(e.target.value)}
+          />
+          Visitor
+        </label>
+        <label className={styles.radioLabel}>
+          <input
+            type="radio"
+            name="role"
+            value="editor"
+            checked={role === "editor"}
+            onChange={(e) => setRole(e.target.value)}
+          />
+          Editor
+        </label>
+      </div>
+
+      {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+      <button type="submit">Sign up</button>
+    </form>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormProps";
@@ -19,6 +19,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
       setError(validation.message ?? "Invalid login information");
       return;
     }
+
     const response = await authApi.logIn(username, password);
     if (response.success && response.data) {
       login(response.data);
@@ -31,34 +32,25 @@ export function LoginForm({ authApi }: AuthFormProps) {
   };
 
   return (
-    <div className="auth-container">
-      <h1 className="auth-title">Пријава</h1>
-      <form onSubmit={submitForm} className="auth-form">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="auth-input"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="auth-input"
-        />
-        {error && <p className="auth-error">{error}</p>}
-        <button type="submit" className="auth-button">
-          Log in
-        </button>
-      </form>
-      <p className="auth-footer">
-        Don't have an account?{" "}
-        <Link to="/register" className="auth-link">
-          Sign up
-        </Link>
-      </p>
-    </div>
+    <form onSubmit={submitForm}>
+      <label htmlFor="chk" aria-hidden="true">Login</label>
+
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+      <button type="submit">Login</button>
+    </form>
   );
 }
