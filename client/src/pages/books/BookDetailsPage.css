@@ -3,18 +3,18 @@
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  background-color: #cda59f; /* ovdje je pozadina */
-  border-radius: 10px;    /* zaobljeni rubovi */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* lagana sjena */
+  background-color: #cda59f;
+  border-radius: 10px;   
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
 }
 
 .product__photo {
-  flex: 2;           /* zauzima 2/3 prostora */
-  max-width: 600px;  /* maksimalna širina slike */
+  flex: 2;           
+  max-width: 600px;  
 }
 
 .product__photo img {
-  width: 100%;       /* slika zauzima sav prostor u kontejneru */
+  width: 100%;       
   height: auto;
   border-radius: 10px;
   object-fit: cover;

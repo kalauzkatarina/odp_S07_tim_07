@@ -57,17 +57,17 @@ const HomePage = () => {
     search.trim() === ""
       ? allBooks
       : allBooks.filter(
-        (b) =>
-          b.title.toLowerCase().includes(search.toLowerCase()) ||
-          b.author.toLowerCase().includes(search.toLowerCase())
-      );
+          (b) =>
+            b.title.toLowerCase().includes(search.toLowerCase()) ||
+            b.author.toLowerCase().includes(search.toLowerCase())
+        );
 
   const genreFilteredBooks =
     selectedGenre === ""
       ? filteredBooks
       : filteredBooks.filter((b) =>
-        b.genres?.some((g) => g.id === selectedGenre)
-      );
+          b.genres?.some((g) => g.id === selectedGenre)
+        );
 
   const renderBooks = (books: BookDto[]) => (
     <ul className="cards">
@@ -86,7 +86,7 @@ const HomePage = () => {
               </p>
               <button
                 onClick={() => handleClick(book.id)}
-                className="mt-4 px-4 py-2 border-2 border-[#704141] text-[#704141] font-semibold rounded hover:bg-[#704141] hover:text-white transition"
+                className="btn btn-outline btn-details"
               >
                 Detalji
               </button>
@@ -110,7 +110,6 @@ const HomePage = () => {
   const handleAddFeatured = async () => {
     if (!auth?.token || !auth.user || !selectedBookId) return;
 
-    // Provera da li je knjiga već u recommended
     if (recommended.some((b) => b.id === selectedBookId)) {
       alert("Ova knjiga je već u recommended sekciji!");
       return;
@@ -127,7 +126,9 @@ const HomePage = () => {
         setRecommended((prev) => [...prev, newFeatured.book]);
         setSelectedBookId("");
       } else {
-        console.warn("API nije vratio book objekat unutar FeaturedBookDto, dodajemo book iz allBooks");
+        console.warn(
+          "API nije vratio book objekat unutar FeaturedBookDto, dodajemo book iz allBooks"
+        );
         const book = allBooks.find((b) => b.id === selectedBookId);
         if (book) {
           setRecommended((prev) => [...prev, book]);
@@ -142,31 +143,31 @@ const HomePage = () => {
     }
   };
 
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="flex justify-between items-center px-6 py-4 bg-white shadow">
-        <h1 className="text-2xl font-bold text-gray-800">Bukvarijum</h1>
+    <div className="app-container">
+      <header className="app-header">
+        <h1 className="app-title">Bukvarijum</h1>
       </header>
 
-      <div className="sticky top-0 bg-white z-10 shadow px-6 py-2">
+      <div className="tabs-sticky">
         <TabsBar activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
 
-      <main className="flex-1 px-6 pt-4">
+      <main className="app-main">
         {activeTab === "bestsellers" && renderBooks(topViewed)}
         {activeTab === "new" && renderBooks(newBooks)}
 
         {activeTab === "recommended" && (
-          <section ref={recommendedRef} className="my-8 p-4 bg-white shadow rounded">
-            <div className="flex justify-between items-center mb-4">
+          <section ref={recommendedRef} className="section">
+            <div className="row between center mb-4">
               {auth?.user?.role === "editor" && (
                 <button
-                  className="bg-blue-500 text-white rounded text-xs"
-                  style={{ width: "150px", height: "42px" }}
+                  className={`btn btn-primary btn-edit`}
                   onClick={() => {
                     if (isEditing) {
-                      recommendedRef.current?.scrollIntoView({ behavior: "smooth" });
+                      recommendedRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                      });
                     }
                     setIsEditing(!isEditing);
                   }}
@@ -178,7 +179,7 @@ const HomePage = () => {
 
             <ul className="cards">
               {recommended.map((book) => (
-                <li key={book.id} className="cards__item relative">
+                <li key={book.id} className="cards__item card-item-relative">
                   <div className="card">
                     <div
                       className="card__image"
@@ -192,7 +193,7 @@ const HomePage = () => {
                       </p>
                       <button
                         onClick={() => handleClick(book.id)}
-                        className="mt-4 px-4 py-2 border-2 border-[#704141] text-[#704141] font-semibold rounded hover:bg-[#704141] hover:text-white transition"
+                        className="btn btn-outline btn-details"
                       >
                         Detalji
                       </button>
@@ -201,9 +202,10 @@ const HomePage = () => {
 
                   {isEditing && (
                     <button
-                      className="absolute top-1 right-1 w-5 h-5 text-xs bg-red-500 text-white rounded-full flex items-center justify-center"
-                      style={{ width: "250px", height: "42px" }}
+                      className="btn btn-danger btn-remove-featured"
                       onClick={() => handleRemoveFeatured(book.id)}
+                      aria-label="Ukloni iz featured"
+                      title="Ukloni iz featured"
                     >
                       ×
                     </button>
@@ -213,12 +215,11 @@ const HomePage = () => {
             </ul>
 
             {isEditing && (
-              <div className="mt-4 flex gap-2 items-center">
+              <div className="row gap-2 mt-4">
                 <select
                   value={selectedBookId}
                   onChange={(e) => setSelectedBookId(Number(e.target.value))}
-                  className="border p-2 rounded"
-                  style={{ width: "250px", height: "42px" }}
+                  className="select select-wide"
                 >
                   <option value="">Izaberi knjigu</option>
                   {allBooks.map((b) => (
@@ -228,8 +229,7 @@ const HomePage = () => {
                   ))}
                 </select>
                 <button
-                  className="inline-flex items-center justify-center px-2 py-1 text-xs bg-green-500 text-white rounded"
-                  style={{ width: "250px", height: "42px" }}
+                  className="btn btn-success btn-wide"
                   onClick={handleAddFeatured}
                   disabled={!selectedBookId}
                 >
@@ -241,7 +241,7 @@ const HomePage = () => {
         )}
 
         {activeTab === "login" && (
-          <div className="mt-4 text-center text-gray-700">
+          <div className="mt-4 text-center text-muted">
             {auth?.user
               ? `Dobrodošao, ${auth.user.username}!`
               : "Kliknite Login za pristup korisničkoj stranici."}
@@ -255,17 +255,16 @@ const HomePage = () => {
               placeholder="Pretraga po naslovu ili autoru"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border rounded w-full max-w-lg mb-4 p-2"
+              className="input input-full mb-4"
             />
 
-            <div className="mb-4 flex gap-4 items-center">
-
+            <div className="row gap-4 mb-4">
               <select
                 value={selectedGenre}
-                onChange={(e) => setSelectedGenre(Number(e.target.value) || "")}
-                className="w-64 h-10 border rounded p-2"
-                style={{ width: "250px", height: "42px" }}
-
+                onChange={(e) =>
+                  setSelectedGenre(Number(e.target.value) || "")
+                }
+                className="select select-wide"
               >
                 <option value="">Svi žanrovi</option>
                 {genres.map((g) => (
@@ -274,7 +273,6 @@ const HomePage = () => {
                   </option>
                 ))}
               </select>
-
             </div>
 
             {renderBooks(genreFilteredBooks)}
@@ -282,13 +280,11 @@ const HomePage = () => {
             {auth?.user?.role === "editor" && (
               <button
                 onClick={() => navigate("/books/add")}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                style={{ width: "250px", height: "42px" }}
+                className="btn btn-blue btn-wide mt-4"
               >
                 Dodaj novu knjigu
               </button>
             )}
-
           </div>
         )}
       </main>

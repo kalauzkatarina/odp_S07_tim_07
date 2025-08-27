@@ -5,7 +5,7 @@ import { booksApi } from "../../api_services/book_api/BooksApiService";
 import type { CommentDto } from "../../models/comments/CommentDto";
 import { commentsApi } from "../../api_services/comment_api/CommentsApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
-import "./BookDetailsPage.css"; // CSS za komentare i stranicu
+import "./BookDetailsPage.css";
 
 export default function BookDetailsPage() {
   const { id } = useParams();
@@ -66,31 +66,30 @@ export default function BookDetailsPage() {
     if (success) setComments((prev) => prev.filter((c) => c.id !== commentId));
   };
 
-
-  if (!book) return <p className="p-6">Učitavanje...</p>;
+  if (!book) return <p className="loading-text">Učitavanje...</p>;
 
   return (
-    <main className="book-details container mt-4">
-      <section className="product row">
-        <div className="col-md-5 product__photo">
+    <main className="book-details">
+      <section className="product">
+        <div className="product__photo">
           <div className="photo-container">
             <div className="photo-main">
-              <img src={book.cover_image_url} alt={book.title} className="img-fluid" />
+              <img src={book.cover_image_url} alt={book.title} />
             </div>
           </div>
         </div>
 
-        <div className="col-md-7 product__info">
-          <div className="title mb-2">
+        <div className="product__info">
+          <div className="title">
             <h1>{book.title}</h1>
             <span>ISBN: {book.isbn}</span>
           </div>
 
-          <div className="price mb-3">
+          <div className="views">
             <span>Pregleda: {book.views}</span>
           </div>
 
-          <div className="variant mb-3">
+          <div className="details">
             <h3>Detalji knjige</h3>
             <ul>
               <li><b>Autor:</b> {book.author}</li>
@@ -104,56 +103,44 @@ export default function BookDetailsPage() {
           </div>
 
           {user?.role === "editor" && (
-            <div className="editor-buttons mb-3">
-              <button className="btn btn-danger mr-2" onClick={handleDeleteBook}>Obriši knjigu</button>
-              <button className="btn btn-secondary" onClick={() => navigate(`/books/${book.id}/edit`)}>Uredi knjigu</button>
+            <div className="editor-buttons">
+              <button className="btn-delete" onClick={handleDeleteBook}>Obriši knjigu</button>
+              <button className="btn-edit" onClick={() => navigate(`/books/${book.id}/edit`)}>Uredi knjigu</button>
             </div>
           )}
 
-          <div className="description">
+          <div className="comments">
             <h3>Komentari</h3>
-            <div className="mb-3">
+            <div className="new-comment">
               <input
                 type="text"
-                className="form-control"
                 placeholder="Napiši komentar..."
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
               />
-              <button
-                className="btn btn-primary mt-2"
-                onClick={handleAddComment}
-              >
-                Dodaj komentar
-              </button>
+              <button className="btn-add-comment" onClick={handleAddComment}>Dodaj komentar</button>
             </div>
 
             <ul className="comments-list">
               {comments.map(c => (
-                <li className="card card-white post mb-3" key={c.id}>
-                  <div className="post-heading d-flex align-items-center">
+                <li className="comment-card" key={c.id}>
+                  <div className="comment-heading">
                     <div className="avatar-placeholder"></div>
-                    <div className="float-left meta ml-3">
-                      <div className="title h5">
-                        <b>{c.username || `User #${c.user_id}`}</b> 
+                    <div className="comment-meta">
+                      <div className="comment-title">
+                        <b>{c.username || `User #${c.user_id}`}</b>
                       </div>
                     </div>
                   </div>
-                  <div className="post-description mt-2">
+                  <div className="comment-body">
                     <p>{c.content}</p>
                     {user?.role === "editor" && (
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => handleDeleteComment(c.id)}
-                      >
-                        Obriši
-                      </button>
+                      <button className="btn-comment-delete" onClick={() => handleDeleteComment(c.id)}>Obriši</button>
                     )}
                   </div>
                 </li>
               ))}
             </ul>
-
           </div>
         </div>
       </section>
