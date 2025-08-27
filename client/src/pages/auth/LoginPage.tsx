@@ -39,7 +39,6 @@ const LoginPage: FC<LoginPageProps> = ({ authApi }) => {
     }
   };
 
-
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

@@ -1,13 +1,27 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color:#8e5351;
 }
 :root {
  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
  line-height: 1.5;
  font-weight: 400;
+  --color-copper-rust-50: #faf7ef;
+  --color-copper-rust-100: #f6eeed;
+  --color-copper-rust-200: #eee0dd;
+  --color-copper-rust-300: #dfc7c2;
+  --color-copper-rust-400: #cda59f;
+  --color-copper-rust-500: #b7827c;
+  --color-copper-rust-600: #9f635f;
+  --color-copper-rust-700: #8e5351;
+  --color-copper-rust-800: #704141;
+  --color-copper-rust-900: #613a3b;
+  --color-copper-rust-950: #341d1d;
 }
+
 
 h1 {
  font-size: 2.4em;
