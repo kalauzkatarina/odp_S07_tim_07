@@ -12,8 +12,8 @@ import SearchAndFilter from "../../components/homePage/SearchAndFilter";
 import RecommendedSection from "../../components/homePage/RecommendedSection";
 import AddBookForm from "../../components/addBook/AddBookForm";
 import type { CommentDto } from "../../models/comments/CommentDto";
-import BookDetailsCard from "../../components/bookDetailsForm/BookDetailsForm";
 import { commentsApi } from "../../api_services/commentApi/CommentsApiService";
+import { BookDetailsForm } from "../../components/bookDetailsForm/BookDetailsForm";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -71,67 +71,32 @@ const HomePage = () => {
     }
   };
 
-  const handleRemoveFeatured = async (bookId: number) => {
-    if (!auth?.token) return;
-    try {
-      await featuredBooksApi.removeFeaturedBook(auth.token, bookId);
-      setRecommended((prev) => prev.filter((b) => b.id !== bookId));
-    } catch (err) {
-      console.error("Greška pri uklanjanju featured knjige:", err);
-    }
-  };
-
-  const handleAddFeatured = async (bookId: number) => {
-    if (!auth?.token || !auth.user) return;
-
-    if (recommended.some((b) => b.id === bookId)) {
-      alert("This book is already in the recommended section!");
-      return;
-    }
-
-    if (recommended.length >= 5) {
-      alert(`Max number of recommended books is ${5}. Remove one of the books first.`);
-      return;
-    }
-
-    try {
-      const newFeatured = await featuredBooksApi.addFeaturedBook(
-        auth.token,
-        bookId,
-        auth.user.id
-      );
-
-      if (newFeatured.book) {
-        setRecommended((prev) => [...prev, newFeatured.book].slice(0, 5));
-      } else {
-        const book = allBooks.find((b) => b.id === bookId);
-        if (book) setRecommended((prev) => [...prev, book]);
-      }
-
-      setSelectedBookId("");
-    } catch (err) {
-      console.error("Error while adding featured books:", err);
-    }
-  };
   const handleBookAdded = (newBook: BookDto) => {
     setAllBooks((prev) => [...prev, newBook]);
+  };
+
+  const handleBookUpdated = (updatedBook: BookDto) => {
+    setAllBooks((prev) =>
+      prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
+    );
+    setSelectedBookDetails(updatedBook);
   };
 
   const filteredBooks =
     search.trim() === ""
       ? allBooks
       : allBooks.filter(
-        (b) =>
-          b.title.toLowerCase().includes(search.toLowerCase()) ||
-          b.author.toLowerCase().includes(search.toLowerCase())
-      );
+          (b) =>
+            b.title.toLowerCase().includes(search.toLowerCase()) ||
+            b.author.toLowerCase().includes(search.toLowerCase())
+        );
 
   const genreFilteredBooks =
     selectedGenre === ""
       ? filteredBooks
       : filteredBooks.filter((b) =>
-        b.genres?.some((g) => g.id === selectedGenre)
-      );
+          b.genres?.some((g) => g.id === selectedGenre)
+        );
 
   return (
     <div className="app-container">
@@ -156,8 +121,22 @@ const HomePage = () => {
             allBooks={allBooks}
             isEditing={isEditing}
             onToggleEdit={() => setIsEditing((prev) => !prev)}
-            onRemove={handleRemoveFeatured}
-            onAdd={handleAddFeatured}
+            onRemove={async (bookId) => {
+              if (!auth?.token) return;
+              try {
+                await featuredBooksApi.removeFeaturedBook(auth.token, bookId);
+                setRecommended((prev) => prev.filter((b) => b.id !== bookId));
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            onAdd={async (bookId) => {
+              if (!auth?.token || !auth.user) return;
+              if (recommended.some((b) => b.id === bookId)) return;
+              if (recommended.length >= 5) return;
+              const book = allBooks.find((b) => b.id === bookId);
+              if (book) setRecommended((prev) => [...prev, book]);
+            }}
             selectedBookId={selectedBookId}
             setSelectedBookId={setSelectedBookId}
             isEditor={auth?.user?.role === "editor"}
@@ -185,7 +164,6 @@ const HomePage = () => {
               <button onClick={() => setShowForm(true)} className="btnAdd">
                 Add new book
               </button>
-
             )}
             {showForm && (
               <AddBookForm
@@ -193,24 +171,21 @@ const HomePage = () => {
                 onBookAdded={handleBookAdded}
               />
             )}
-
           </div>
         )}
 
         {selectedBookDetails && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <BookDetailsCard
+              <BookDetailsForm
                 book={selectedBookDetails}
+                editable={auth?.user?.role === "editor"}
                 comments={bookDetailsComments}
                 user={auth?.user}
                 newComment={newComment}
                 onNewCommentChange={setNewComment}
                 onAddComment={async () => {
-                  if (!auth?.user || !auth.token || !newComment.trim()) {
-                    alert("You must be logged in and enter a comment.");
-                    return;
-                  }
+                  if (!auth?.user || !auth.token || !newComment.trim()) return;
                   const created = await commentsApi.createComment(
                     newComment,
                     selectedBookDetails.id,
@@ -218,40 +193,57 @@ const HomePage = () => {
                     auth.token
                   );
                   if (created.id !== 0) {
-                    const refreshed = await commentsApi.getAllCommentsByBook(selectedBookDetails.id);
+                    const refreshed = await commentsApi.getAllCommentsByBook(
+                      selectedBookDetails.id
+                    );
                     setBookDetailsComments(refreshed);
                     setNewComment("");
                   }
                 }}
                 onDeleteComment={async (commentId) => {
                   if (!auth?.user || !auth.token) return;
-                  const confirmed = confirm("Are you sure you want to delete this comment?");
+                  const confirmed = confirm(
+                    "Are you sure you want to delete this comment?"
+                  );
                   if (!confirmed) return;
-                  const success = await commentsApi.deleteComment(auth.token, commentId);
+                  const success = await commentsApi.deleteComment(
+                    auth.token,
+                    commentId
+                  );
                   if (success) {
-                    setBookDetailsComments(prev => prev.filter(c => c.id !== commentId));
+                    setBookDetailsComments((prev) =>
+                      prev.filter((c) => c.id !== commentId)
+                    );
                   }
                 }}
                 onDeleteBook={async () => {
                   if (!auth?.user || !auth.token) return;
-                  const confirmed = confirm(`Are you sure you want to delete "${selectedBookDetails.title}"?`);
+                  const confirmed = confirm(
+                    `Are you sure you want to delete "${selectedBookDetails.title}"?`
+                  );
                   if (!confirmed) return;
-                  const success = await booksApi.deleteBook(auth.token, selectedBookDetails.id);
+                  const success = await booksApi.deleteBook(
+                    auth.token,
+                    selectedBookDetails.id
+                  );
                   if (success) {
-                    setAllBooks(prev => prev.filter(b => b.id !== selectedBookDetails.id));
+                    setAllBooks((prev) =>
+                      prev.filter((b) => b.id !== selectedBookDetails.id)
+                    );
                     setSelectedBookDetails(null);
                   }
                 }}
-                onEditBook={() => {
-                  // Možeš otvoriti posebnu formu ili navigirati
-                  alert("Implement edit functionality here!");
-                }}
+                onEditBook={handleBookUpdated}
               />
-              <button className="btn-close" onClick={() => setSelectedBookDetails(null)}>× Close</button>
+              <button
+                className="btn-close"
+                onClick={() => setSelectedBookDetails(null)}
+              >
+                × Close
+              </button>
             </div>
           </div>
         )}
-
       </main>
     </div>
   );
