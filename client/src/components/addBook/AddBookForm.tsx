@@ -1,0 +1,137 @@
+import { useState } from "react";
+import { useAuth } from "../../hooks/auth/useAuthHook";
+import { useNavigate } from "react-router-dom";
+import type { GenreDto } from "../../models/genres/GenreDto";
+import { genresApi } from "../../api_services/genreApi/GenresApiService";
+import { booksApi } from "../../api_services/bookApi/BooksApiService";
+import "./AddBookForm.css";
+
+interface AddBookFormProps {
+  onClose: () => void;
+}
+
+export default function AddBookForm({ onClose }: AddBookFormProps) {
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [summary, setSummary] = useState("");
+  const [format, setFormat] = useState("");
+  const [pages, setPages] = useState(0);
+  const [script, setScript] = useState("");
+  const [binding, setBinding] = useState("");
+  const [publishDate, setPublishDate] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState("");
+  const [genres, setGenres] = useState<GenreDto[]>([]);
+  const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+
+  // učitavanje žanrova
+  useState(() => {
+    const fetchGenres = async () => {
+      const data = await genresApi.getAllGenres();
+      setGenres(data);
+    };
+    fetchGenres();
+  });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onloadend = () => setCoverImageUrl(reader.result as string);
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleGenreToggle = (genreId: number) => {
+    setSelectedGenreIds((prev) =>
+      prev.includes(genreId)
+        ? prev.filter((id) => id !== genreId)
+        : [...prev, genreId]
+    );
+  };
+
+  const handleSubmit = async () => {
+    if (!token) {
+      alert("You have to be logged in as the Editor to add a new book!");
+      return;
+    }
+
+    const created = await booksApi.createBook(
+      token,
+      title,
+      author,
+      summary,
+      format,
+      pages,
+      script,
+      binding,
+      publishDate,
+      isbn,
+      coverImageUrl,
+      selectedGenreIds
+    );
+
+    if (created.id !== 0) {
+      alert("Book successfully added!");
+      navigate(`/books/${created.id}`);
+      onClose();
+    } else {
+      alert("Error while adding a new book!");
+    }
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <button className="modal-close" onClick={onClose}>✕</button>
+        <h2>Add new book</h2>
+
+        {/* === Preview slike iznad forme === */}
+        {coverImageUrl && (
+          <div className="preview-container">
+            <img
+              src={coverImageUrl}
+              alt="Preview"
+              className="preview-image"
+            />
+          </div>
+        )}
+
+        <div className="form-grid">
+          <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
+          <input type="text" placeholder="Author" value={author} onChange={e => setAuthor(e.target.value)} />
+
+          <textarea placeholder="Summary" value={summary} onChange={e => setSummary(e.target.value)} />
+
+          <input type="text" placeholder="Format" value={format} onChange={e => setFormat(e.target.value)} />
+          <input type="text" placeholder="Binding" value={binding} onChange={e => setBinding(e.target.value)} />
+
+          <input type="number" placeholder="Number of Pages" value={pages} onChange={e => setPages(Number(e.target.value))} />
+          <input type="text" placeholder="Script" value={script} onChange={e => setScript(e.target.value)} />
+
+          <input type="text" placeholder="Publish Date" value={publishDate} onChange={e => setPublishDate(e.target.value)} />
+          <input type="text" placeholder="ISBN" value={isbn} onChange={e => setIsbn(e.target.value)} />
+
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
+
+          <div className="genres">
+            {genres.map(genre => (
+              <label key={genre.id}>
+                <input
+                  type="checkbox"
+                  checked={selectedGenreIds.includes(genre.id)}
+                  onChange={() => handleGenreToggle(genre.id)}
+                />
+                <span>{genre.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <button className="btn-edit" onClick={handleSubmit}>Add Book</button>
+      </div>
+    </div>
+  );
+}

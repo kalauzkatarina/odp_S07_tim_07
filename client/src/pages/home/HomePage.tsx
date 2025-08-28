@@ -1,13 +1,17 @@
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import { featuredBooksApi } from "../../api_services/featuredBooksApi/FeaturedBooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
 import TabsBar from "../tabsbar/TabsBar";
-import "./HomePage.css";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
+import "./HomePage.css";
+import BooksList from "../../components/homePage/BooksList";
+import SearchAndFilter from "../../components/homePage/SearchAndFilter";
+import RecommendedSection from "../../components/homePage/RecommendedSection";
+import AddBookForm from "../../components/addBook/AddBookForm";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -22,10 +26,10 @@ const HomePage = () => {
   const [selectedBookId, setSelectedBookId] = useState<number | "">("");
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | "">("");
+  const [showForm, setShowForm] = useState(false);
 
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
-  const recommendedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,53 +53,9 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  const handleClick = (bookId: number) => {
+  const handleClickBook = (bookId: number) => {
     navigate(`/books/${bookId}`);
   };
-
-  const filteredBooks =
-    search.trim() === ""
-      ? allBooks
-      : allBooks.filter(
-          (b) =>
-            b.title.toLowerCase().includes(search.toLowerCase()) ||
-            b.author.toLowerCase().includes(search.toLowerCase())
-        );
-
-  const genreFilteredBooks =
-    selectedGenre === ""
-      ? filteredBooks
-      : filteredBooks.filter((b) =>
-          b.genres?.some((g) => g.id === selectedGenre)
-        );
-
-  const renderBooks = (books: BookDto[]) => (
-    <ul className="cards">
-      {books.map((book) => (
-        <li key={book.id} className="cards__item">
-          <div className="card">
-            <div
-              className="card__image"
-              style={{ backgroundImage: `url(${book.cover_image_url})` }}
-            ></div>
-            <div className="card__content">
-              <div className="card__title">{book.title}</div>
-              <p className="card__text">{book.author}</p>
-              <p className="card__text">
-                {book.summary ? book.summary.slice(0, 100) + "..." : ""}
-              </p>
-              <button
-                onClick={() => handleClick(book.id)}
-                className="btn btn-outline btn-details"
-              >
-                Details
-              </button>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
 
   const handleRemoveFeatured = async (bookId: number) => {
     if (!auth?.token) return;
@@ -107,10 +67,10 @@ const HomePage = () => {
     }
   };
 
-  const handleAddFeatured = async () => {
-    if (!auth?.token || !auth.user || !selectedBookId) return;
+  const handleAddFeatured = async (bookId: number) => {
+    if (!auth?.token || !auth.user) return;
 
-    if (recommended.some((b) => b.id === selectedBookId)) {
+    if (recommended.some((b) => b.id === bookId)) {
       alert("This book is already in the recommended section!");
       return;
     }
@@ -123,29 +83,38 @@ const HomePage = () => {
     try {
       const newFeatured = await featuredBooksApi.addFeaturedBook(
         auth.token,
-        selectedBookId,
+        bookId,
         auth.user.id
       );
 
       if (newFeatured.book) {
         setRecommended((prev) => [...prev, newFeatured.book].slice(0, 5));
-        setSelectedBookId("");
       } else {
-        console.warn(
-          "API did not return book object in FeaturedBookDto, adding books from allBooks"
-        );
-        const book = allBooks.find((b) => b.id === selectedBookId);
-        if (book) {
-          setRecommended((prev) => [...prev, book]);
-        }
+        const book = allBooks.find((b) => b.id === bookId);
+        if (book) setRecommended((prev) => [...prev, book]);
       }
 
       setSelectedBookId("");
-      recommendedRef.current?.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
       console.error("Error while adding featured books:", err);
     }
   };
+
+  const filteredBooks =
+    search.trim() === ""
+      ? allBooks
+      : allBooks.filter(
+        (b) =>
+          b.title.toLowerCase().includes(search.toLowerCase()) ||
+          b.author.toLowerCase().includes(search.toLowerCase())
+      );
+
+  const genreFilteredBooks =
+    selectedGenre === ""
+      ? filteredBooks
+      : filteredBooks.filter((b) =>
+        b.genres?.some((g) => g.id === selectedGenre)
+      );
 
   return (
     <div className="app-container">
@@ -158,135 +127,50 @@ const HomePage = () => {
       </div>
 
       <main className="app-main">
-        {activeTab === "bestsellers" && renderBooks(topViewed)}
-        {activeTab === "new" && renderBooks(newBooks)}
-
-        {activeTab === "recommended" && (
-          <section ref={recommendedRef} className="section section--recommended">
-            <div className="row row-between row-center spacing-mb">
-              {auth?.user?.role === "editor" && (
-                <button
-                  className="btnEdit"
-                  onClick={() => {
-                    if (isEditing) {
-                      recommendedRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                      });
-                    }
-                    setIsEditing(!isEditing);
-                  }}
-                >
-                  {isEditing ? "End" : "Edit"}
-                </button>
-              )}
-            </div>
-
-            <ul className="cards">
-              {recommended.map((book) => (
-                <li key={book.id} className="cards__item card-item-relative">
-                  <div className="card">
-                    <div
-                      className="card__image"
-                      style={{ backgroundImage: `url(${book.cover_image_url})` }}
-                    ></div>
-                    <div className="card__content">
-                      <div className="card__title">{book.title}</div>
-                      <p className="card__text">{book.author}</p>
-                      <p className="card__text">
-                        {book.summary ? book.summary.slice(0, 100) + "..." : ""}
-                      </p>
-                      <button
-                        onClick={() => handleClick(book.id)}
-                        className="btnDetails"
-                      >
-                        Details
-                      </button>
-                    </div>
-                  </div>
-
-                  {isEditing && (
-                    <button
-                      className="btnRemove"
-                      onClick={() => handleRemoveFeatured(book.id)}
-                      aria-label="Remove from featured"
-                      title="Remove from featured"
-                    >
-                      ×
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-
-            {isEditing && (
-              <div className="row">
-                <select
-                  value={selectedBookId}
-                  onChange={(e) => setSelectedBookId(Number(e.target.value))}
-                  className="form-select-featured"
-                >
-                  <option value="">Select a book</option>
-                  {allBooks.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {b.title}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  className="btnAddFb"
-                  onClick={handleAddFeatured}
-                  disabled={!selectedBookId}
-                >
-                  Add a new featured book
-                </button>
-              </div>
-            )}
-          </section>
+        {activeTab === "bestsellers" && (
+          <BooksList books={topViewed} onClick={handleClickBook} />
         )}
-
+        {activeTab === "new" && (
+          <BooksList books={newBooks} onClick={handleClickBook} />
+        )}
+        {activeTab === "recommended" && (
+          <RecommendedSection
+            books={recommended}
+            allBooks={allBooks}
+            isEditing={isEditing}
+            onToggleEdit={() => setIsEditing((prev) => !prev)}
+            onRemove={handleRemoveFeatured}
+            onAdd={handleAddFeatured}
+            selectedBookId={selectedBookId}
+            setSelectedBookId={setSelectedBookId}
+            isEditor={auth?.user?.role === "editor"}
+            onClickBook={handleClickBook}
+          />
+        )}
         {activeTab === "login" && (
           <div className="spacing-mt text-muted text-center">
-            {auth?.user ? `Welcome, ${auth.user.username}!` : "Click Login to access the user page."}
+            {auth?.user
+              ? `Welcome, ${auth.user.username}!`
+              : "Click Login to access the user page."}
           </div>
         )}
-
         {activeTab === "allBooks" && (
           <div>
-            <input
-              type="text"
-              placeholder="Search by the title or author..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="form-input spacing-mb"
+            <SearchAndFilter
+              search={search}
+              onSearchChange={setSearch}
+              genres={genres}
+              selectedGenre={selectedGenre}
+              onGenreChange={setSelectedGenre}
             />
+            <BooksList books={genreFilteredBooks} onClick={handleClickBook} />
+            {auth?.user?.role === "editor" && (
+              <button onClick={() => setShowForm(true)} className="btnAdd">
+                Add new book
+              </button>
 
-            <div className="section-header">
-              <div className="row row-gap spacing-mb">
-                <select
-                  value={selectedGenre}
-                  onChange={(e) => setSelectedGenre(Number(e.target.value) || "")}
-                  className="form-select"
-                >
-                  <option value="">Genres</option>
-                  {genres.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {renderBooks(genreFilteredBooks)}
-
-              {auth?.user?.role === "editor" && (
-                <button
-                  onClick={() => navigate("/books/add")}
-                  className="btnAdd"
-                >
-                  Add new book
-                </button>
-              )}
-            </div>
+            )}
+            {showForm && <AddBookForm onClose={() => setShowForm(false)} />}
           </div>
         )}
       </main>

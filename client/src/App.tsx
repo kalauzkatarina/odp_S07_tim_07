@@ -6,7 +6,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import BookDetailsPage from "./pages/books/BookDetailsPage";
 import EditBookPage from "./pages/books/EditBookPage";
 import UnauthorizedPage from "./pages/common/UnauthorizedPage";
-import AddBookPage from "./pages/books/AddBookPage";
 import HomePage from "./pages/home/HomePage";
 
 function App() {
@@ -19,12 +18,6 @@ function App() {
       <Route path="/home" element={<HomePage />} />
       
       <Route path="/books/:id" element={<BookDetailsPage />} />
-
-      <Route path="/books/add" element={
-        <ProtectedRoute roles={["editor"]}>
-          <AddBookPage />
-        </ProtectedRoute>
-      } />
 
       <Route path="/books/:id/edit" element={
         <ProtectedRoute roles={["editor"]}>
