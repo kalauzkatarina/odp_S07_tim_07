@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS books(
     binding VARCHAR(50),
     publish_date VARCHAR(20),
     isbn VARCHAR(20) UNIQUE,
-    cover_image_url VARCHAR(300),
+    cover_image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     views INT DEFAULT 0
 );
@@ -53,4 +53,13 @@ CREATE TABLE IF NOT EXISTS featured_books (
     featured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
     FOREIGN KEY (editor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS favorite_books (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    book_id INT NOT NULL,
+    user_id INT NOT NULL,
+    favorite BOOLEAN,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

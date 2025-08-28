@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./index.css";
-import { authApi } from "./api_services/auth_api/AuthAPIService";
+import { authApi } from "./api_services/authApi/AuthAPIService";
 import LoginPage from "./pages/auth/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BookDetailsPage from "./pages/books/BookDetailsPage";

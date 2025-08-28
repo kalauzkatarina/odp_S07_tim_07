@@ -2,7 +2,6 @@ import { Response, Request, Router } from "express";
 import { IFeaturedBookService } from "../../Domain/services/featuredBooks/IFeaturedBookService";
 import { authenticate } from "../../Middlewares/authentification/AuthMiddleware";
 import { authorize } from "../../Middlewares/authorization/AuthorizeMiddleware";
-import { FeaturedBookDto } from "../../Domain/DTOs/featuredBooks/FeaturedBookDto";
 
 export class FeaturedBookController {
     private router: Router;
@@ -37,7 +36,6 @@ export class FeaturedBookController {
         res.status(500).json({ success: false, message: error });
     }
 }
-
 
      private async addFeaturedBook(req: Request, res: Response): Promise<void> {
     try {

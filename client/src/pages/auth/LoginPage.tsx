@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import type { IAuthAPIService } from "../../api_services/auth_api/IAuthAPIService";
+import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService";
 import styles from "./LoginPage.module.css";
 import { SignUpForm } from "../../components/auth/SignUpForm";
 import { LoginForm } from "../../components/auth/LoginForm";

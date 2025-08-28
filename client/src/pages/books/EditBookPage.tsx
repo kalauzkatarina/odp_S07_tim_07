@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/useAuthHook";
-import { booksApi } from "../../api_services/book_api/BooksApiService";
-import { genresApi } from "../../api_services/genre_api/GenresApiService";
+import { booksApi } from "../../api_services/bookApi/BooksApiService";
+import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import type { BookDto } from "../../models/books/BookDto";
 import type { GenreDto } from "../../models/genres/GenreDto";
 

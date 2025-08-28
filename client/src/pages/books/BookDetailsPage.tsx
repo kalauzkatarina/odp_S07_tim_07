@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { BookDto } from "../../models/books/BookDto";
-import { booksApi } from "../../api_services/book_api/BooksApiService";
+import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import type { CommentDto } from "../../models/comments/CommentDto";
-import { commentsApi } from "../../api_services/comment_api/CommentsApiService";
+import { commentsApi } from "../../api_services/commentApi/CommentsApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import "./BookDetailsPage.css";
 

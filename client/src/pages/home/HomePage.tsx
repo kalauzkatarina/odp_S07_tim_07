@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { booksApi } from "../../api_services/book_api/BooksApiService";
-import { featuredBooksApi } from "../../api_services/featured_books/FeaturedBooksApiService";
+import { booksApi } from "../../api_services/bookApi/BooksApiService";
+import { featuredBooksApi } from "../../api_services/featuredBooksApi/FeaturedBooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
 import TabsBar from "../tabsbar/TabsBar";
 import "./HomePage.css";
 import type { GenreDto } from "../../models/genres/GenreDto";
-import { genresApi } from "../../api_services/genre_api/GenresApiService";
+import { genresApi } from "../../api_services/genreApi/GenresApiService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
