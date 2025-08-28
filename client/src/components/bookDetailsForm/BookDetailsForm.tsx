@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { BookDto } from "../../models/books/BookDto";
 import { BookEditForm } from "../editBookForm/EditBookForm";
 import type { CommentDto } from "../../models/comments/CommentDto";
+import "./BookDetailsForm.css"; 
 
 interface BookDetailsFormProps {
   book: BookDto;
@@ -47,8 +48,9 @@ export function BookDetailsForm({
   }
 
   return (
-    <main className="book-details">
-      <section className="product">
+    <section className="book-details">
+      <div className="product">
+        {/* LEVA STRANA: SLIKA */}
         <div className="product__photo">
           <div className="photo-container">
             <div className="photo-main">
@@ -60,27 +62,22 @@ export function BookDetailsForm({
           </div>
         </div>
 
+        {/* DESNA STRANA: DETALJI */}
         <div className="product__info">
           <div className="title">
             <h1>{currentBook.title}</h1>
+            <p>by {currentBook.author}</p>
             <span>ISBN: {currentBook.isbn}</span>
           </div>
 
-          <div className="views">
-            <span>Views: {currentBook.views}</span>
-          </div>
-
-          <div className="details">
-            <h3>Book Details</h3>
-            <ul>
-              <li><b>Author:</b> {currentBook.author}</li>
-              <li><b>Genres:</b> {currentBook.genres.map(g => g.name).join(", ") || "No Genres"}</li>
-              <li><b>Format:</b> {currentBook.format}</li>
-              <li><b>Page Number:</b> {currentBook.pages}</li>
-              <li><b>Script:</b> {currentBook.script}</li>
-              <li><b>Binding:</b> {currentBook.binding}</li>
-              <li><b>Publish Date:</b> {currentBook.publish_date}</li>
-            </ul>
+          <div className="book-summary">
+            <p>{currentBook.summary}</p>
+            <p><b>Format:</b> {currentBook.format}</p>
+            <p><b>Binding:</b> {currentBook.binding}</p>
+            <p><b>Pages:</b> {currentBook.pages}</p>
+            <p><b>Script:</b> {currentBook.script}</p>
+            <p><b>Publish Date:</b> {currentBook.publish_date}</p>
+            <p><b>Genres:</b> {currentBook.genres?.map(g => g.name).join(", ")}</p>
           </div>
 
           {user?.role === "editor" && (
@@ -90,6 +87,7 @@ export function BookDetailsForm({
             </div>
           )}
 
+          {/* KOMENTARI */}
           <div className="comments">
             <h3>Comments</h3>
             <div className="new-comment">
@@ -97,13 +95,13 @@ export function BookDetailsForm({
                 type="text"
                 placeholder="Leave a comment..."
                 value={newComment}
-                onChange={e => onNewCommentChange?.(e.target.value)}
+                onChange={(e) => onNewCommentChange?.(e.target.value)}
               />
               <button className="btn-add-comment" onClick={onAddComment}>Add comment</button>
             </div>
 
             <ul className="comments-list">
-              {comments.map(c => (
+              {comments.map((c) => (
                 <li className="comment-card" key={c.id}>
                   <div className="comment-heading">
                     <div className="avatar-placeholder"></div>
@@ -129,7 +127,7 @@ export function BookDetailsForm({
             </ul>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

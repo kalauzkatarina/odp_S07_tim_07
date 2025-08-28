@@ -1,3 +1,4 @@
+import { BookmarkIcon } from "lucide-react";
 import type { BookDto } from "../../models/books/BookDto";
 
 type Props = {
@@ -14,6 +15,9 @@ const BookCard = ({ book, onClick, isEditable, onRemove }: Props) => (
         className="card__image"
         style={{ backgroundImage: `url(${book.cover_image_url})` }}
       />
+      <button className="bookmark_btn">
+        <BookmarkIcon className="bookmark"/>
+      </button>
       <div className="card__content">
         <div className="card__title">{book.title}</div>
         <p className="card__text">{book.author}</p>

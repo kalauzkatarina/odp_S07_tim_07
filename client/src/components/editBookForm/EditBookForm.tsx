@@ -5,7 +5,7 @@ import type { BookDto } from "../../models/books/BookDto";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 
-import "./EditBookForm.css"; // koristi isti CSS kao u prvom fajlu
+import "./EditBookForm.css"; 
 
 interface BookEditFormProps {
   bookId: number;
