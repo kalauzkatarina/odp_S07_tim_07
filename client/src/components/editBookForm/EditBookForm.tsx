@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/auth/useAuthHook";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import type { BookDto } from "../../models/books/BookDto";
 import type { GenreDto } from "../../models/genres/GenreDto";
+import { useAuth } from "../../hooks/auth/useAuthHook";
+
+import "./EditBookForm.css"; // koristi isti CSS kao u prvom fajlu
 
 interface BookEditFormProps {
   bookId: number;
-  onSave: (book: BookDto) => void;
+  onSave: (updatedBook: BookDto) => void;
   onCancel: () => void;
 }
 
@@ -21,7 +23,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
     const fetchData = async () => {
       const bookData = await booksApi.getBookById(bookId);
       setBook(bookData);
-      setSelectedGenreIds(bookData.genres.map(g => g.id));
+      setSelectedGenreIds(bookData.genres.map((g) => g.id));
       const allGenres = await genresApi.getAllGenres();
       setGenres(allGenres);
     };
@@ -29,13 +31,20 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   }, [bookId]);
 
   const handleGenreToggle = (genreId: number) => {
-    setSelectedGenreIds(prev =>
-      prev.includes(genreId) ? prev.filter(id => id !== genreId) : [...prev, genreId]
+    setSelectedGenreIds((prev) =>
+      prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
     );
   };
 
+  const handleChange = (field: keyof BookDto, value: any) => {
+    if (book) setBook({ ...book, [field]: value });
+  };
+
   const handleSubmit = async () => {
-    if (!token || !book) return;
+    if (!token || !book) {
+      alert("You need to be logged in as the Editor!");
+      return;
+    }
 
     const updated = await booksApi.updateBook(token, book.id, {
       title: book.title,
@@ -48,12 +57,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       publish_date: book.publish_date,
       isbn: book.isbn,
       cover_image_url: book.cover_image_url,
-      genres: genres.filter(g => selectedGenreIds.includes(g.id)).map(g => ({ id: g.id, name: g.name })),
+      genres: genres
+        .filter((g) => selectedGenreIds.includes(g.id))
+        .map((g) => ({ id: g.id, name: g.name })),
     });
 
-    if (updated.id) {
+    if (updated.id !== 0) {
       alert("✅ Book successfully edited!");
-      onSave(updated); // VAŽNO: prosleđuje nove podatke BookDetailsForm-u
+      onSave(updated);
     } else {
       alert("❌ Error while editing the book!");
     }
@@ -62,40 +73,106 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   if (!book) return <p className="loading-text">Reading the book...</p>;
 
   return (
-    <div className="book-edit-form">
-      <input
-        type="text"
-        value={book.title}
-        onChange={e => setBook({ ...book, title: e.target.value })}
-        placeholder="Title"
-      />
-      <input
-        type="text"
-        value={book.author}
-        onChange={e => setBook({ ...book, author: e.target.value })}
-        placeholder="Author"
-      />
+    <section className="book-card">
+      <h1>✏️ Edit the Book</h1>
+
+      <div className="row">
+        <input
+          type="text"
+          placeholder="Title"
+          value={book.title}
+          onChange={(e) => handleChange("title", e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Author"
+          value={book.author}
+          onChange={(e) => handleChange("author", e.target.value)}
+        />
+      </div>
+
       <textarea
-        value={book.summary}
-        onChange={e => setBook({ ...book, summary: e.target.value })}
         placeholder="Summary"
+        value={book.summary}
+        onChange={(e) => handleChange("summary", e.target.value)}
       />
-      {/* Dodaj ostala polja isto kao u originalnom EditBookPage */}
+
+      <div className="row">
+        <input
+          type="text"
+          placeholder="Format"
+          value={book.format}
+          onChange={(e) => handleChange("format", e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Binding"
+          value={book.binding}
+          onChange={(e) => handleChange("binding", e.target.value)}
+        />
+      </div>
+
+      <div className="row">
+        <input
+          type="number"
+          placeholder="Page Number"
+          value={book.pages}
+          onChange={(e) => handleChange("pages", Number(e.target.value))}
+        />
+        <input
+          type="text"
+          placeholder="Script"
+          value={book.script}
+          onChange={(e) => handleChange("script", e.target.value)}
+        />
+      </div>
+
+      <div className="row">
+        <input
+          type="text"
+          placeholder="Publish Date"
+          value={book.publish_date}
+          onChange={(e) => handleChange("publish_date", e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="ISBN"
+          value={book.isbn}
+          onChange={(e) => handleChange("isbn", e.target.value)}
+        />
+      </div>
+
+      <input
+        type="text"
+        placeholder="Cover Image URL"
+        value={book.cover_image_url}
+        onChange={(e) => handleChange("cover_image_url", e.target.value)}
+      />
+
+      <div className="photo-preview">
+        <img
+          src={book.cover_image_url || "https://via.placeholder.com/400x600?text=Korice"}
+          alt="Book Cover"
+        />
+      </div>
+
       <div className="genres">
-        {genres.map(g => (
-          <label key={g.id}>
+        {genres.map((genre) => (
+          <label key={genre.id}>
             <input
               type="checkbox"
-              checked={selectedGenreIds.includes(g.id)}
-              onChange={() => handleGenreToggle(g.id)}
+              checked={selectedGenreIds.includes(genre.id)}
+              onChange={() => handleGenreToggle(genre.id)}
             />
-            {g.name}
+            <span>{genre.name}</span>
           </label>
         ))}
       </div>
 
-      <button onClick={handleSubmit}>Save changes</button>
-      <button onClick={onCancel}>Cancel</button>
-    </div>
+      <div className="row">
+        <button onClick={handleSubmit}>Save changes</button>
+        <button onClick={onCancel}>Cancel</button>
+      </div>
+    </section>
   );
 }

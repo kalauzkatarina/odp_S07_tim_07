@@ -79,6 +79,19 @@ const HomePage = () => {
     setAllBooks((prev) =>
       prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
     );
+
+    setTopViewed((prev) =>
+      prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
+    );
+
+    setNewBooks((prev) =>
+      prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
+    );
+
+    setRecommended((prev) =>
+      prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
+    );
+    
     setSelectedBookDetails(updatedBook);
   };
 
