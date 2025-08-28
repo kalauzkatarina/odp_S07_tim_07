@@ -1,5 +1,4 @@
 import { useContext, type FC } from "react";
-import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import styles from "./TabsBar.module.css";
 import { LogOut } from "lucide-react";
@@ -17,6 +16,7 @@ const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
 
   const handleLogout = () => {
     auth?.logout();
+    onTabChange("bestsellers");
   };
 
   return (
@@ -39,29 +39,24 @@ const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
         </div>
 
         {!auth?.user ? (
-          <Link
-            to="/login"
-            className={styles.tab}
-            onClick={() => onTabChange("login")}
-          >
+          <div className={styles.tab} onClick={() => onTabChange("login")}>
             Login
-          </Link>
+          </div>
         ) : (
           <div className={`${styles.tab} ${styles.userTab}`}>
-            <Link
-              to="/user"
+            <div
               className={styles.username}
               onClick={() => onTabChange("login")}
             >
               {auth.user.username}
-            </Link>
-            <Link to="/home"
+            </div>
+            <div
               onClick={handleLogout}
               className={styles.logoutBtn}
               title="Logout"
             >
               <LogOut size={20} />
-            </Link>
+            </div>
           </div>
         )}
 

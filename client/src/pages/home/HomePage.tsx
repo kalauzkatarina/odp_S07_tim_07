@@ -14,10 +14,12 @@ import AddBookForm from "../../components/addBook/AddBookForm";
 import type { CommentDto } from "../../models/comments/CommentDto";
 import { commentsApi } from "../../api_services/commentApi/CommentsApiService";
 import { BookDetailsForm } from "../../components/bookDetailsForm/BookDetailsForm";
+import { AuthForm } from "../../components/auth/AuthForm";
+import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
-const HomePage = () => {
+const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [topViewed, setTopViewed] = useState<BookDto[]>([]);
   const [newBooks, setNewBooks] = useState<BookDto[]>([]);
   const [recommended, setRecommended] = useState<BookDto[]>([]);
@@ -91,7 +93,7 @@ const HomePage = () => {
     setRecommended((prev) =>
       prev.map((b) => (b.id === updatedBook.id ? updatedBook : b))
     );
-    
+
     setSelectedBookDetails(updatedBook);
   };
 
@@ -99,17 +101,17 @@ const HomePage = () => {
     search.trim() === ""
       ? allBooks
       : allBooks.filter(
-          (b) =>
-            b.title.toLowerCase().includes(search.toLowerCase()) ||
-            b.author.toLowerCase().includes(search.toLowerCase())
-        );
+        (b) =>
+          b.title.toLowerCase().includes(search.toLowerCase()) ||
+          b.author.toLowerCase().includes(search.toLowerCase())
+      );
 
   const genreFilteredBooks =
     selectedGenre === ""
       ? filteredBooks
       : filteredBooks.filter((b) =>
-          b.genres?.some((g) => g.id === selectedGenre)
-        );
+        b.genres?.some((g) => g.id === selectedGenre)
+      );
 
   return (
     <div className="app-container">
@@ -157,12 +159,20 @@ const HomePage = () => {
           />
         )}
         {activeTab === "login" && (
-          <div className="spacing-mt text-muted text-center">
-            {auth?.user
-              ? `Welcome, ${auth.user.username}!`
-              : "Click Login to access the user page."}
-          </div>
+          <>
+            {!auth?.user ? (
+              <AuthForm authApi={authApi} />
+            ) : (
+              <div className="user-profile">
+                <h2>Welcome, {auth.user.username}!</h2>
+                <p>Role: {auth.user.role}</p>
+                <button onClick={() => auth.logout()}>Logout</button>
+              </div>
+            )}
+          </>
         )}
+
+
         {activeTab === "allBooks" && (
           <div>
             <SearchAndFilter
