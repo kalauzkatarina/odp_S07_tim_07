@@ -85,7 +85,7 @@ export default function AddBookPage() {
 
         <div className="product__info info-bottom">
           <div className="title">
-            <h1>➕ Add new book</h1>
+            <h1>Add new book</h1>
           </div>
 
           <div className="form-grid">

@@ -1,7 +1,8 @@
 import { useContext, type FC } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../contexts/auth_context/AuthContext";
-import styles from './TabsBar.module.css'
+import styles from "./TabsBar.module.css";
+import { LogOut } from "lucide-react";
 
 const tabOrder = ["bestsellers", "new", "recommended", "allBooks", "login"] as const;
 type TabType = typeof tabOrder[number];
@@ -13,6 +14,10 @@ interface TabsBarProps {
 
 const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
   const auth = useContext(AuthContext);
+
+  const handleLogout = () => {
+    auth?.logout();
+  };
 
   return (
     <div className={styles.container}>
@@ -29,20 +34,36 @@ const TabsBar: FC<TabsBarProps> = ({ activeTab, onTabChange }) => {
           Do Not Judge a Book by Its Cover
         </div>
 
-        <div
-          className={styles.tab}
-          onClick={() => onTabChange("allBooks")}
-        >
+        <div className={styles.tab} onClick={() => onTabChange("allBooks")}>
           Library
         </div>
 
-        <Link
-          to={auth?.user ? "/user" : "/login"}
-          className={styles.tab}
-          onClick={() => onTabChange("login")}
-        >
-          {auth?.user ? auth.user.username : "Login"}
-        </Link>
+        {!auth?.user ? (
+          <Link
+            to="/login"
+            className={styles.tab}
+            onClick={() => onTabChange("login")}
+          >
+            Login
+          </Link>
+        ) : (
+          <div className={`${styles.tab} ${styles.userTab}`}>
+            <Link
+              to="/user"
+              className={styles.username}
+              onClick={() => onTabChange("login")}
+            >
+              {auth.user.username}
+            </Link>
+            <Link to="/home"
+              onClick={handleLogout}
+              className={styles.logoutBtn}
+              title="Logout"
+            >
+              <LogOut size={20} />
+            </Link>
+          </div>
+        )}
 
         <span
           className={styles.glider}

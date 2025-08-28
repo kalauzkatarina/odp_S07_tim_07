@@ -5,7 +5,7 @@ import { featuredBooksApi } from "../../api_services/featured_books/FeaturedBook
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
 import TabsBar from "../tabsbar/TabsBar";
-import "./Cards.css";
+import "./HomePage.css";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genre_api/GenresApiService";
 
@@ -166,7 +166,7 @@ const HomePage = () => {
             <div className="row row-between row-center spacing-mb">
               {auth?.user?.role === "editor" && (
                 <button
-                  className="btn btn-primary btn-edit"
+                  className="btnEdit"
                   onClick={() => {
                     if (isEditing) {
                       recommendedRef.current?.scrollIntoView({
@@ -197,7 +197,7 @@ const HomePage = () => {
                       </p>
                       <button
                         onClick={() => handleClick(book.id)}
-                        className="btn btn-outline btn-details"
+                        className="btnDetails"
                       >
                         Details
                       </button>
@@ -206,7 +206,7 @@ const HomePage = () => {
 
                   {isEditing && (
                     <button
-                      className="btn btn-danger btn-remove-featured"
+                      className="btnRemove"
                       onClick={() => handleRemoveFeatured(book.id)}
                       aria-label="Remove from featured"
                       title="Remove from featured"
@@ -219,11 +219,11 @@ const HomePage = () => {
             </ul>
 
             {isEditing && (
-              <div className="row row-gap spacing-mt">
+              <div className="row">
                 <select
                   value={selectedBookId}
                   onChange={(e) => setSelectedBookId(Number(e.target.value))}
-                  className="form-select"
+                  className="form-select-featured"
                 >
                   <option value="">Select a book</option>
                   {allBooks.map((b) => (
@@ -233,7 +233,7 @@ const HomePage = () => {
                   ))}
                 </select>
                 <button
-                  className="btn btn-success btn-wide"
+                  className="btnAddFb"
                   onClick={handleAddFeatured}
                   disabled={!selectedBookId}
                 >
@@ -281,7 +281,7 @@ const HomePage = () => {
               {auth?.user?.role === "editor" && (
                 <button
                   onClick={() => navigate("/books/add")}
-                  className="btn btn-blue btn-wide spacing-mt"
+                  className="btnAdd"
                 >
                   Add new book
                 </button>

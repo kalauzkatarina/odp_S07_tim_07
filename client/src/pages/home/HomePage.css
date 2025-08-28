@@ -2,12 +2,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  padding: 1rem 0;
-  justify-content: center;
+  padding: 1rem;
+  justify-content: flex-start;
 }
 
 .cards__item {
-  flex: 0 0 350px; 
+  flex: 0 0 278px; 
   list-style: none;
 }
 
@@ -51,4 +51,40 @@
 .section-header {
   min-height: 62px;
   margin-bottom: 1rem;
+}
+
+.form-input{
+  width: 700px;
+  border-radius: 20px;
+}
+
+.form-select{
+  width: 300px;
+  border-radius: 20px;
+}
+
+.btnEdit{
+  width: 150px;
+}
+
+.btnDetails{
+  width: 150px;
+}
+
+.btnRemove{
+  width: 70px;
+}
+
+.btnAddFb{
+  width: 250px;
+}
+
+.form-select-featured{
+  width: 500px;
+  border-radius: 20px;
+}
+
+.btnAdd{
+  margin-bottom: 50px;
+  width: 200px;
 }

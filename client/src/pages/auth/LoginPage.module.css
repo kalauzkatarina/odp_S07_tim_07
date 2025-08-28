@@ -43,15 +43,14 @@ label {
 }
 
 input, select, button {
-  width: 60%;
   margin: 20px auto;
   display: block;
   padding: 12px;
-  border-radius: 5px;
   border: none;
   outline: none;
   font-size: 1em;
   text-align: center;
+  width: 180px;
 }
 
 input, select {
@@ -93,12 +92,7 @@ select::-ms-expand {
 }
 
 button {
-  height: 40px;
-  background: var(--color-copper-rust-500);
-  color: var(--color-copper-rust-50);
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s ease-in;
+  border-radius: 20px;
 }
 
 button:hover {

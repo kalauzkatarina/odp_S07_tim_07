@@ -15,7 +15,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
 }
 
-
 .product__photo {
   flex: 2;           
   max-width: 600px;  
@@ -48,6 +47,7 @@
 .editor-buttons button {
   margin-right: 1rem;
   padding: 0.5rem 1rem;
+  width: 180px;
 }
 
 .description{
