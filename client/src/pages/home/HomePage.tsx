@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import { featuredBooksApi } from "../../api_services/featuredBooksApi/FeaturedBooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
@@ -12,6 +11,9 @@ import BooksList from "../../components/homePage/BooksList";
 import SearchAndFilter from "../../components/homePage/SearchAndFilter";
 import RecommendedSection from "../../components/homePage/RecommendedSection";
 import AddBookForm from "../../components/addBook/AddBookForm";
+import type { CommentDto } from "../../models/comments/CommentDto";
+import BookDetailsCard from "../../components/bookDetailsForm/BookDetailsForm";
+import { commentsApi } from "../../api_services/commentApi/CommentsApiService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -27,8 +29,10 @@ const HomePage = () => {
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | "">("");
   const [showForm, setShowForm] = useState(false);
+  const [selectedBookDetails, setSelectedBookDetails] = useState<BookDto | null>(null);
+  const [bookDetailsComments, setBookDetailsComments] = useState<CommentDto[]>([]);
+  const [newComment, setNewComment] = useState("");
 
-  const navigate = useNavigate();
   const auth = useContext(AuthContext);
 
   useEffect(() => {
@@ -53,8 +57,18 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  const handleClickBook = (bookId: number) => {
-    navigate(`/books/${bookId}`);
+  const handleClickBook = async (bookId: number) => {
+    try {
+      const found = await booksApi.getBookById(bookId);
+      if (found && found.id !== 0) {
+        setSelectedBookDetails(found);
+        await booksApi.incrementViews(found.id);
+        const comments = await commentsApi.getAllCommentsByBook(found.id);
+        setBookDetailsComments(comments);
+      }
+    } catch (error) {
+      console.error("Failed to fetch book details:", error);
+    }
   };
 
   const handleRemoveFeatured = async (bookId: number) => {
@@ -98,6 +112,9 @@ const HomePage = () => {
     } catch (err) {
       console.error("Error while adding featured books:", err);
     }
+  };
+  const handleBookAdded = (newBook: BookDto) => {
+    setAllBooks((prev) => [...prev, newBook]);
   };
 
   const filteredBooks =
@@ -170,9 +187,71 @@ const HomePage = () => {
               </button>
 
             )}
-            {showForm && <AddBookForm onClose={() => setShowForm(false)} />}
+            {showForm && (
+              <AddBookForm
+                onClose={() => setShowForm(false)}
+                onBookAdded={handleBookAdded}
+              />
+            )}
+
           </div>
         )}
+
+        {selectedBookDetails && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <BookDetailsCard
+                book={selectedBookDetails}
+                comments={bookDetailsComments}
+                user={auth?.user}
+                newComment={newComment}
+                onNewCommentChange={setNewComment}
+                onAddComment={async () => {
+                  if (!auth?.user || !auth.token || !newComment.trim()) {
+                    alert("You must be logged in and enter a comment.");
+                    return;
+                  }
+                  const created = await commentsApi.createComment(
+                    newComment,
+                    selectedBookDetails.id,
+                    auth.user.id,
+                    auth.token
+                  );
+                  if (created.id !== 0) {
+                    const refreshed = await commentsApi.getAllCommentsByBook(selectedBookDetails.id);
+                    setBookDetailsComments(refreshed);
+                    setNewComment("");
+                  }
+                }}
+                onDeleteComment={async (commentId) => {
+                  if (!auth?.user || !auth.token) return;
+                  const confirmed = confirm("Are you sure you want to delete this comment?");
+                  if (!confirmed) return;
+                  const success = await commentsApi.deleteComment(auth.token, commentId);
+                  if (success) {
+                    setBookDetailsComments(prev => prev.filter(c => c.id !== commentId));
+                  }
+                }}
+                onDeleteBook={async () => {
+                  if (!auth?.user || !auth.token) return;
+                  const confirmed = confirm(`Are you sure you want to delete "${selectedBookDetails.title}"?`);
+                  if (!confirmed) return;
+                  const success = await booksApi.deleteBook(auth.token, selectedBookDetails.id);
+                  if (success) {
+                    setAllBooks(prev => prev.filter(b => b.id !== selectedBookDetails.id));
+                    setSelectedBookDetails(null);
+                  }
+                }}
+                onEditBook={() => {
+                  // Možeš otvoriti posebnu formu ili navigirati
+                  alert("Implement edit functionality here!");
+                }}
+              />
+              <button className="btn-close" onClick={() => setSelectedBookDetails(null)}>× Close</button>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );

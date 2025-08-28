@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/auth/useAuthHook";
-import { useNavigate } from "react-router-dom";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import "./AddBookForm.css";
+import type { BookDto } from "../../models/books/BookDto";
 
 interface AddBookFormProps {
   onClose: () => void;
+  onBookAdded: (book: BookDto) => void;
 }
 
-export default function AddBookForm({ onClose }: AddBookFormProps) {
+export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) {
   const { token } = useAuth();
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -27,7 +27,6 @@ export default function AddBookForm({ onClose }: AddBookFormProps) {
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
 
-  // učitavanje žanrova
   useState(() => {
     const fetchGenres = async () => {
       const data = await genresApi.getAllGenres();
@@ -75,7 +74,7 @@ export default function AddBookForm({ onClose }: AddBookFormProps) {
 
     if (created.id !== 0) {
       alert("Book successfully added!");
-      navigate(`/books/${created.id}`);
+      onBookAdded(created);
       onClose();
     } else {
       alert("Error while adding a new book!");
@@ -88,7 +87,6 @@ export default function AddBookForm({ onClose }: AddBookFormProps) {
         <button className="modal-close" onClick={onClose}>✕</button>
         <h2>Add new book</h2>
 
-        {/* === Preview slike iznad forme === */}
         {coverImageUrl && (
           <div className="preview-container">
             <img
