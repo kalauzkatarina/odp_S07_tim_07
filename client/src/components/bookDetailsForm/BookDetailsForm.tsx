@@ -124,8 +124,8 @@ export function BookDetailsForm({
                     <p>{c.content}</p>
                     {user?.role === "editor" && (
                       <button
-                        className="btn-comment-delete"
-                        onClick={() => onDeleteComment?.(c.id)}
+                      className="btn-comment-delete"
+                      onClick={() => onDeleteComment?.(c.id)}
                       >
                         Delete comment
                       </button>

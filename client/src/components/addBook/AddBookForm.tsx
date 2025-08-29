@@ -110,7 +110,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
           </div>
         )}
 
-        <h1>Add new Book</h1>
+        <h2 className="add-new-book">Add new Book</h2>
 
         <div className="row">
           <input
@@ -186,6 +186,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
           {genres.map((genre) => (
             <label key={genre.id}>
               <input
+                className="chbx"
                 type="checkbox"
                 checked={selectedGenreIds.includes(genre.id)}
                 onChange={() => handleGenreToggle(genre.id)}
@@ -196,8 +197,8 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
         </div>
 
         <div className="row">
-          <button onClick={handleSubmit}>Add Book</button>
-          <button onClick={onClose}>Cancel</button>
+          <button className="btn-add-book" onClick={handleSubmit}>Add Book</button>
+          <button className="btn-cancel" onClick={onClose}>Cancel</button>
         </div>
       </div>
     </div>
