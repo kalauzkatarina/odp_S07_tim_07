@@ -6,7 +6,7 @@ body,
   width: 100%;
   height: 100%;
   background-color: #321d1d;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif, 'Times New Roman', Times, serif;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -55,7 +55,7 @@ button {
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-family:  Bebas Neue;
+  font-family: 'Times New Roman', Times, serif;
   width: 60%;
   background: #321d1d;
   color: #dfc7c2;
@@ -75,6 +75,7 @@ label {
   margin-bottom: 0.5rem;
   font-weight: 500;
   text-align: left;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 input {
@@ -82,4 +83,5 @@ input {
   padding: 0.6rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  font-family: 'Times New Roman', Times, serif;
 }

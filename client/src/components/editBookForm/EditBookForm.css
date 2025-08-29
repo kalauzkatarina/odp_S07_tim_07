@@ -1,5 +1,5 @@
 .book-card {
-  width: 750px;
+  max-width: 900px;
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
@@ -8,12 +8,13 @@
   background-color: #dfc7c2;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .book-card h1 {
   font-size: 2rem;
   text-align: center;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .book-card input,
@@ -26,6 +27,7 @@
   background-color: #f6eeed;
   color: #624345;
   margin: 3px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .book-card textarea {

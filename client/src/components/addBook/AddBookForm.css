@@ -12,10 +12,9 @@
 }
 
 .modal-content {
-  background-color: var(--color-copper-rust-400);
   color: white;
+  max-width: 900px;
   width: 90%;
-  max-width:900px;
   border-radius: 0.5rem;
   padding: 2rem;
   position: relative;
@@ -77,6 +76,7 @@
   color: white;
   margin-top: 12px;
   margin-bottom: 10px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .addbook-form-textarea {
@@ -112,7 +112,7 @@
 }
 
 .add-new-book{
-  font-family: Bebas Neue;
+  font-family: 'Times New Roman', Times, serif;
   font-size: 3rem;
   color: #321d1d;
   text-align: center;
