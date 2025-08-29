@@ -100,23 +100,61 @@ export class FavoriteBooksRepository implements IFavoriteBooksRepository{
             return null;
         }
     }
-    async getByUserId(id: number): Promise<FavoriteBooks> {
-        try {
-            const query = `SELECT * FROM favorite_books WHERE user_id = ?`;
+  async getByUserId(userId: number): Promise<(FavoriteBooks & { book: Book })[]> {
+    try {
+        const query = `
+            SELECT 
+                fb.id AS favorite_id,
+                fb.book_id,
+                fb.user_id,
+                fb.favorite,
+                b.id AS book_id,
+                b.title,
+                b.author,
+                b.summary,
+                b.format,
+                b.pages,
+                b.script,
+                b.binding,
+                b.publish_date,
+                b.isbn,
+                b.cover_image_url,
+                b.created_at,
+                b.views
+            FROM favorite_books fb
+            JOIN books b ON fb.book_id = b.id
+            WHERE fb.user_id = ?
+        `;
 
-            const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
+        const [rows] = await db.execute<RowDataPacket[]>(query, [userId]);
 
-            if (rows.length > 0) {
-                const row = rows[0];
-                return new FavoriteBooks(row.id, row.book_id, row.user_id, row.favorite);
-            }
-
-            return new FavoriteBooks();
-        } catch (error) {
-            console.error("Error fetching favorite books by user id: ", error);
-            return new FavoriteBooks();
-        }
+        return rows.map(row => ({
+            id: row.favorite_id,
+            book_id: row.book_id,
+            user_id: row.user_id,
+            favorite: !!row.favorite,
+            book: new Book(
+                row.book_id,
+                row.title,
+                row.author,
+                row.summary,
+                row.format,
+                row.pages,
+                row.script,
+                row.binding,
+                row.publish_date,
+                row.isbn,
+                row.cover_image_url,
+                row.created_at,
+                row.views
+            )
+        }));
+    } catch (error) {
+        console.error("Error fetching favorite books by user id: ", error);
+        return [];
     }
+}
+
     async getAll(favorite: boolean): Promise<(FavoriteBooks & { book: Book; })[]> {
         try {
             const query = `

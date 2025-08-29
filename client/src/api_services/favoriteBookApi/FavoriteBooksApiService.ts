@@ -42,6 +42,17 @@ export const favoriteBooksApi: IFavoriteBooksService = {
         }
     },
 
+    async getFavoriteBooksByUserId(token: string, userId: number): Promise<FavoriteBooksDto[]> {
+  try {
+    const res = await axios.get<FavoriteBooksDto[]>(`${API_URL}/getFavoritesByUser/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return res.data;
+  } catch {
+    return [];
+  }
+},
+
     async addFavoriteBook(token: string, bookId: number, userId: number): Promise<FavoriteBooksDto> {
         try {
             const res = await axios.post<FavoriteBooksDto>(
@@ -57,10 +68,11 @@ export const favoriteBooksApi: IFavoriteBooksService = {
         }
     },
 
-    async removeFavoriteBook(token: string, id: number): Promise<boolean> {
+    async removeFavoriteBook(token: string, bookId: number, userId: number): Promise<boolean> {
         try {
-            await axios.delete(`${API_URL}/removeFavoriteBook/${id}`, {
+            await axios.delete(`${API_URL}/removeFavoriteBook`, {
                 headers: { Authorization: `Bearer ${token}` },
+                data: {bookId, userId}
             });
             return true;
         } catch {

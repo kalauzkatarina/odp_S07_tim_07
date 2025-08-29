@@ -39,27 +39,32 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [bookDetailsComments, setBookDetailsComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
 
-  const [favoriteBooks, setFavoriteBooks] = useState<FavoriteBooksDto[]>([]);
-
+  const [favoriteBooks, setFavoriteBooks] = useState<FavoriteBooksDto[]>(() => {
+    const stored = localStorage.getItem("favoriteBooks");
+    return stored ? JSON.parse(stored) : [];
+  });
   const auth = useContext(AuthContext);
   const [localUser, setLocalUser] = useState(auth!.user);
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (!auth?.token) {
-        setFavoriteBooks([]); 
-        return;
-      }
+      if (!auth?.token || !auth.user) return;
+
       try {
-        const favs = await favoriteBooksApi.getAllFavoriteBooks(auth.token);
+        const favs = await favoriteBooksApi.getFavoriteBooksByUserId(auth.token, auth.user.id);
+
         setFavoriteBooks(favs);
         localStorage.setItem("favoriteBooks", JSON.stringify(favs));
       } catch (err) {
         console.error("Failed to fetch favorites", err);
       }
     };
+
     fetchFavorites();
-  }, [auth?.token]);
+  }, [auth?.token, auth?.user]);
+
+
+
 
   useEffect(() => {
     if (auth?.user) {
@@ -99,6 +104,27 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
     };
     fetchData();
   }, []);
+
+  const refreshFavorites = async () => {
+    if (!auth?.token || !auth.user) return;
+    try {
+      const favs = await favoriteBooksApi.getFavoriteBooksByUserId(auth.token, auth.user.id);
+      setFavoriteBooks(favs);
+      localStorage.setItem("favoriteBooks", JSON.stringify(favs));
+    } catch (err) {
+      console.error("Failed to fetch favorites", err);
+    }
+  };
+
+  useEffect(() => {
+    if (auth?.user) {
+      setFavoriteBooks([]); // resetuj pre fetch-a
+      refreshFavorites();
+    } else {
+      setFavoriteBooks([]);
+      localStorage.removeItem("favoriteBooks");
+    }
+  }, [auth?.user, auth?.token]);
 
   const handleClickBook = async (bookId: number) => {
     try {
@@ -154,34 +180,28 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
         b.genres?.some((g) => g.id === selectedGenre)
       );
 
- const handleToggleFavorite = async (book: BookDto) => {
-  if (!auth?.token || !auth.user) return;
+  const handleToggleFavorite = async (book: BookDto) => {
+    if (!auth?.token || !auth.user) return;
 
-  try {
-    // Provjeri da li je knjiga već favorit
-    const existingFav = favoriteBooks.find((f) => f.book.id === book.id);
+    try {
+      const existingFav = favoriteBooks.find(f => f.book.id === book.id);
 
-    let updatedFavorites: FavoriteBooksDto[];
+      let updatedFavorites: FavoriteBooksDto[];
 
-    if (existingFav) {
-      // Ako postoji, briši iz fav-a
-      const success = await favoriteBooksApi.removeFavoriteBook(auth.token, existingFav.id);
-      if (!success) return;
-      updatedFavorites = favoriteBooks.filter((f) => f.id !== existingFav.id);
-    } else {
-      // Dodaj u favorite
-      const added = await favoriteBooksApi.addFavoriteBook(auth.token, book.id, auth.user.id);
-      if (!added || added.id === 0) return;
-      updatedFavorites = [...favoriteBooks, added];
+      if (existingFav) {
+        await favoriteBooksApi.removeFavoriteBook(auth.token, book.id, auth.user.id);
+        updatedFavorites = favoriteBooks.filter(f => f.book.id !== book.id);
+      } else {
+        const added = await favoriteBooksApi.addFavoriteBook(auth.token, book.id, auth.user.id);
+        updatedFavorites = added ? [...favoriteBooks, added] : favoriteBooks;
+      }
+
+      setFavoriteBooks(updatedFavorites);
+      localStorage.setItem("favoriteBooks", JSON.stringify(updatedFavorites));
+    } catch (err) {
+      console.error("Failed to toggle favorite:", err);
     }
-
-    // Postavi novo stanje
-    setFavoriteBooks(updatedFavorites);
-    localStorage.setItem("favoriteBooks", JSON.stringify(updatedFavorites));
-  } catch (err) {
-    console.error("Failed to toggle favorite:", err);
-  }
-};
+  };
 
 
   return (
