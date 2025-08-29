@@ -19,6 +19,7 @@ import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService
 import { UserForm } from "../../components/userProfile/UserProfile";
 import { usersApi } from "../../api_services/userApi/UsersAPIService";
 import { favoriteBooksApi } from "../../api_services/favoriteBookApi/FavoriteBooksApiService";
+import type { FavoriteBooksDto } from "../../models/favoriteBooks/FavoriteBooksDto";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -37,32 +38,24 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [selectedBookDetails, setSelectedBookDetails] = useState<BookDto | null>(null);
   const [bookDetailsComments, setBookDetailsComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
-  const [favoriteBooks, setFavoriteBooks] = useState<BookDto[]>([]);
+
+  const [favoriteBooks, setFavoriteBooks] = useState<FavoriteBooksDto[]>([]);
 
   const auth = useContext(AuthContext);
-  const [localUser, setLocalUser] = useState(auth!.user); //no null assertion operator !
-
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem("favoriteBooks");
-    if (storedFavorites) {
-      try {
-        const parsed = JSON.parse(storedFavorites);
-        if (Array.isArray(parsed)) {
-          setFavoriteBooks(parsed);
-        }
-      } catch {
-        // ignore
-      }
-    }
-  }, []);
+  const [localUser, setLocalUser] = useState(auth!.user);
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (auth?.token) {
+      if (!auth?.token) {
+        setFavoriteBooks([]); 
+        return;
+      }
+      try {
         const favs = await favoriteBooksApi.getAllFavoriteBooks(auth.token);
         setFavoriteBooks(favs);
-
         localStorage.setItem("favoriteBooks", JSON.stringify(favs));
+      } catch (err) {
+        console.error("Failed to fetch favorites", err);
       }
     };
     fetchFavorites();
@@ -160,28 +153,37 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
       : filteredBooks.filter((b) =>
         b.genres?.some((g) => g.id === selectedGenre)
       );
-  
-  const handleToggleFavorite = async (book: BookDto) => {
-    if (!auth?.token || !auth.user) return;
 
-    const isFav = favoriteBooks.some((b) => b.id === book.id);
+ const handleToggleFavorite = async (book: BookDto) => {
+  if (!auth?.token || !auth.user) return;
 
-    if (isFav) {
-      const fav = await favoriteBooksApi.removeFavoriteBook(auth.token, book.id);
-      if (fav) {
-        const updated = favoriteBooks.filter((b) => b.id !== book.id);
-        setFavoriteBooks(updated);
-        localStorage.setItem("favoriteBooks", JSON.stringify(updated));
-      }
+  try {
+    // Provjeri da li je knjiga već favorit
+    const existingFav = favoriteBooks.find((f) => f.book.id === book.id);
+
+    let updatedFavorites: FavoriteBooksDto[];
+
+    if (existingFav) {
+      // Ako postoji, briši iz fav-a
+      const success = await favoriteBooksApi.removeFavoriteBook(auth.token, existingFav.id);
+      if (!success) return;
+      updatedFavorites = favoriteBooks.filter((f) => f.id !== existingFav.id);
     } else {
+      // Dodaj u favorite
       const added = await favoriteBooksApi.addFavoriteBook(auth.token, book.id, auth.user.id);
-      if (added.id !== 0) {
-        const updated = [...favoriteBooks, book];
-        setFavoriteBooks(updated);
-        localStorage.setItem("favoriteBooks", JSON.stringify(updated));
-      }
+      if (!added || added.id === 0) return;
+      updatedFavorites = [...favoriteBooks, added];
     }
-  };
+
+    // Postavi novo stanje
+    setFavoriteBooks(updatedFavorites);
+    localStorage.setItem("favoriteBooks", JSON.stringify(updatedFavorites));
+  } catch (err) {
+    console.error("Failed to toggle favorite:", err);
+  }
+};
+
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -194,16 +196,20 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
 
       <main className="app-main">
         {activeTab === "bestsellers" && (
-          <BooksList books={topViewed}
+          <BooksList
+            books={topViewed}
             onClick={handleClickBook}
             onToggleFavorite={handleToggleFavorite}
-            favoriteBooks={favoriteBooks} />
+            favoriteBooks={favoriteBooks.map(f => f.book)}
+          />
         )}
         {activeTab === "new" && (
-          <BooksList books={newBooks}
+          <BooksList
+            books={newBooks}
             onClick={handleClickBook}
             onToggleFavorite={handleToggleFavorite}
-            favoriteBooks={favoriteBooks} />
+            favoriteBooks={favoriteBooks.map(f => f.book)}
+          />
         )}
         {activeTab === "recommended" && (
           <RecommendedSection
@@ -248,17 +254,14 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                       const newUser = await usersApi.updateUser(auth.token, auth.user.id, updatedUser);
                       if (newUser) setLocalUser(newUser);
                     }}
-                    favoriteBooks={favoriteBooks}
+                    favoriteBooks={favoriteBooks.map(f => f.book)}
                     onToggleFavorite={handleToggleFavorite}
                   />
                 )}
-
-
               </div>
             )}
           </>
         )}
-
 
         {activeTab === "allBooks" && (
           <div>
@@ -269,7 +272,12 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
               selectedGenre={selectedGenre}
               onGenreChange={setSelectedGenre}
             />
-            <BooksList books={genreFilteredBooks} onClick={handleClickBook} />
+            <BooksList
+              books={genreFilteredBooks}
+              onClick={handleClickBook}
+              onToggleFavorite={handleToggleFavorite}
+              favoriteBooks={favoriteBooks.map(f => f.book)}
+            />
             {auth?.user?.role === "editor" && (
               <button onClick={() => setShowForm(true)} className="btnAdd">
                 Add new book

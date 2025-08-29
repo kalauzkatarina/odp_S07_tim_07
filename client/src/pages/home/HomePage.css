@@ -44,7 +44,7 @@
 }
 
 .bookmark_btn.active{
-  background-color: var(--color-copper-rust-600);
+  background-color: var(--color-copper-rust-800);
 }
 
 .card__content {
