@@ -6,6 +6,7 @@ import type { GenreDto } from "../../models/genres/GenreDto";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 
 import "./EditBookForm.css";
+import { validateBookData } from "../../api_services/validators/books/ValidateBookData";
 
 interface BookEditFormProps {
   bookId: number;
@@ -57,6 +58,23 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   const handleSubmit = async () => {
     if (!token || !book) {
       alert("You need to be logged in as the Editor!");
+      return;
+    }
+    const validation = validateBookData({
+      title: book.title,
+      author: book.author,
+      summary: book.summary,
+      format: book.format,
+      pages: book.pages,
+      script: book.script,
+      binding: book.binding,
+      publish_date: book.publish_date,
+      isbn: book.isbn,
+      cover_image_url: book.cover_image_url
+    });
+
+    if(!validation.success){
+      alert(validation.message);
       return;
     }
 

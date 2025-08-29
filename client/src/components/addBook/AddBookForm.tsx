@@ -5,6 +5,7 @@ import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import "./AddBookForm.css";
 import type { BookDto } from "../../models/books/BookDto";
+import { validateBookData } from "../../api_services/validators/books/ValidateBookData";
 
 interface AddBookFormProps {
   onClose: () => void;
@@ -56,6 +57,23 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
       alert("You have to be logged in as the Editor to add a new book!");
       return;
     }
+    const validation = validateBookData({
+      title,
+      author,
+      summary,
+      format,
+      pages,
+      script,
+      binding,
+      publish_date: publishDate,
+      isbn,
+      cover_image_url: coverImageUrl
+    });
+
+    if (!validation.success) {
+      alert(validation.message);
+      return;
+    }
 
     const created = await booksApi.createBook(
       token,
@@ -85,51 +103,105 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
     <div className="modal-overlay">
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>✕</button>
-        <h2>Add new book</h2>
 
         {coverImageUrl && (
-          <div className="preview-container">
-            <img
-              src={coverImageUrl}
-              alt="Preview"
-              className="preview-image"
-            />
+          <div className="photo-preview">
+            <img src={coverImageUrl} alt="Book Cover Preview" />
           </div>
         )}
 
-        <div className="form-grid">
-          <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} />
-          <input type="text" placeholder="Author" value={author} onChange={e => setAuthor(e.target.value)} />
+        <h1>Add new Book</h1>
 
-          <textarea placeholder="Summary" value={summary} onChange={e => setSummary(e.target.value)} />
-
-          <input type="text" placeholder="Format" value={format} onChange={e => setFormat(e.target.value)} />
-          <input type="text" placeholder="Binding" value={binding} onChange={e => setBinding(e.target.value)} />
-
-          <input type="number" placeholder="Number of Pages" value={pages} onChange={e => setPages(Number(e.target.value))} />
-          <input type="text" placeholder="Script" value={script} onChange={e => setScript(e.target.value)} />
-
-          <input type="text" placeholder="Publish Date" value={publishDate} onChange={e => setPublishDate(e.target.value)} />
-          <input type="text" placeholder="ISBN" value={isbn} onChange={e => setIsbn(e.target.value)} />
-
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-
-          <div className="genres">
-            {genres.map(genre => (
-              <label key={genre.id}>
-                <input
-                  type="checkbox"
-                  checked={selectedGenreIds.includes(genre.id)}
-                  onChange={() => handleGenreToggle(genre.id)}
-                />
-                <span>{genre.name}</span>
-              </label>
-            ))}
-          </div>
+        <div className="row">
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Author"
+            value={author}
+            onChange={e => setAuthor(e.target.value)}
+          />
         </div>
 
-        <button className="btn-edit" onClick={handleSubmit}>Add Book</button>
+        <textarea
+          placeholder="Summary"
+          value={summary}
+          onChange={e => setSummary(e.target.value)}
+        />
+
+        <div className="row">
+          <input
+            type="text"
+            placeholder="Format"
+            value={format}
+            onChange={e => setFormat(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Binding"
+            value={binding}
+            onChange={e => setBinding(e.target.value)}
+          />
+        </div>
+
+        <div className="row">
+          <input
+            type="number"
+            placeholder="Pages"
+            value={pages}
+            onChange={e => setPages(Number(e.target.value))}
+          />
+          <input
+            type="text"
+            placeholder="Script"
+            value={script}
+            onChange={e => setScript(e.target.value)}
+          />
+        </div>
+
+        <div className="row">
+          <input
+            type="text"
+            placeholder="Publish Date"
+            value={publishDate}
+            onChange={e => setPublishDate(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="ISBN"
+            value={isbn}
+            onChange={e => setIsbn(e.target.value)}
+          />
+        </div>
+
+        <label className="file-input-label">
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
+        </label>
+
+        <div className="genres">
+          {genres.map((genre) => (
+            <label key={genre.id}>
+              <input
+                type="checkbox"
+                checked={selectedGenreIds.includes(genre.id)}
+                onChange={() => handleGenreToggle(genre.id)}
+              />
+              <span>{genre.name}</span>
+            </label>
+          ))}
+        </div>
+
+        <div className="row">
+          <button onClick={handleSubmit}>Add Book</button>
+          <button onClick={onClose}>Cancel</button>
+        </div>
       </div>
     </div>
+
+
   );
 }

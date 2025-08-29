@@ -21,10 +21,8 @@ export const AuthForm = ({ authApi }: AuthFormProps) => {
             <UserForm
               username={auth.user.username}
               onSave={(updatedUser) => {
-                // možeš ovde dodati update user funkcionalnost ako bude potrebno
                 console.log("Updated user data", updatedUser);
-              }}
-            />
+              } } email={""}            />
           </div>
         ) : (
           <>

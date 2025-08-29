@@ -181,7 +181,10 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
       );
 
   const handleToggleFavorite = async (book: BookDto) => {
-    if (!auth?.token || !auth.user) return;
+    if (!auth?.token || !auth.user) {
+      alert("You have to be logged in to bookmark a book!");
+      return;
+    }
 
     try {
       const existingFav = favoriteBooks.find(f => f.book.id === book.id);
