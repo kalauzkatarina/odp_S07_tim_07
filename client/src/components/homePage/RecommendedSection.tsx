@@ -4,28 +4,20 @@ import BooksList from "./BooksList";
 
 type Props = {
   books: BookDto[];
-  allBooks: BookDto[];
   isEditing: boolean;
   onToggleEdit: () => void;
-  onRemove: (id: number) => void;
-  onAdd: (id: number) => void;
-  selectedBookId: number | "";
-  setSelectedBookId: (id: number | "") => void;
   isEditor: boolean;
   onClickBook: (id: number) => void;
+  onRemove: (id: number) => void;
 };
 
 const RecommendedSection = ({
   books,
-  allBooks,
   isEditing,
   onToggleEdit,
-  onRemove,
-  onAdd,
-  selectedBookId,
-  setSelectedBookId,
   isEditor,
   onClickBook,
+  onRemove,
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -53,30 +45,6 @@ const RecommendedSection = ({
         editable={isEditing}
         onRemove={onRemove}
       />
-
-      {isEditing && (
-        <div className="row">
-          <select
-            value={selectedBookId}
-            onChange={(e) => setSelectedBookId(Number(e.target.value))}
-            className="form-select-featured"
-          >
-            <option value="">Select a book</option>
-            {allBooks.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.title}
-              </option>
-            ))}
-          </select>
-          <button
-            className="btnAddFb"
-            onClick={() => selectedBookId && onAdd(selectedBookId)}
-            disabled={!selectedBookId}
-          >
-            Add a new featured book
-          </button>
-        </div>
-      )}
     </section>
   );
 };

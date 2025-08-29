@@ -20,6 +20,7 @@ import { UserForm } from "../../components/userProfile/UserProfile";
 import { usersApi } from "../../api_services/userApi/UsersAPIService";
 import { favoriteBooksApi } from "../../api_services/favoriteBookApi/FavoriteBooksApiService";
 import type { FavoriteBooksDto } from "../../models/favoriteBooks/FavoriteBooksDto";
+import BookImageGrid from "../../components/homePage/BookImageGrid";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -31,7 +32,6 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("bestsellers");
   const [isEditing, setIsEditing] = useState(false);
-  const [selectedBookId, setSelectedBookId] = useState<number | "">("");
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<number | "">("");
   const [showForm, setShowForm] = useState(false);
@@ -237,7 +237,6 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
         {activeTab === "recommended" && (
           <RecommendedSection
             books={recommended}
-            allBooks={allBooks}
             isEditing={isEditing}
             onToggleEdit={() => setIsEditing((prev) => !prev)}
             onRemove={async (bookId) => {
@@ -249,19 +248,32 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                 console.error(err);
               }
             }}
-            onAdd={async (bookId) => {
-              if (!auth?.token || !auth.user) return;
-              if (recommended.some((b) => b.id === bookId)) return;
-              if (recommended.length >= 5) return;
-              const book = allBooks.find((b) => b.id === bookId);
-              if (book) setRecommended((prev) => [...prev, book]);
-            }}
-            selectedBookId={selectedBookId}
-            setSelectedBookId={setSelectedBookId}
             isEditor={auth?.user?.role === "editor"}
             onClickBook={handleClickBook}
           />
         )}
+
+        {isEditing && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Select Books for Featured</h2>
+              <BookImageGrid
+                books={allBooks}
+                featuredBooks={recommended}
+                onToggleFeatured={(book) => {
+                  if (recommended.some((b) => b.id === book.id)) {
+                    setRecommended((prev) => prev.filter((b) => b.id !== book.id));
+                  } else {
+                    if (recommended.length >= 5) return;
+                    setRecommended((prev) => [...prev, book]);
+                  }
+                }}
+              />
+              <button onClick={() => setIsEditing(false)}>Close</button>
+            </div>
+          </div>
+        )}
+
         {activeTab === "login" && (
           <>
             {!auth?.user ? (
