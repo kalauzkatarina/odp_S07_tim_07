@@ -214,3 +214,8 @@
 .btn-sign-up{
   color: #faf6f6;
 }
+
+.select-genres {
+  display: flex;
+  justify-content: center; 
+}
