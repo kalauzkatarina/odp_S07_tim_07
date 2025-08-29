@@ -55,8 +55,12 @@ export function validateBookData(data: {
     return { success: false, message: "ISBN can have maximum 20 characters." };
   }
 
-  if (data.cover_image_url && data.cover_image_url.length > 1000) {
-    return { success: false, message: "Cover image URL is too long." };
+  if (!data.isbn) {
+    return { success: false, message: "ISBN cannot be left empty." };
+  }
+
+  if (!data.cover_image_url) {
+    return { success: false, message: "You need to choose a book cover." };
   }
 
   return { success: true };

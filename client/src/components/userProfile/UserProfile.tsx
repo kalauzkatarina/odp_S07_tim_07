@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import "./UserProfile.css"
 import type { BookDto } from "../../models/books/BookDto";
-import BooksList from "../homePage/BooksList";
+import FavoriteBookImageGrid from "../homePage/FavoriteBookImageGrid";
 
 interface UserFormProps {
   username: string;
@@ -40,7 +40,7 @@ export function UserForm({
   return (
     <form onSubmit={handleSubmit} className="form">
       <label className="label-user-profile" htmlFor="chk" aria-hidden="true">
-        User Profile
+        {username}'s profile
       </label>
 
       <input
@@ -74,14 +74,14 @@ export function UserForm({
       </button>
 
       <div className="users-library">
-        <h2 className="users-library-header">User's Library</h2>
+        <h2 className="users-library-header">{username}'s library</h2>
         {favoriteBooks.length > 0 ? (
-          <BooksList
+          <FavoriteBookImageGrid
             books={favoriteBooks}
-            onClick={() => { }}
-            onToggleFavorite={onToggleFavorite}
             favoriteBooks={favoriteBooks}
+            onToggleFavorite={onToggleFavorite || (() => { })}
           />
+
         ) : (
           <p>No favorite books yet.</p>
         )}

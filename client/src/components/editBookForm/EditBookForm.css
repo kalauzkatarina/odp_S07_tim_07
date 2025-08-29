@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 2rem;
-  background-color: #cda59f;
+  background-color: #dfc7c2;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
@@ -23,11 +23,16 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  background-color: #f6eeed;
+  color: #624345;
+  margin: 3px;
 }
 
 .book-card textarea {
   min-height: 80px;
   resize: vertical;
+  outline: none;
+  height: 200px;
 }
 
 .row {
@@ -63,3 +68,6 @@
   width: 16px;   
   height: 16px;
 }
+
+
+

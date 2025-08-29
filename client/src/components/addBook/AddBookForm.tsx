@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
@@ -27,6 +27,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useState(() => {
     const fetchGenres = async () => {
@@ -99,6 +100,10 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
     }
   };
 
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -114,12 +119,14 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
 
         <div className="row">
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Title"
             value={title}
             onChange={e => setTitle(e.target.value)}
           />
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Author"
             value={author}
@@ -128,6 +135,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
         </div>
 
         <textarea
+          className="addbook-form-textarea"
           placeholder="Summary"
           value={summary}
           onChange={e => setSummary(e.target.value)}
@@ -135,12 +143,14 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
 
         <div className="row">
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Format"
             value={format}
             onChange={e => setFormat(e.target.value)}
           />
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Binding"
             value={binding}
@@ -150,12 +160,14 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
 
         <div className="row">
           <input
+            className="addbook-form-input"
             type="number"
             placeholder="Pages"
             value={pages}
             onChange={e => setPages(Number(e.target.value))}
           />
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Script"
             value={script}
@@ -165,12 +177,14 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
 
         <div className="row">
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="Publish Date"
             value={publishDate}
             onChange={e => setPublishDate(e.target.value)}
           />
           <input
+            className="addbook-form-input"
             type="text"
             placeholder="ISBN"
             value={isbn}
@@ -178,9 +192,18 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
           />
         </div>
 
-        <label className="file-input-label">
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-        </label>
+        <div className="upload-cover-wrapper">
+          <button type="button" className="upload-btn" onClick={handleUploadClick}>
+            Upload Cover
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+        </div>
 
         <div className="genres">
           {genres.map((genre) => (

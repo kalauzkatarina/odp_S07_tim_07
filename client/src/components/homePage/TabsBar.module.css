@@ -39,8 +39,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Inter", sans-serif;
-  font-size: 1.1rem;
+  font-family:  Bebas Neue;
+  font-size: 20px;
   font-weight: 600;
   border-radius: 25px;
   cursor: pointer;

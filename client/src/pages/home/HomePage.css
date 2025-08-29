@@ -58,6 +58,7 @@
 
 .card__title {
   font-size: 1.4rem;
+  font-family:  Bebas Neue;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #321d1d;
@@ -65,6 +66,7 @@
 
 .card__text {
   color: #4b5563;
+  font-family:  Bebas Neue;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }

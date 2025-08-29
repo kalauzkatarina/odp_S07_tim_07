@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import type { BookDto } from "../../models/books/BookDto";
@@ -20,7 +20,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
   const [coverPreview, setCoverPreview] = useState<string>("");
-
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       const bookData = await booksApi.getBookById(bookId);
@@ -73,14 +73,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       cover_image_url: book.cover_image_url
     });
 
-    if(!validation.success){
+    if (!validation.success) {
       alert(validation.message);
       return;
     }
 
     const updatedGenres = genres
-    .filter((g) => selectedGenreIds.includes(g.id))
-    .map((g) => ({ id: g.id, name: g.name }));
+      .filter((g) => selectedGenreIds.includes(g.id))
+      .map((g) => ({ id: g.id, name: g.name }));
 
     const updated = await booksApi.updateBook(token, book.id, {
       title: book.title,
@@ -102,6 +102,11 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
     } else {
       alert("Error while editing the book!");
     }
+  };
+
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
   };
 
   if (!book) return <p className="loading-text">Reading the book...</p>;
@@ -182,9 +187,19 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
         />
       </div>
 
-        <label className="file-input-label">
-          <input type="file" accept="image/*" onChange={handleCoverChange} />
-        </label>
+      <div className="upload-cover-wrapper">
+        <button type="button" className="upload-btn" onClick={handleUploadClick}>
+          Upload Cover
+        </button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleCoverChange}
+        />
+      </div>
+
 
       <div className="genres">
         {genres.map((genre) => (
