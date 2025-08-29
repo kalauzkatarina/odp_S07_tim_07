@@ -33,7 +33,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
 
   return (
     <form onSubmit={submitForm}>
-      <label htmlFor="chk" aria-hidden="true">Login</label>
+      <label className="login-label" htmlFor="chk" aria-hidden="true">Login</label>
 
       <input
         type="text"
@@ -50,7 +50,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
         required
       />
       {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-      <button type="submit">Login</button>
+      <button className="login-btn" type="submit">Login</button>
     </form>
   );
 }

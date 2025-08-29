@@ -92,3 +92,31 @@
 .post-description button {
   margin-top: 0.5rem;
 }
+
+.title-details{
+  color: #321d1d;
+  font-family: Bebas Neue;
+  font-size: 2.8rem;
+}
+
+span, p {
+  color: #321d1d;
+}
+
+.comments-header{
+  color: #321d1d;
+  font-family: Bebas Neue;
+  font-size: 1.7rem;
+}
+
+.btn-add-comment{
+  color: #faf6f6;
+}
+
+.comment-title{
+  color: #321d1d;
+}
+
+.comment-card{
+  color: #321d1d;
+}

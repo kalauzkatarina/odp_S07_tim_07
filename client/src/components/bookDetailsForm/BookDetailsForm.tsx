@@ -66,7 +66,7 @@ export function BookDetailsForm({
         {/* DESNA STRANA: DETALJI */}
         <div className="product__info">
           <div className="title">
-            <h1>{currentBook.title}</h1>
+            <h2 className="title-details">{currentBook.title}</h2>
             <p><b>Author:</b> {currentBook.author}</p>
             <span><b>ISBN:</b> {currentBook.isbn}</span>
           </div>
@@ -79,6 +79,7 @@ export function BookDetailsForm({
             <p><b>Script:</b> {currentBook.script}</p>
             <p><b>Publish Date:</b> {currentBook.publish_date}</p>
             <p><b>Genres:</b> {currentBook.genres?.map(g => g.name).join(", ")}</p>
+            <p><b>Views:</b> {currentBook.views}</p>
           </div>
 
           {user?.role === "editor" && (
@@ -89,7 +90,7 @@ export function BookDetailsForm({
           )}
 
           <div className="comments">
-            <h3>Comments</h3>
+            <h3 className="comments-header">Comments</h3>
             <div className="new-comment">
               <input
                 type="text"

@@ -5,7 +5,7 @@ body,
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #8e5351;
+  background-color: #321d1d;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -26,13 +26,28 @@ body,
   --color-copper-rust-800: #704141;
   --color-copper-rust-900: #613a3b;
   --color-copper-rust-950: #341d1d;
+
+
+  --red-50:  #faf6f6;
+  --red-100: #f5ebeb;
+  --red-200: #eddbdb;
+  --red-300: #dfc2c2;
+  --red-400: #cc9d9d;
+  --red-500: #b77c7c;
+  --red-600: #a06262;
+  --red-700: #855050;
+  --red-800: #704444;
+  --red-900: #603e3e;
+  --red-1000:#321d1d;
 }
 
 h1 {
-  font-size: 2.4em;
+  font-size: 4em;
   line-height: 1.1;
   margin-bottom: 1rem;
   text-align: center;
+  font-family: Bebas Neue;
+  color: #faf6f6;
 }
 
 button {
@@ -42,8 +57,8 @@ button {
   font-size: 1em;
   font-family: inherit;
   width: 60%;
-  background: var(--color-copper-rust-500);
-  color: var(--color-copper-rust-50);
+  background: #321d1d;
+  color: #dfc7c2;
   font-weight: bold;
 }
 

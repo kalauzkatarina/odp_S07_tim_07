@@ -12,7 +12,7 @@
 }
 
 .card {
-  background-color: #cda59f; 
+  background-color: #dfc7c2; 
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -34,17 +34,22 @@
   background-position: center;
 }
 
+.card__title{
+  color: #faf6f6;
+}
+
 .bookmark_btn {
   height: 50px;
   width: 50px;
   margin-left: 200px;
   margin-top: -30px;
   margin-bottom: -20px;
-  background-color: rgb(183, 130, 124, 0.8)
+  background-color: #321d1d;
+  color: #faf6f6;
 }
 
 .bookmark_btn.active{
-  background-color: var(--color-copper-rust-800);
+  background-color: #a06262;
 }
 
 .card__content {
@@ -52,10 +57,10 @@
 }
 
 .card__title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #1f2937;
+  color: #321d1d;
 }
 
 .card__text {
@@ -77,14 +82,19 @@
 .form-select{
   width: 300px;
   border-radius: 20px;
+  color: #321d1d;
+  font-weight: 600;
 }
 
 .btnEdit{
   width: 150px;
+  background-color: #dfc7c2;
+  color: #321d1d;
 }
 
 .btnDetails{
   width: 150px;
+  color: #faf6f6;
 }
 
 .btnRemove{
@@ -103,6 +113,9 @@
 .btnAdd{
   margin-bottom: 50px;
   width: 200px;
+  background-color: #dfc7c2;
+  color: #321d1d;
+
 }
 
 .book-image-grid {
@@ -140,18 +153,62 @@
 }
 
 .btnFeatured.add {
-  background-color: var(--color-copper-rust-600);
+  background-color: #321d1d;
   color: white;
   width: 70px;
   border: none;
   border-radius: 20px;
+}
+
+.btnFeatured.add:hover{
+  background-color: #dfc7c2;
+  color: #321d1d;
 }
 
 .btnFeatured.remove {
-  background-color: var(--color-copper-rust-800);
+  background-color: #321d1d;
   color: white;
   width: 70px;
   border: none;
   border-radius: 20px;
 }
 
+.btnFeatured.remove:hover{
+  background-color: #dfc7c2;
+  color: #321d1d;
+}
+
+.btnCloseRecommended{
+  color: white;
+}
+
+.select-for-featured{
+  color: #321d1d;
+  font-family: Bebas Neue;
+  font-size: 2rem;
+}
+
+.btnSave{
+  width: 120px;
+  background-color: #dfc7c2;
+  color: #321d1d;
+}
+
+.btnSave:hover{
+  color: #dfc7c2;
+}
+
+.users-library-header, .label-user-profile{
+  font-family: Bebas Neue;
+  font-size: 2rem;
+  color: #faf6f6;
+  text-align: center;
+}
+
+.sign-up{
+  color: #321d1d;
+}
+
+.btn-sign-up{
+  color: #faf6f6;
+}

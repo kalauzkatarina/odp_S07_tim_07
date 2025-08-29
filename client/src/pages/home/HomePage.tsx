@@ -256,7 +256,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
         {isEditing && (
           <div className="modal-overlay">
             <div className="modal-content">
-              <h2>Select Books for Featured</h2>
+              <h2 className="select-for-featured" >Select Books for Featured</h2>
               <BookImageGrid
                 books={allBooks}
                 featuredBooks={recommended}
@@ -269,7 +269,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                   }
                 }}
               />
-              <button onClick={() => setIsEditing(false)}>Close</button>
+              <button className="btnCloseRecommended" onClick={() => setIsEditing(false)}>Close</button>
             </div>
           </div>
         )}

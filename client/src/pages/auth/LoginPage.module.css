@@ -49,6 +49,7 @@ input, select, button {
   font-size: 1em;
   text-align: center;
   width: 180px;
+  color: #faf6f6;
 }
 
 input, select {

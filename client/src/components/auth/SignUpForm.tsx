@@ -35,7 +35,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
 
   return (
     <form onSubmit={submitForm}>
-      <label htmlFor="chk">Sign up</label>
+      <label className="sign-up" htmlFor="chk">Sign up</label>
 
       <input
         type="text"
@@ -83,7 +83,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
       </div>
 
       {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-      <button type="submit">Sign up</button>
+      <button className="btn-sign-up" type="submit">Sign up</button>
     </form>
   );
 }

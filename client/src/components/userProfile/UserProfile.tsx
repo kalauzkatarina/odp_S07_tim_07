@@ -39,7 +39,7 @@ export function UserForm({
 
   return (
     <form onSubmit={handleSubmit} className="form">
-      <label htmlFor="chk" aria-hidden="true">
+      <label className="label-user-profile" htmlFor="chk" aria-hidden="true">
         User Profile
       </label>
 
@@ -69,12 +69,12 @@ export function UserForm({
         disabled={!isEditing}
       />
 
-      <button type="submit" className="btn">
+      <button type="submit" className="btnSave">
         Save
       </button>
 
       <div className="users-library">
-        <h2>User's Library</h2>
+        <h2 className="users-library-header">User's Library</h2>
         {favoriteBooks.length > 0 ? (
           <BooksList
             books={favoriteBooks}
