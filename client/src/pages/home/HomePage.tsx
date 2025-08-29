@@ -18,6 +18,7 @@ import { AuthForm } from "../../components/auth/AuthForm";
 import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService";
 import { UserForm } from "../../components/userProfile/UserProfile";
 import { usersApi } from "../../api_services/userApi/UsersAPIService";
+import { favoriteBooksApi } from "../../api_services/favoriteBookApi/FavoriteBooksApiService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -36,9 +37,36 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [selectedBookDetails, setSelectedBookDetails] = useState<BookDto | null>(null);
   const [bookDetailsComments, setBookDetailsComments] = useState<CommentDto[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [favoriteBooks, setFavoriteBooks] = useState<BookDto[]>([]);
 
   const auth = useContext(AuthContext);
   const [localUser, setLocalUser] = useState(auth!.user); //no null assertion operator !
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favoriteBooks");
+    if (storedFavorites) {
+      try {
+        const parsed = JSON.parse(storedFavorites);
+        if (Array.isArray(parsed)) {
+          setFavoriteBooks(parsed);
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (auth?.token) {
+        const favs = await favoriteBooksApi.getAllFavoriteBooks(auth.token);
+        setFavoriteBooks(favs);
+
+        localStorage.setItem("favoriteBooks", JSON.stringify(favs));
+      }
+    };
+    fetchFavorites();
+  }, [auth?.token]);
 
   useEffect(() => {
     if (auth?.user) {
@@ -47,15 +75,15 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   }, [auth?.user]);
 
   useEffect(() => {
-  const fetchFullUser = async () => {
-    if (auth?.user && auth?.token) {
-      const fullUser = await usersApi.getUserById(auth.token, auth.user.id);
-      console.log(fullUser);
-      setLocalUser(fullUser);
-    }
-  };
-  fetchFullUser();
-}, [auth?.user, auth?.token]);
+    const fetchFullUser = async () => {
+      if (auth?.user && auth?.token) {
+        const fullUser = await usersApi.getUserById(auth.token, auth.user.id);
+        console.log(fullUser);
+        setLocalUser(fullUser);
+      }
+    };
+    fetchFullUser();
+  }, [auth?.user, auth?.token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,7 +160,28 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
       : filteredBooks.filter((b) =>
         b.genres?.some((g) => g.id === selectedGenre)
       );
+  
+  const handleToggleFavorite = async (book: BookDto) => {
+    if (!auth?.token || !auth.user) return;
 
+    const isFav = favoriteBooks.some((b) => b.id === book.id);
+
+    if (isFav) {
+      const fav = await favoriteBooksApi.removeFavoriteBook(auth.token, book.id);
+      if (fav) {
+        const updated = favoriteBooks.filter((b) => b.id !== book.id);
+        setFavoriteBooks(updated);
+        localStorage.setItem("favoriteBooks", JSON.stringify(updated));
+      }
+    } else {
+      const added = await favoriteBooksApi.addFavoriteBook(auth.token, book.id, auth.user.id);
+      if (added.id !== 0) {
+        const updated = [...favoriteBooks, book];
+        setFavoriteBooks(updated);
+        localStorage.setItem("favoriteBooks", JSON.stringify(updated));
+      }
+    }
+  };
   return (
     <div className="app-container">
       <header className="app-header">
@@ -145,10 +194,16 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
 
       <main className="app-main">
         {activeTab === "bestsellers" && (
-          <BooksList books={topViewed} onClick={handleClickBook} />
+          <BooksList books={topViewed}
+            onClick={handleClickBook}
+            onToggleFavorite={handleToggleFavorite}
+            favoriteBooks={favoriteBooks} />
         )}
         {activeTab === "new" && (
-          <BooksList books={newBooks} onClick={handleClickBook} />
+          <BooksList books={newBooks}
+            onClick={handleClickBook}
+            onToggleFavorite={handleToggleFavorite}
+            favoriteBooks={favoriteBooks} />
         )}
         {activeTab === "recommended" && (
           <RecommendedSection
@@ -193,8 +248,9 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                       const newUser = await usersApi.updateUser(auth.token, auth.user.id, updatedUser);
                       if (newUser) setLocalUser(newUser);
                     }}
+                    favoriteBooks={favoriteBooks}
+                    onToggleFavorite={handleToggleFavorite}
                   />
-
                 )}
 
 

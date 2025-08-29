@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 
 import "./UserProfile.css"
+import type { BookDto } from "../../models/books/BookDto";
+import BooksList from "../homePage/BooksList";
 
 interface UserFormProps {
   username: string;
   email: string;
   onSave: (updatedUser: { username: string; email: string; password?: string }) => void;
+  favoriteBooks?: BookDto[];
+  onToggleFavorite?: (book: BookDto) => void;
 }
 
 export function UserForm({
   username: initialUsername,
   email: initialEmail,
   onSave,
+  favoriteBooks = [],
+  onToggleFavorite
 }: UserFormProps) {
   const [username, setUsername] = useState(initialUsername);
   const [email, setEmail] = useState(initialEmail);
@@ -63,9 +69,25 @@ export function UserForm({
         disabled={!isEditing}
       />
 
-        <button type="submit" className="btn">
-          Save
-        </button>
+      <button type="submit" className="btn">
+        Save
+      </button>
+
+      <div className="users-library">
+        <h2>User's Library</h2>
+        {favoriteBooks.length > 0 ? (
+          <BooksList
+            books={favoriteBooks}
+            onClick={() => { }}
+            onToggleFavorite={onToggleFavorite}
+            favoriteBooks={favoriteBooks}
+          />
+        ) : (
+          <p>No favorite books yet.</p>
+        )}
+      </div>
     </form>
+
+
   );
 }

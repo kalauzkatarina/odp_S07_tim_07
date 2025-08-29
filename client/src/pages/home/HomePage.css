@@ -43,6 +43,10 @@
   background-color: rgb(183, 130, 124, 0.8)
 }
 
+.bookmark_btn.active{
+  background-color: var(--color-copper-rust-600);
+}
+
 .card__content {
   padding: 1rem;
 }

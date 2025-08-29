@@ -29,9 +29,13 @@ const emptyFavoriteBook: FavoriteBooksDto = {
 };
 
 export const favoriteBooksApi: IFavoriteBooksService = {
-    async getAllFavoriteBooks(): Promise<BookDto[]> {
+    async getAllFavoriteBooks(token: string): Promise<BookDto[]> {
         try {
-            const res = await axios.get<FavoriteBooksDto[]>(`${API_URL}/getAllFavoriteBooks`);
+            const res = await axios.get<FavoriteBooksDto[]>(`${API_URL}/getAllFavoriteBooks`,
+                {
+                headers: {Authorization: `Bearer ${token}`}
+                }
+            );
             return res.data.map(fb => fb.book);
         } catch {
             return [];
