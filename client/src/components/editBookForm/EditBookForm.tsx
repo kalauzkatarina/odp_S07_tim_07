@@ -90,7 +90,6 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
 
   return (
     <section className="book-card">
-
       {coverPreview && (
         <div className="photo-preview">
           <img src={coverPreview} alt="Book Cover Preview" />

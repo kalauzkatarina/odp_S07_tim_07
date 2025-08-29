@@ -118,7 +118,7 @@ export class BookRepository implements IBookRepository {
                     row.pages,
                     row.script,
                     row.binding,
-                    row.publish_date, // ispravljeno iz publlish_date
+                    row.publish_date, 
                     row.isbn,
                     row.cover_image_url,
                     row.created_at,

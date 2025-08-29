@@ -1,42 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import "./UserProfile.css"
 
 interface UserFormProps {
   username: string;
-  onSave: (updatedUser: { username: string; password?: string }) => void;
+  email: string;
+  onSave: (updatedUser: { username: string; email: string; password?: string }) => void;
 }
 
-export function UserForm({ username: initialUsername, onSave }: UserFormProps) {
+export function UserForm({
+  username: initialUsername,
+  email: initialEmail,
+  onSave,
+}: UserFormProps) {
   const [username, setUsername] = useState(initialUsername);
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
+  const [isEditing, setIsEditing] = useState(true);
+
+  useEffect(() => {
+    setUsername(initialUsername);
+    setEmail(initialEmail);
+  }, [initialUsername, initialEmail]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ username, password: password || undefined });
-    setPassword(""); 
+    onSave({ username, email, password: password || undefined });
+    setPassword("");
+    setIsEditing(false);
+    alert("Users data updated successfully.");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="user-form">
-      <div className="form-group">
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="form">
+      <label htmlFor="chk" aria-hidden="true">
+        User Profile
+      </label>
 
-      <div className="form-group">
-        <label>Password: <small>(leave empty to keep current)</small></label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        disabled={!isEditing}
+        required
+      />
 
-      <button type="submit" className="btn-save">Save Changes</button>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        disabled={!isEditing}
+        required
+      />
+
+      <input
+        type="password"
+        placeholder="************"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        disabled={!isEditing}
+      />
+
+        <button type="submit" className="btn">
+          Save
+        </button>
     </form>
   );
 }

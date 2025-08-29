@@ -16,6 +16,8 @@ import { commentsApi } from "../../api_services/commentApi/CommentsApiService";
 import { BookDetailsForm } from "../../components/bookDetailsForm/BookDetailsForm";
 import { AuthForm } from "../../components/auth/AuthForm";
 import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService";
+import { UserForm } from "../../components/userProfile/UserProfile";
+import { usersApi } from "../../api_services/userApi/UsersAPIService";
 
 type TabType = "bestsellers" | "new" | "recommended" | "allBooks" | "login";
 
@@ -36,6 +38,24 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
   const [newComment, setNewComment] = useState("");
 
   const auth = useContext(AuthContext);
+  const [localUser, setLocalUser] = useState(auth!.user); //no null assertion operator !
+
+  useEffect(() => {
+    if (auth?.user) {
+      setLocalUser(auth.user);
+    }
+  }, [auth?.user]);
+
+  useEffect(() => {
+  const fetchFullUser = async () => {
+    if (auth?.user && auth?.token) {
+      const fullUser = await usersApi.getUserById(auth.token, auth.user.id);
+      console.log(fullUser);
+      setLocalUser(fullUser);
+    }
+  };
+  fetchFullUser();
+}, [auth?.user, auth?.token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,9 +184,20 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
               <AuthForm authApi={authApi} />
             ) : (
               <div className="user-profile">
-                <h2>Welcome, {auth.user.username}!</h2>
-                <p>Role: {auth.user.role}</p>
-                <button onClick={() => auth.logout()}>Logout</button>
+                {activeTab === "login" && auth?.user && (
+                  <UserForm
+                    username={localUser?.username ?? ""}
+                    email={localUser?.email ?? ""}
+                    onSave={async (updatedUser) => {
+                      if (!auth.token || !auth.user) return;
+                      const newUser = await usersApi.updateUser(auth.token, auth.user.id, updatedUser);
+                      if (newUser) setLocalUser(newUser);
+                    }}
+                  />
+
+                )}
+
+
               </div>
             )}
           </>

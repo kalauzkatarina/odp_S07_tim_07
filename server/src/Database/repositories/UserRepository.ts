@@ -32,15 +32,24 @@ export class UserRepository implements IUserRepository {
             const query = `SELECT * FROM users WHERE id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
-
+            console.log("Id za query: " + id)
+            console.log("Rows: " + rows);
             if (rows.length > 0) {
                 const row = rows[0];
+                console.log("Row id: " + row.id)
+                console.log("Row username" + row.username)
+                console.log("Row password: "+ row.password)
+                console.log("Row email" + row.email)
+                console.log("Row role" + row.role)
+                console.log("Row created" + row.created_at)
                 return new User(row.id, row.username, row.password, row.email, row.role, row.created_at);
             }
 
+            console.log("nesto")
             return new User();
         }
         catch {
+                        console.log("nesto")
             return new User();
         }
     }
@@ -124,6 +133,7 @@ export class UserRepository implements IUserRepository {
     }
     async update(user: User): Promise<User> {
         try {
+            console.log("User u update: " + user.id)
             const query = `UPDATE users SET username = ?, password = ?, email = ?, role = ?, created_at = ? WHERE id = ?`;
 
             const [result] = await db.execute<ResultSetHeader>(query, [
@@ -131,8 +141,11 @@ export class UserRepository implements IUserRepository {
                 user.password,
                 user.email,
                 user.role,
-                user.created_at
+                user.created_at,
+                user.id
             ]);
+
+            console.log("Result: " + result.insertId)
 
             if (result.affectedRows > 0) {
                 return user;
@@ -140,7 +153,8 @@ export class UserRepository implements IUserRepository {
 
             return new User();
         }
-        catch {
+        catch (error) {
+            console.log("Error: " + error )
             return new User();
         }
     }

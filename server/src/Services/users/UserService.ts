@@ -21,7 +21,7 @@ export class UserService implements IUserService{
 
     async getUserById(id: number): Promise<UserDto> {
         const user = await this.userRepository.getById(id);
-        
+        console.log("Id:" + id)
         if(user.id !== 0){
             return new UserDto(user.id, user.username, user.email, user.role);
         }
@@ -29,7 +29,9 @@ export class UserService implements IUserService{
     }
 
     async updateUser(id: number, updates: { username?: string; email?: string; password?: string; role?: UserRole; }): Promise<UserDto> {
+        console.log("ID: " + id)
         const existingUser = await this.userRepository.getById(id);
+        console.log("Existing user: " + existingUser.id)
         
         if(existingUser.id == 0){
             return new UserDto();
@@ -47,9 +49,9 @@ export class UserService implements IUserService{
             updates.role || existingUser.role,
             existingUser.created_at
         );
-
+        console.log("UpdatedUSer: " + updatedUser.username)
         const savedUser = await this.userRepository.update(updatedUser);
-
+        console.log("SavedUSer" + savedUser.username)
         return new UserDto(savedUser.id, savedUser.username, savedUser.email, savedUser.role);
     }
 }
