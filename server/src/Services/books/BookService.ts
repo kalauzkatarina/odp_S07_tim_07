@@ -100,6 +100,18 @@ export class BookService implements IBookService {
         );
 
         const savedBook = await this.bookRepository.update(updatedBook);
+
+        if (updates.genres) {
+            await this.bookGenreRepository.delete(savedBook.id);
+
+            for (const genre of updates.genres) {
+                await this.bookGenreRepository.create({
+                    book_id: savedBook.id,
+                    genre_id: genre.id
+                });
+            }
+        }
+        
         return this.mapToDto(savedBook);
     }
 

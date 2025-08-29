@@ -5,7 +5,7 @@ import type { BookDto } from "../../models/books/BookDto";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 
-import "./EditBookForm.css"; 
+import "./EditBookForm.css";
 
 interface BookEditFormProps {
   bookId: number;
@@ -18,11 +18,13 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   const [book, setBook] = useState<BookDto | null>(null);
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+  const [coverPreview, setCoverPreview] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
       const bookData = await booksApi.getBookById(bookId);
       setBook(bookData);
+      setCoverPreview(bookData.cover_image_url || "");
       setSelectedGenreIds(bookData.genres.map((g) => g.id));
       const allGenres = await genresApi.getAllGenres();
       setGenres(allGenres);
@@ -40,11 +42,27 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
     if (book) setBook({ ...book, [field]: value });
   };
 
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCoverPreview(reader.result as string);
+        setBook((prev) => prev && { ...prev, cover_image_url: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!token || !book) {
       alert("You need to be logged in as the Editor!");
       return;
     }
+
+    const updatedGenres = genres
+    .filter((g) => selectedGenreIds.includes(g.id))
+    .map((g) => ({ id: g.id, name: g.name }));
 
     const updated = await booksApi.updateBook(token, book.id, {
       title: book.title,
@@ -57,16 +75,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       publish_date: book.publish_date,
       isbn: book.isbn,
       cover_image_url: book.cover_image_url,
-      genres: genres
-        .filter((g) => selectedGenreIds.includes(g.id))
-        .map((g) => ({ id: g.id, name: g.name })),
+      genres: updatedGenres
     });
 
     if (updated.id !== 0) {
-      alert("✅ Book successfully edited!");
+      alert("Book successfully edited!");
       onSave(updated);
     } else {
-      alert("❌ Error while editing the book!");
+      alert("Error while editing the book!");
     }
   };
 
@@ -74,7 +90,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
 
   return (
     <section className="book-card">
-      <h1>✏️ Edit the Book</h1>
+
+      {coverPreview && (
+        <div className="photo-preview">
+          <img src={coverPreview} alt="Book Cover Preview" />
+        </div>
+      )}
+
+      <h1>Edit the Book</h1>
 
       <div className="row">
         <input
@@ -115,7 +138,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       <div className="row">
         <input
           type="number"
-          placeholder="Page Number"
+          placeholder="Pages"
           value={book.pages}
           onChange={(e) => handleChange("pages", Number(e.target.value))}
         />
@@ -142,19 +165,9 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
         />
       </div>
 
-      <input
-        type="text"
-        placeholder="Cover Image URL"
-        value={book.cover_image_url}
-        onChange={(e) => handleChange("cover_image_url", e.target.value)}
-      />
-
-      <div className="photo-preview">
-        <img
-          src={book.cover_image_url || "https://via.placeholder.com/400x600?text=Korice"}
-          alt="Book Cover"
-        />
-      </div>
+        <label className="file-input-label">
+          <input type="file" accept="image/*" onChange={handleCoverChange} />
+        </label>
 
       <div className="genres">
         {genres.map((genre) => (

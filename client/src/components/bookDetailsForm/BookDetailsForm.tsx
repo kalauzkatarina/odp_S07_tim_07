@@ -1,8 +1,9 @@
+// BookDetailsForm.tsx
 import { useState } from "react";
 import type { BookDto } from "../../models/books/BookDto";
 import { BookEditForm } from "../editBookForm/EditBookForm";
 import type { CommentDto } from "../../models/comments/CommentDto";
-import "./BookDetailsForm.css"; 
+import "./BookDetailsForm.css";
 
 interface BookDetailsFormProps {
   book: BookDto;
@@ -66,12 +67,12 @@ export function BookDetailsForm({
         <div className="product__info">
           <div className="title">
             <h1>{currentBook.title}</h1>
-            <p>by {currentBook.author}</p>
-            <span>ISBN: {currentBook.isbn}</span>
+            <p><b>Author:</b> {currentBook.author}</p>
+            <span><b>ISBN:</b> {currentBook.isbn}</span>
           </div>
 
           <div className="book-summary">
-            <p>{currentBook.summary}</p>
+            <p><b>Summary:</b> {currentBook.summary}</p>
             <p><b>Format:</b> {currentBook.format}</p>
             <p><b>Binding:</b> {currentBook.binding}</p>
             <p><b>Pages:</b> {currentBook.pages}</p>
@@ -87,7 +88,6 @@ export function BookDetailsForm({
             </div>
           )}
 
-          {/* KOMENTARI */}
           <div className="comments">
             <h3>Comments</h3>
             <div className="new-comment">
@@ -97,7 +97,15 @@ export function BookDetailsForm({
                 value={newComment}
                 onChange={(e) => onNewCommentChange?.(e.target.value)}
               />
-              <button className="btn-add-comment" onClick={onAddComment}>Add comment</button>
+              <button className="btn-add-comment"
+                onClick={() => {
+                  if (!user) {
+                    alert("You must be logged in to leave a comment!");
+                    return;
+                  }
+                  onAddComment?.();
+                }}
+              >Add comment</button>
             </div>
 
             <ul className="comments-list">

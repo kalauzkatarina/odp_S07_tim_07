@@ -3,7 +3,7 @@ import { booksApi } from "../../api_services/bookApi/BooksApiService";
 import { featuredBooksApi } from "../../api_services/featuredBooksApi/FeaturedBooksApiService";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { BookDto } from "../../models/books/BookDto";
-import TabsBar from "../tabsbar/TabsBar";
+import TabsBar from "../../components/homePage/TabsBar";
 import type { GenreDto } from "../../models/genres/GenreDto";
 import { genresApi } from "../../api_services/genreApi/GenresApiService";
 import "./HomePage.css";

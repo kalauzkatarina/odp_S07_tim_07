@@ -1,5 +1,5 @@
 .book-card {
-  width: 800px;
+  width: 750px;
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
@@ -30,15 +30,36 @@
   resize: vertical;
 }
 
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+.row input {
+  flex: 1;
+}
+
 .photo-preview img {
-  max-width: 200px;
   border-radius: 6px;
   display: block;
-  margin: 0 auto;
+  margin: 0.5rem auto;
+  width: 180px;
 }
 
 .genres {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.genres label {
+  font-size: 1.3rem; 
+  display: flex;
+  align-items: center;
+  gap: 0.3rem; 
+}
+
+.genres input[type="checkbox"] {
+  width: 16px;   
+  height: 16px;
 }
