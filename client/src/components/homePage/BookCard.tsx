@@ -32,9 +32,6 @@ const BookCard = ({ book, onClick, onToggleFavorite, isFavorite }: Props) => (
       <div className="card__content">
         <div className="card__title">{book.title}</div>
         <p className="card__text">{book.author}</p>
-        <p className="card__text">
-          {book.summary ? book.summary.slice(0, 100) + "..." : ""}
-        </p>
         <button onClick={() => onClick(book.id)} className="btnDetails">
           Details
         </button>

@@ -45,9 +45,8 @@
 }
 
 .book-image {
-  width: 100%;
-  max-width: 150px;
-  height: auto;
+  height: 180px;
+  width: 115px;
   border-radius: 6px;
   object-fit: cover;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);

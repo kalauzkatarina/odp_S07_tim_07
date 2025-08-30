@@ -126,10 +126,19 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
     try {
       const found = await booksApi.getBookById(bookId);
       if (found && found.id !== 0) {
+        const updatedBook = await booksApi.incrementViews(found.id);
         setSelectedBookDetails(found);
-        await booksApi.incrementViews(found.id);
         const comments = await commentsApi.getAllCommentsByBook(found.id);
         setBookDetailsComments(comments);
+
+        setTopViewed((prev) => {
+        const filtered = prev.filter(b => b.id !== updatedBook.id);
+        const updatedList = [...filtered, updatedBook];
+
+        updatedList.sort((a, b) => b.views - a.views);
+
+        return updatedList.slice(0, 3);
+      });
       }
     } catch (error) {
       console.error("Failed to fetch book details:", error);

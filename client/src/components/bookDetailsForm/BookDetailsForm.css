@@ -109,6 +109,7 @@ span,
 p,
 b {
   color: #321d1d;
+  text-align: justify;
 }
 
 .isbn {
