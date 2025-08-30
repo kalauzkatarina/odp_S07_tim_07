@@ -48,11 +48,17 @@ label {
 .btnLogin{
   background: #dfc7c2;
   color: #624345;
+  width: 100px;
 }
 
 .btnSignUp{
   color: #dfc7c2;
   background: #624345;
+  width: 100px;
+}
+
+.btnLogin:hover{
+  color: #dfc7c2;
 }
 
 input, select, button {

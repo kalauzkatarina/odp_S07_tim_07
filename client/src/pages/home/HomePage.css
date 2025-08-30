@@ -45,11 +45,16 @@
   margin-top: -30px;
   margin-bottom: -20px;
   background-color: #321d1d;
-  color: #faf6f6;
+  color: #dfc7c2;
 }
 
 .bookmark_btn.active{
-  background-color: #624345;
+  background-color: #a06262;
+}
+
+.bookmark_btn:hover{
+  background-color: #855050;
+  color: #321d1d;
 }
 
 .card__content {
@@ -96,7 +101,11 @@
 
 .btnDetails{
   width: 150px;
-  color: #faf6f6;
+  color: #dfc7c2;
+}
+
+.btnDetails:hover{
+  color: #321d1d;
 }
 
 .btnRemove{
@@ -117,7 +126,10 @@
   width: 200px;
   background-color: #dfc7c2;
   color: #321d1d;
+}
 
+.btnAdd:hover{
+  color:#dfc7c2
 }
 
 .book-image-grid {
@@ -156,20 +168,20 @@
 
 .btnFeatured.add {
   background-color: #321d1d;
-  color: white;
+  color: #dfc7c2;
   width: 70px;
   border: none;
   border-radius: 20px;
 }
 
 .btnFeatured.add:hover{
-  background-color: #dfc7c2;
+  background-color: var(--color-copper-rust-600);
   color: #321d1d;
 }
 
 .btnFeatured.remove {
   background-color: #321d1d;
-  color: white;
+  color: #dfc7c2;
   width: 70px;
   border: none;
   border-radius: 20px;
@@ -181,11 +193,16 @@
 }
 
 .btnCloseRecommended{
-  color: white;
+  color: #dfc7c2;
+}
+
+.btnCloseRecommended:hover{
+  color: #321d1d;
 }
 
 .select-for-featured{
-  color: #321d1d;
+  color: #dfc7c2;
+  text-align: center;
   font-family: 'Times New Roman', Times, serif;
   font-size: 2rem;
 }
@@ -222,6 +239,10 @@
   align-items: center;
 }
 
-.bookmark_btn:hover{
-  background-color:#a06262;
+.btn-close:hover{
+  color: #321d1d;
+}
+
+.btnEdit:hover{
+  color: #dfc7c2;
 }

@@ -120,7 +120,11 @@ span, p, b {
 }
 
 .btn-add-comment{
-  color: #faf6f6;
+  color: #dfc7c2;
+}
+
+.btn-add-comment:hover{
+  color: #321d1d;
 }
 
 .comment-title{
@@ -128,6 +132,18 @@ span, p, b {
 }
 
 .comment-card{
+  color: #321d1d;
+}
+
+.btn-comment-delete:hover{
+  color: #321d1d;
+}
+
+.btn-edit:hover{
+  color: #321d1d;
+}
+
+.btn-delete:hover{
   color: #321d1d;
 }
 

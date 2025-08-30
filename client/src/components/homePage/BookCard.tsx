@@ -10,7 +10,7 @@ type Props = {
   onRemove?: (id: number) => void;
 };
 
-const BookCard = ({ book, onClick, onToggleFavorite, isFavorite, isEditable, onRemove }: Props) => (
+const BookCard = ({ book, onClick, onToggleFavorite, isFavorite }: Props) => (
   <li className="cards__item card-item-relative">
     <div className="card">
       <div
@@ -41,16 +41,7 @@ const BookCard = ({ book, onClick, onToggleFavorite, isFavorite, isEditable, onR
       </div>
     </div>
 
-    {isEditable && onRemove && (
-      <button
-        className="btnRemove"
-        onClick={() => onRemove(book.id)}
-        aria-label="Remove from featured"
-        title="Remove from featured"
-      >
-        ×
-      </button>
-    )}
+
   </li>
 );
 
