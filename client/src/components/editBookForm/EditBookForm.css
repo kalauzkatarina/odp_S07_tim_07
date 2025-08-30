@@ -11,6 +11,25 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
+.book-card.fade-in {
+  animation: fadeInScale 0.3s ease forwards;
+}
+
+.book-card.fade-out {
+  animation: fadeOutScale 0.3s ease forwards;
+}
+
+@keyframes fadeOutScale {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
 .book-card h1 {
   font-size: 2rem;
   text-align: center;
@@ -53,6 +72,12 @@
   width: 180px;
 }
 
+.edit-book-header{
+  color: #321d1d;
+  text-align: center;
+  font-size: 2.5rem;
+}
+
 .genres {
   display: flex;
   flex-wrap: wrap;
@@ -71,5 +96,13 @@
   height: 16px;
 }
 
-
-
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

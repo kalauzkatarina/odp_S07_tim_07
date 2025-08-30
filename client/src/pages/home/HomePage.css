@@ -219,3 +219,13 @@
   display: flex;
   justify-content: center; 
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* zauzima ceo ekran */
+  background: rgba(0, 0, 0, 0.3); /* tamna providna pozadina */
+  backdrop-filter: blur(4px);     /* ovde je blur efekat */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

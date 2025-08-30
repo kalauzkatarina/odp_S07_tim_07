@@ -53,6 +53,13 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btnFavorite.remove:hover{
+.btnFavorite.remove{
+  background-color: #dfc2c2;
   color: #321d1d;
+  width: 130px;
+}
+
+.btnFavorite.remove:hover{
+ background-color: #a06262;
+  color: #dfc2c2; 
 }

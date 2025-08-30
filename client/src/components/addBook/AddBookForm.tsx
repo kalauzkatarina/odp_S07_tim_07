@@ -14,7 +14,7 @@ interface AddBookFormProps {
 
 export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) {
   const { token } = useAuth();
-
+  const [isClosing, setIsClosing] = useState(false);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [summary, setSummary] = useState("");
@@ -36,6 +36,13 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
     };
     fetchGenres();
   });
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose(); // tek posle animacije se unmountuje
+    }, 300); // isto trajanje kao CSS animacija
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -106,8 +113,8 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="modal-close" onClick={onClose}>✕</button>
+      <div className={`modal-content ${isClosing ? "fade-out" : ""}`}>
+        <button className="modal-close" onClick={handleClose}>✕</button>
 
         {coverImageUrl && (
           <div className="photo-preview">

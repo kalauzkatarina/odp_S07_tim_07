@@ -31,6 +31,7 @@ export function BookDetailsForm({
 }: BookDetailsFormProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBook, setCurrentBook] = useState(book);
+  const [isClosing, setIsClosing] = useState(false); 
 
   const handleSave = (updatedBook: BookDto) => {
     setCurrentBook(updatedBook);
@@ -38,13 +39,23 @@ export function BookDetailsForm({
     onEditBook(updatedBook);
   };
 
+  const handleCancel = () => {
+    setIsClosing(true); 
+    setTimeout(() => {
+      setIsEditing(false); 
+      setIsClosing(false);
+    }, 300); 
+  };
+
   if (isEditing) {
     return (
+      <div className={`fade-wrapper ${isClosing ? "fade-out" : "fade-in"}`}>
       <BookEditForm
         bookId={currentBook.id}
         onSave={handleSave}
-        onCancel={() => setIsEditing(false)}
+        onCancel={handleCancel}
       />
+      </div>
     );
   }
 

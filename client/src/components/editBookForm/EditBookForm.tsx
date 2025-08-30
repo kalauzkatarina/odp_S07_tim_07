@@ -20,6 +20,9 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   const [genres, setGenres] = useState<GenreDto[]>([]);
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
   const [coverPreview, setCoverPreview] = useState<string>("");
+  const [isClosing, setIsClosing] = useState(false);
+  
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +35,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
     };
     fetchData();
   }, [bookId]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onCancel();
+    }, 300); // isto trajanje kao CSS animacija
+  };
+
 
   const handleGenreToggle = (genreId: number) => {
     setSelectedGenreIds((prev) =>
@@ -112,14 +123,14 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   if (!book) return <p className="loading-text">Reading the book...</p>;
 
   return (
-    <section className="book-card">
+    <section className={`book-card ${isClosing ? "fade-out" : ""}`}>
       {coverPreview && (
         <div className="photo-preview">
           <img src={coverPreview} alt="Book Cover Preview" />
         </div>
       )}
 
-      <h1>Edit the Book</h1>
+      <h2 className="edit-book-header">Edit the Book</h2>
 
       <div className="row">
         <input
@@ -216,7 +227,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
 
       <div className="row">
         <button onClick={handleSubmit}>Save changes</button>
-        <button onClick={onCancel}>Cancel</button>
+        <button onClick={handleClose}>Cancel</button>
       </div>
     </section>
   );
