@@ -114,7 +114,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
 
   useEffect(() => {
     if (auth?.user) {
-      setFavoriteBooks([]); 
+      setFavoriteBooks([]);
       refreshFavorites();
     } else {
       setFavoriteBooks([]);
@@ -256,12 +256,28 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
               <BookImageGrid
                 books={allBooks}
                 featuredBooks={recommended}
-                onToggleFeatured={(book) => {
-                  if (recommended.some((b) => b.id === book.id)) {
-                    setRecommended((prev) => prev.filter((b) => b.id !== book.id));
-                  } else {
-                    if (recommended.length >= 5) return;
-                    setRecommended((prev) => [...prev, book]);
+                onToggleFeatured={async (book) => {
+                  if (!auth?.token || !auth.user) return;
+
+                  const isAlreadyFeatured = recommended.some((b) => b.id === book.id);
+
+                  try {
+                    if (isAlreadyFeatured) {
+                      await featuredBooksApi.removeFeaturedBook(auth.token, book.id);
+                      setRecommended((prev) => prev.filter((b) => b.id !== book.id));
+                    } else {
+                      if (recommended.length >= 5) {
+                        alert("You have to delete a book before you add a new book.");
+                        return;
+                      }
+
+                      const added = await featuredBooksApi.addFeaturedBook(auth.token, book.id, auth.user.id);
+                      if (added) {
+                        setRecommended((prev) => [...prev, book]);
+                      }
+                    }
+                  } catch (err) {
+                    console.error("Failed to toggle featured book:", err);
                   }
                 }}
               />

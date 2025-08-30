@@ -203,7 +203,7 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
     }
     async delete(id: number): Promise<boolean> {
         try {
-            const query = `DELETE FROM featured_books WHERE id = ?`;
+            const query = `DELETE FROM featured_books WHERE book_id = ?`;
 
             const [result] = await db.execute<ResultSetHeader>(query, [id]);
 
