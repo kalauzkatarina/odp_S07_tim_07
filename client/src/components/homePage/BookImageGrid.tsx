@@ -3,7 +3,9 @@ import type { BookDto } from "../../models/books/BookDto";
 type Props = {
   books: BookDto[];
   featuredBooks?: BookDto[];
+  favoriteBooks?: BookDto[];
   onToggleFeatured: (book: BookDto) => void;
+  onToggleFavorite: (book: BookDto) => void;
 };
 
 const BookImageGrid = ({ books, featuredBooks, onToggleFeatured }: Props) => {

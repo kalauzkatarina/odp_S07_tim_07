@@ -9,6 +9,8 @@ type Props = {
   isEditor: boolean;
   onClickBook: (id: number) => void;
   onRemove: (id: number) => void;
+  onToggleFavorite: (book: BookDto) => void;
+  favoriteBooks: BookDto[];
 };
 
 const RecommendedSection = ({
@@ -18,6 +20,8 @@ const RecommendedSection = ({
   isEditor,
   onClickBook,
   onRemove,
+  onToggleFavorite,
+  favoriteBooks
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -44,6 +48,8 @@ const RecommendedSection = ({
         onClick={onClickBook}
         editable={isEditing}
         onRemove={onRemove}
+        onToggleFavorite={onToggleFavorite}
+        favoriteBooks={favoriteBooks}
       />
     </section>
   );

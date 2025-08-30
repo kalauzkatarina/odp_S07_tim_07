@@ -154,10 +154,12 @@
   cursor: pointer;
   border-radius: 4px;
   transition: transform 0.2s;
+  box-shadow: 0 0 8px var(--color-copper-rust-200);
 }
 
 .book-image:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 8px var(--color-copper-rust-300)
 }
 
 .btnFeatured {

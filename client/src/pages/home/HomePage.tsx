@@ -246,6 +246,8 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
             }}
             isEditor={auth?.user?.role === "editor"}
             onClickBook={handleClickBook}
+            onToggleFavorite={handleToggleFavorite}
+            favoriteBooks={favoriteBooks.map(f => f.book)}
           />
         )}
 
@@ -256,6 +258,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
               <BookImageGrid
                 books={allBooks}
                 featuredBooks={recommended}
+                favoriteBooks={favoriteBooks.map(f => f.book)}
                 onToggleFeatured={async (book) => {
                   if (!auth?.token || !auth.user) return;
 
@@ -280,6 +283,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                     console.error("Failed to toggle featured book:", err);
                   }
                 }}
+                onToggleFavorite={handleToggleFavorite}
               />
               <button className="btnCloseRecommended" onClick={() => setIsEditing(false)}>Close</button>
             </div>
