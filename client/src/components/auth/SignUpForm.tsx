@@ -82,7 +82,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
         </label>
       </div>
 
-      {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+      {error && <p style={{ color: "var(--color-copper-rust-600)", fontSize: "14px", textAlign: "center", marginBottom:"-15px", marginTop:"-10px" }}>{error}</p>}
       <button className={styles.btnSignUp} type="submit">Sign up</button>
     </form>
   );

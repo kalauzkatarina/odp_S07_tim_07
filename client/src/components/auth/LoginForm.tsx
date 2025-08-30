@@ -50,7 +50,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+      {error && <p style={{ color: "var(--color-copper-rust-200)", fontSize: "14px", textAlign: "center", marginBottom:"-15px" }}>{error}</p>}
       <button className={styles.btnLogin} type="submit">Login</button>
     </form>
   );

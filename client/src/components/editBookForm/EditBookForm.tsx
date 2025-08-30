@@ -211,7 +211,6 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
         />
       </div>
 
-
       <div className="genres-edit-book">
         {genres.map((genre) => (
           <label key={genre.id}>
