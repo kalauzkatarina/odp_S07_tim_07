@@ -138,6 +138,16 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
 
   const handleBookAdded = (newBook: BookDto) => {
     setAllBooks((prev) => [...prev, newBook]);
+
+    setNewBooks((prev) => {
+      const updated = [newBook, ...prev];
+      return updated.slice(0, 5);
+    });
+
+    setTopViewed((prev) => {
+      const updated = [...prev, newBook];
+      return updated.slice(0, 3);
+    });
   };
 
   const handleBookUpdated = (updatedBook: BookDto) => {
@@ -201,7 +211,6 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
       console.error("Failed to toggle favorite:", err);
     }
   };
-
 
   return (
     <div className="app-container">
@@ -397,6 +406,15 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
                   );
                   if (success) {
                     setAllBooks((prev) =>
+                      prev.filter((b) => b.id !== selectedBookDetails.id)
+                    );
+                    setTopViewed((prev) =>
+                      prev.filter((b) => b.id !== selectedBookDetails.id)
+                    );
+                    setRecommended((prev) =>
+                      prev.filter((b) => b.id !== selectedBookDetails.id)
+                    );
+                    setNewBooks((prev) =>
                       prev.filter((b) => b.id !== selectedBookDetails.id)
                     );
                     setSelectedBookDetails(null);

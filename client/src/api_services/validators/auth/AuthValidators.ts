@@ -3,7 +3,7 @@ import type { ResultOfValidation } from "../../../types/validation/ValidationRes
 export function validationOfDatasAuth(username?: string, password?: string): ResultOfValidation {
 
     if (!username || !password) {
-        return { success: false, message: 'Username and password are required' };
+        return { success: false, message: 'Username and password are required.' };
     }
 
     if (username.length < 3) {

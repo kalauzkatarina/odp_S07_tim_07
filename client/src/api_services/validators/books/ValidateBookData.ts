@@ -1,3 +1,4 @@
+import type { GenreDto } from "../../../models/genres/GenreDto";
 import type { ResultOfValidation } from "../../../types/validation/ValidationResult";
 
 export function validateBookData(data: {
@@ -11,6 +12,7 @@ export function validateBookData(data: {
   publish_date?: string;
   isbn?: string;
   cover_image_url?: string;
+  genre?: GenreDto[];
 }): ResultOfValidation {
 
   if (!data.title || data.title.trim() === "") {
