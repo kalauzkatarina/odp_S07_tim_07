@@ -14,13 +14,12 @@ export class FeaturedBookService implements IFeaturedBookService {
 
     async getAllFeaturedBooks(limit: number): Promise<FeaturedBookDto[]> {
         const featuredBooks = await this.featuredBookRepository.getAll(limit);
-        console.log(featuredBooks);
-        
+
         return featuredBooks.map(fb => new FeaturedBookDto(
             fb.id,
             fb.book_id,
             fb.editor_id,
-            fb.book 
+            fb.book
         ));
     }
 

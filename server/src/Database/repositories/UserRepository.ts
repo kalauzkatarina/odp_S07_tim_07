@@ -32,24 +32,14 @@ export class UserRepository implements IUserRepository {
             const query = `SELECT * FROM users WHERE id = ?`;
 
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
-            console.log("Id za query: " + id)
-            console.log("Rows: " + rows);
             if (rows.length > 0) {
                 const row = rows[0];
-                console.log("Row id: " + row.id)
-                console.log("Row username" + row.username)
-                console.log("Row password: "+ row.password)
-                console.log("Row email" + row.email)
-                console.log("Row role" + row.role)
-                console.log("Row created" + row.created_at)
                 return new User(row.id, row.username, row.password, row.email, row.role, row.created_at);
             }
 
-            console.log("nesto")
             return new User();
         }
         catch {
-                        console.log("nesto")
             return new User();
         }
     }
@@ -71,12 +61,12 @@ export class UserRepository implements IUserRepository {
         }
     }
 
-     async getUsernameById(userId: number): Promise<string> {
+    async getUsernameById(userId: number): Promise<string> {
         try {
             const query = `SELECT username FROM users WHERE id = ?`;
             const [rows] = await db.execute<RowDataPacket[]>(query, [userId]);
             if (rows.length > 0) return rows[0].username;
-            return `User #${userId}`; // fallback
+            return `User #${userId}`;
         } catch (error) {
             console.error("Error fetching username:", error);
             return `User #${userId}`;
@@ -133,7 +123,6 @@ export class UserRepository implements IUserRepository {
     }
     async update(user: User): Promise<User> {
         try {
-            console.log("User u update: " + user.id)
             const query = `UPDATE users SET username = ?, password = ?, email = ?, role = ?, created_at = ? WHERE id = ?`;
 
             const [result] = await db.execute<ResultSetHeader>(query, [
@@ -145,16 +134,13 @@ export class UserRepository implements IUserRepository {
                 user.id
             ]);
 
-            console.log("Result: " + result.insertId)
-
             if (result.affectedRows > 0) {
                 return user;
             }
 
             return new User();
         }
-        catch (error) {
-            console.log("Error: " + error )
+        catch {
             return new User();
         }
     }

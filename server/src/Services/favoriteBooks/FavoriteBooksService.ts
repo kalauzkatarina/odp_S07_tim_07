@@ -22,17 +22,15 @@ export class FavoriteBookService implements IFavoriteBookService {
     }
 
     async getFavoritesByUserId(userId: number): Promise<FavoriteBooksDto[]> {
-    // Dohvati sve favorite zapise za datog korisnika
-    const favorites = await this.favoriteBookRepository.getByUserId(userId);
+        const favorites = await this.favoriteBookRepository.getByUserId(userId);
 
-    // Mapiraj u DTO
-    return favorites.map(fb => new FavoriteBooksDto(
-        fb.id,
-        fb.book_id,
-        fb.user_id,
-        fb.book
-    ));
-}
+        return favorites.map(fb => new FavoriteBooksDto(
+            fb.id,
+            fb.book_id,
+            fb.user_id,
+            fb.book
+        ));
+    }
 
 
     async addFavoriteBook(bookId: number, userId: number): Promise<FavoriteBooksDto> {
@@ -63,15 +61,13 @@ export class FavoriteBookService implements IFavoriteBookService {
     }
 
     async removeFavoriteBook(bookId: number, userId: number): Promise<boolean> {
-    // Pronađi favorite zapis za tog korisnika i knjigu
-    const favorite = await this.favoriteBookRepository.getByBookId(bookId);
+        const favorite = await this.favoriteBookRepository.getByBookId(bookId);
 
-    if (!favorite || favorite.user_id !== userId) {
-        throw new Error("Favorite zapis nije pronađen za ovog korisnika.");
+        if (!favorite || favorite.user_id !== userId) {
+            throw new Error("Favorite zapis nije pronađen za ovog korisnika.");
+        }
+
+        return await this.favoriteBookRepository.delete(favorite.id);
     }
-
-    // Stvarno brisanje iz baze
-    return await this.favoriteBookRepository.delete(favorite.id);
-}
 
 }

@@ -1,9 +1,9 @@
 import type { BookDto } from "../../models/books/BookDto";
 
 type Props = {
-  books: BookDto[]; 
-  favoriteBooks?: BookDto[]; 
-  onToggleFavorite: (book: BookDto) => void; 
+  books: BookDto[];
+  favoriteBooks?: BookDto[];
+  onToggleFavorite: (book: BookDto) => void;
 };
 
 const FavoriteBookImageGrid = ({ books, favoriteBooks, onToggleFavorite }: Props) => {

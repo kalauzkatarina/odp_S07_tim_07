@@ -6,11 +6,11 @@ import { authApi } from "./api_services/authApi/AuthAPIService";
 
 function App() {
   return (
-     <Routes>
-     
+    <Routes>
+
       <Route path="/" element={<Navigate to="/home" replace />} />
-      
-      <Route path="/home" element={<HomePage authApi={authApi}/>} />
+
+      <Route path="/home" element={<HomePage authApi={authApi} />} />
 
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
     </Routes>

@@ -118,7 +118,7 @@ export class BookRepository implements IBookRepository {
                     row.pages,
                     row.script,
                     row.binding,
-                    row.publish_date, 
+                    row.publish_date,
                     row.isbn,
                     row.cover_image_url,
                     row.created_at,
@@ -126,7 +126,7 @@ export class BookRepository implements IBookRepository {
                 );
             }
 
-            return new Book(); // vraća prazan objekat ako knjiga ne postoji
+            return new Book();
         } catch (error) {
             console.error("Error getting the book by id: ", error);
             return new Book();

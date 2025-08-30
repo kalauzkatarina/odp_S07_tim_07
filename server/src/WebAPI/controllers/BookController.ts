@@ -116,7 +116,7 @@ export class BookController {
     private async incrementViews(req: Request, res: Response) {
         try {
             const id = Number(req.params.id);
-            const book = await this.bookService.incrementViewsById(id); 
+            const book = await this.bookService.incrementViewsById(id);
             res.status(200).json(book);
         } catch (error) {
             res.status(500).json({ success: false, message: error });
@@ -127,7 +127,6 @@ export class BookController {
         try {
             const limit = Number(req.query.limit) || 3;
             const books = await this.bookService.getTopViewedBooks(limit);
-            console.log(limit)
             res.status(200).json(books);
         } catch (error) {
             res.status(500).json({ success: false, message: error });

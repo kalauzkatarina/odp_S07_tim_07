@@ -48,8 +48,8 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
     }
 
     async getByBookId(id: number): Promise<FeaturedBooks & { book: Book } | null> {
-    try {
-        const query = `
+        try {
+            const query = `
             SELECT 
                 fb.id AS featured_id,
                 fb.book_id AS fb_book_id,
@@ -73,38 +73,38 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
             WHERE fb.book_id = ?
         `;
 
-        const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
+            const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
-        if (rows.length === 0) return null;
+            if (rows.length === 0) return null;
 
-        const row = rows[0];
+            const row = rows[0];
 
-        return {
-            id: row.featured_id,
-            book_id: row.fb_book_id,
-            editor_id: row.editor_id,
-            featured_at: row.featured_at,
-            book: new Book(
-                row.book_id,
-                row.title,
-                row.author,
-                row.summary,
-                row.format,
-                row.pages,
-                row.script,
-                row.binding,
-                row.publish_date,
-                row.isbn,
-                row.cover_image_url,
-                row.created_at,
-                row.views
-            )
-        };
-    } catch (error) {
-        console.error("Error fetching featured book with book details:", error);
-        return null;
+            return {
+                id: row.featured_id,
+                book_id: row.fb_book_id,
+                editor_id: row.editor_id,
+                featured_at: row.featured_at,
+                book: new Book(
+                    row.book_id,
+                    row.title,
+                    row.author,
+                    row.summary,
+                    row.format,
+                    row.pages,
+                    row.script,
+                    row.binding,
+                    row.publish_date,
+                    row.isbn,
+                    row.cover_image_url,
+                    row.created_at,
+                    row.views
+                )
+            };
+        } catch (error) {
+            console.error("Error fetching featured book with book details:", error);
+            return null;
+        }
     }
-}
 
 
     async getByEditorId(id: number): Promise<FeaturedBooks> {
@@ -126,7 +126,6 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
     }
     async getAll(limit: number): Promise<(FeaturedBooks & { book: Book })[]> {
         try {
-            //console.log(limit)
             const query = `
             SELECT 
                 fb.id              AS featured_id,
@@ -153,7 +152,6 @@ export class FeaturedBooksRepository implements IFeaturedBooksRepository {
         `;
 
             const [rows] = await db.execute<RowDataPacket[]>(query);
-            console.log("Rows: ", rows);
 
             return rows.map(row => ({
                 id: row.featured_id,

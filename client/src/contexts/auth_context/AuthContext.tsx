@@ -14,6 +14,7 @@ const decodeJWT = (token: string): JwtTokenClaims | null => {
             return {
                 id: decoded.id,
                 username: decoded.username,
+                email: decoded.email,
                 role: decoded.role
             };
         }
@@ -57,6 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 setUser({
                     id: claims.id,
                     username: claims.username,
+                    email: claims.email,
                     role: claims.role
                 });
             } else {
@@ -75,6 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setUser({
                 id: claims.id,
                 username: claims.username,
+                email: claims.email,
                 role: claims.role
             });
             SaveValueByKey("authToken", newToken);

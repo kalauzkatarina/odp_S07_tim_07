@@ -16,7 +16,6 @@ export const commentsApi: ICommentsApiService = {
     async getAllCommentsByBook(book_id: number): Promise<CommentDto[]> {
         try {
             const res = await axios.get<CommentDto[]>(`${API_URL}s/getComments/${book_id}`);
-            console.log(res);
             return res.data;
         }
         catch {

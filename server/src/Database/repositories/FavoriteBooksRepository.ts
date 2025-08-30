@@ -4,7 +4,7 @@ import { FavoriteBooks } from "../../Domain/models/FavoriteBooks";
 import { IFavoriteBooksRepository } from "../../Domain/repositories/IFavoriteBooksRepository";
 import db from "../connection/DbConnectionPool";
 
-export class FavoriteBooksRepository implements IFavoriteBooksRepository{
+export class FavoriteBooksRepository implements IFavoriteBooksRepository {
     async create(favorite_books: FavoriteBooks): Promise<FavoriteBooks> {
         try {
             const query = `INSERT INTO favorite_books (book_id, user_id, favorite) VALUES (?, ?, ?)`;
@@ -100,9 +100,9 @@ export class FavoriteBooksRepository implements IFavoriteBooksRepository{
             return null;
         }
     }
-  async getByUserId(userId: number): Promise<(FavoriteBooks & { book: Book })[]> {
-    try {
-        const query = `
+    async getByUserId(userId: number): Promise<(FavoriteBooks & { book: Book })[]> {
+        try {
+            const query = `
             SELECT 
                 fb.id AS favorite_id,
                 fb.book_id,
@@ -126,34 +126,34 @@ export class FavoriteBooksRepository implements IFavoriteBooksRepository{
             WHERE fb.user_id = ?
         `;
 
-        const [rows] = await db.execute<RowDataPacket[]>(query, [userId]);
+            const [rows] = await db.execute<RowDataPacket[]>(query, [userId]);
 
-        return rows.map(row => ({
-            id: row.favorite_id,
-            book_id: row.book_id,
-            user_id: row.user_id,
-            favorite: !!row.favorite,
-            book: new Book(
-                row.book_id,
-                row.title,
-                row.author,
-                row.summary,
-                row.format,
-                row.pages,
-                row.script,
-                row.binding,
-                row.publish_date,
-                row.isbn,
-                row.cover_image_url,
-                row.created_at,
-                row.views
-            )
-        }));
-    } catch (error) {
-        console.error("Error fetching favorite books by user id: ", error);
-        return [];
+            return rows.map(row => ({
+                id: row.favorite_id,
+                book_id: row.book_id,
+                user_id: row.user_id,
+                favorite: !!row.favorite,
+                book: new Book(
+                    row.book_id,
+                    row.title,
+                    row.author,
+                    row.summary,
+                    row.format,
+                    row.pages,
+                    row.script,
+                    row.binding,
+                    row.publish_date,
+                    row.isbn,
+                    row.cover_image_url,
+                    row.created_at,
+                    row.views
+                )
+            }));
+        } catch (error) {
+            console.error("Error fetching favorite books by user id: ", error);
+            return [];
+        }
     }
-}
 
     async getAll(favorite: boolean): Promise<(FavoriteBooks & { book: Book; })[]> {
         try {
@@ -255,5 +255,5 @@ export class FavoriteBooksRepository implements IFavoriteBooksRepository{
             return false;
         }
     }
-    
+
 }

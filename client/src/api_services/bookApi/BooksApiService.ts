@@ -132,7 +132,6 @@ export const booksApi: IBooksApiService = {
     async getTopViewed(limit: number = 3): Promise<BookDto[]> {
         try {
             const res = await axios.get<BookDto[]>(`${API_URL}s/topViewed?limit=${limit}`);
-            console.log("Res = " + res);
             return res.data;
         } catch {
             return [];

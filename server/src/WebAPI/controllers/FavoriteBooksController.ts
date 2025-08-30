@@ -14,7 +14,7 @@ export class FavoriteBookController {
 
     private initializeRoutes(): void {
         this.router.get("/favoriteBooks/getAllFavoriteBooks", this.getAllFavoriteBooks.bind(this));
-        this.router.get("/favoriteBooks/getFavoritesByUser/:userId", authenticate, this.getFavoritesByUser.bind(this)); 
+        this.router.get("/favoriteBooks/getFavoritesByUser/:userId", authenticate, this.getFavoritesByUser.bind(this));
         this.router.post("/favoriteBooks/addFavoriteBook", authenticate, this.addFavoriteBook.bind(this));
         this.router.delete("/favoriteBooks/removeFavoriteBook", authenticate, this.removeFavoriteBook.bind(this));
     }
@@ -38,26 +38,26 @@ export class FavoriteBookController {
     }
 
     private async getFavoritesByUser(req: Request, res: Response): Promise<void> {
-    try {
-        const userId = Number(req.params.userId);
-        if (!userId) {
-            res.status(400).json({ success: false, message: "Nedostaje userId." });
-            return;
+        try {
+            const userId = Number(req.params.userId);
+            if (!userId) {
+                res.status(400).json({ success: false, message: "Nedostaje userId." });
+                return;
+            }
+
+            const favorites = await this.favoriteBookService.getFavoritesByUserId(userId);
+            const result = favorites.map(fb => ({
+                id: fb.id,
+                book_id: fb.book_id,
+                user_id: fb.user_id,
+                book: fb.book
+            }));
+
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({ success: false, message: error instanceof Error ? error.message : error });
         }
-
-        const favorites = await this.favoriteBookService.getFavoritesByUserId(userId); 
-        const result = favorites.map(fb => ({
-            id: fb.id,
-            book_id: fb.book_id,
-            user_id: fb.user_id,
-            book: fb.book
-        }));
-
-        res.status(200).json(result);
-    } catch (error) {
-        res.status(500).json({ success: false, message: error instanceof Error ? error.message : error });
     }
-}
 
     private async addFavoriteBook(req: Request, res: Response): Promise<void> {
         try {
@@ -75,21 +75,21 @@ export class FavoriteBookController {
         }
     }
 
-   private async removeFavoriteBook(req: Request, res: Response): Promise<void> {
-    try {
-        const { bookId, userId } = req.body;
+    private async removeFavoriteBook(req: Request, res: Response): Promise<void> {
+        try {
+            const { bookId, userId } = req.body;
 
-        if (!bookId || !userId) {
-            res.status(400).json({ success: false, message: "Nedostaje bookId ili userId." });
-            return;
+            if (!bookId || !userId) {
+                res.status(400).json({ success: false, message: "Nedostaje bookId ili userId." });
+                return;
+            }
+
+            const removed = await this.favoriteBookService.removeFavoriteBook(Number(bookId), Number(userId));
+            res.status(removed ? 200 : 404).json({ success: removed });
+        } catch (error) {
+            res.status(500).json({ success: false, message: error instanceof Error ? error.message : error });
         }
-
-        const removed = await this.favoriteBookService.removeFavoriteBook(Number(bookId), Number(userId));
-        res.status(removed ? 200 : 404).json({ success: removed });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error instanceof Error ? error.message : error });
     }
-}
 
 
     public getRouter(): Router {

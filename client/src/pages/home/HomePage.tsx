@@ -63,9 +63,6 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
     fetchFavorites();
   }, [auth?.token, auth?.user]);
 
-
-
-
   useEffect(() => {
     if (auth?.user) {
       setLocalUser(auth.user);
@@ -76,7 +73,6 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
     const fetchFullUser = async () => {
       if (auth?.user && auth?.token) {
         const fullUser = await usersApi.getUserById(auth.token, auth.user.id);
-        console.log(fullUser);
         setLocalUser(fullUser);
       }
     };
@@ -118,7 +114,7 @@ const HomePage = ({ authApi }: { authApi: IAuthAPIService }) => {
 
   useEffect(() => {
     if (auth?.user) {
-      setFavoriteBooks([]); // resetuj pre fetch-a
+      setFavoriteBooks([]); 
       refreshFavorites();
     } else {
       setFavoriteBooks([]);

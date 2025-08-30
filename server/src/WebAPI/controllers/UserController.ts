@@ -50,19 +50,12 @@ export class UserController {
             const userId = Number(req.params.id);
             const { username, email, password, role } = req.body;
 
-            // Ako hoćeš da ograničiš update da user može menjati samo svoje podatke:
-            /*if (!req.user || (req.user.id !== userId && req.user.role !== "admin")) {
-                res.status(403).json({ success: false, message: "Forbidden" });
-                return;
-            }*/
-            console.log("USer id: " + userId)
             const updated = await this.userService.updateUser(userId, {
                 username,
                 email,
                 password,
                 role
             });
-            console.log("Updated: " + updated)
             if (!updated.id) {
                 res.status(404).json({ success: false, message: "User not found" });
                 return;
@@ -78,9 +71,7 @@ export class UserController {
     private async getUserById(req: Request, res: Response): Promise<void> {
         try {
             const userId = parseInt(req.params.id, 10);
-            console.log(userId)
 
-            // Optional: korisnik može videti samo sebe ili admin
             if (!req.user || (req.user.id !== userId && req.user.role !== "admin")) {
                 res.status(403).json({ success: false, message: "Forbidden" });
                 return;

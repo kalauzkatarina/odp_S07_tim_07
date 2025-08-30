@@ -7,14 +7,14 @@
 }
 
 .cards__item {
-  flex: 0 0 278px; 
+  flex: 0 0 278px;
   list-style: none;
 }
 
 .card {
-  background-color: #dfc7c2; 
+  background-color: #dfc7c2;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
   height: 500px;
@@ -22,7 +22,7 @@
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card__image {
@@ -34,7 +34,7 @@
   background-position: center;
 }
 
-.card__title{
+.card__title {
   color: #faf6f6;
 }
 
@@ -48,11 +48,11 @@
   color: #dfc7c2;
 }
 
-.bookmark_btn.active{
+.bookmark_btn.active {
   background-color: #a06262;
 }
 
-.bookmark_btn:hover{
+.bookmark_btn:hover {
   background-color: #855050;
   color: #321d1d;
 }
@@ -63,7 +63,7 @@
 
 .card__title {
   font-size: 1.4rem;
-  font-family:  'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif;
   font-weight: bold;
   margin-bottom: 0.5rem;
   color: #321d1d;
@@ -71,7 +71,7 @@
 
 .card__text {
   color: #4b5563;
-  font-family:  'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif;
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
@@ -81,56 +81,56 @@
   margin-bottom: 1rem;
 }
 
-.form-input{
+.form-input {
   width: 700px;
   border-radius: 20px;
   background-color: var(--color-copper-rust-100);
 }
 
-.form-select{
+.form-select {
   width: 300px;
   border-radius: 20px;
   color: #321d1d;
   font-weight: 600;
 }
 
-.btnEdit{
+.btnEdit {
   width: 150px;
   background-color: #dfc7c2;
   color: #321d1d;
 }
 
-.btnDetails{
+.btnDetails {
   width: 150px;
   color: #dfc7c2;
 }
 
-.btnDetails:hover{
+.btnDetails:hover {
   color: #321d1d;
 }
 
-.btnRemove{
+.btnRemove {
   width: 70px;
 }
 
-.btnAddFb{
+.btnAddFb {
   width: 250px;
 }
 
-.form-select-featured{
+.form-select-featured {
   width: 500px;
   border-radius: 20px;
 }
 
-.btnAdd{
+.btnAdd {
   margin-bottom: 50px;
   width: 200px;
   background-color: #dfc7c2;
   color: #321d1d;
 }
 
-.btnAdd:hover{
-  color:#dfc7c2
+.btnAdd:hover {
+  color: #dfc7c2
 }
 
 .book-image-grid {
@@ -175,7 +175,7 @@
   border-radius: 20px;
 }
 
-.btnFeatured.add:hover{
+.btnFeatured.add:hover {
   background-color: var(--color-copper-rust-600);
   color: #321d1d;
 }
@@ -188,37 +188,38 @@
   border-radius: 20px;
 }
 
-.btnFeatured.remove:hover{
+.btnFeatured.remove:hover {
   background-color: #dfc7c2;
   color: #321d1d;
 }
 
-.btnCloseRecommended{
+.btnCloseRecommended {
   color: #dfc7c2;
 }
 
-.btnCloseRecommended:hover{
+.btnCloseRecommended:hover {
   color: #321d1d;
 }
 
-.select-for-featured{
+.select-for-featured {
   color: #dfc7c2;
   text-align: center;
   font-family: 'Times New Roman', Times, serif;
   font-size: 2rem;
 }
 
-.btnSave{
+.btnSave {
   width: 120px;
   background-color: #dfc7c2;
   color: #321d1d;
 }
 
-.btnSave:hover{
+.btnSave:hover {
   color: #dfc7c2;
 }
 
-.users-library-header, .label-user-profile{
+.users-library-header,
+.label-user-profile {
   font-family: 'Times New Roman', Times, serif;
   font-size: 2rem;
   color: #faf6f6;
@@ -227,24 +228,24 @@
 
 .select-genres {
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   font-family: 'Times New Roman', Times, serif;
 }
 
 .modal-overlay {
   position: fixed;
-  inset: 0; 
-  background: rgba(0, 0, 0, 0.3); 
-  backdrop-filter: blur(4px);    
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.btn-close:hover{
+.btn-close:hover {
   color: #321d1d;
 }
 
-.btnEdit:hover{
+.btnEdit:hover {
   color: #dfc7c2;
 }

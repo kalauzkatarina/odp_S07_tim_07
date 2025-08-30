@@ -31,8 +31,8 @@ export class BookGenreRepository implements IBookGenreRepository {
             const [rows] = await db.execute<RowDataPacket[]>(query, [id]);
 
             if (rows.length > 0) {
-               return rows.map(
-                (row) => new BookGenre(row.book_id, row.genre_id)
+                return rows.map(
+                    (row) => new BookGenre(row.book_id, row.genre_id)
                 );
             }
 

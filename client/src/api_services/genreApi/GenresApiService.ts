@@ -4,11 +4,6 @@ import type { IGenresApiService } from "./IGenresApiService";
 
 const API_URL: string = import.meta.env.VITE_API_URL + "genre";
 
-const emptyGenre: GenreDto = {
-    id: 0,
-    name: ""
-};
-
 export const genresApi: IGenresApiService = {
     async getAllGenres(): Promise<GenreDto[]> {
         try {
@@ -17,24 +12,6 @@ export const genresApi: IGenresApiService = {
         }
         catch {
             return [];
-        }
-    },
-    async createGenre(token: string, name: string): Promise<GenreDto> {
-        try {
-            const res = await axios.post<GenreDto>(
-                `${API_URL}`,
-                {
-                    name
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            return res.data;
-        } catch {
-            return emptyGenre;
         }
     },
     async deleteGenre(token: string, id: number): Promise<boolean> {

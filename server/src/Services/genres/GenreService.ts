@@ -3,8 +3,8 @@ import { Genre } from "../../Domain/models/Genre";
 import { IGenreRepository } from "../../Domain/repositories/IGenreRepository";
 import { IGenreService } from "../../Domain/services/genres/IGenreService";
 
-export class GenreService implements IGenreService{
-    public constructor(private genreRepository: IGenreRepository){}
+export class GenreService implements IGenreService {
+    public constructor(private genreRepository: IGenreRepository) { }
 
     async getAllGenres(): Promise<GenreDto[]> {
         const genres: Genre[] = await this.genreRepository.getAll();
@@ -21,8 +21,8 @@ export class GenreService implements IGenreService{
         );
     }
 
-   async deleteGenre(id: number): Promise<boolean> {
+    async deleteGenre(id: number): Promise<boolean> {
         return this.genreRepository.delete(id);
     }
-    
+
 }

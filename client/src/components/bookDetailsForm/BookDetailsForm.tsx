@@ -1,4 +1,3 @@
-// BookDetailsForm.tsx
 import { useState } from "react";
 import type { BookDto } from "../../models/books/BookDto";
 import { BookEditForm } from "../editBookForm/EditBookForm";
@@ -31,7 +30,7 @@ export function BookDetailsForm({
 }: BookDetailsFormProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [currentBook, setCurrentBook] = useState(book);
-  const [isClosing, setIsClosing] = useState(false); 
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleSave = (updatedBook: BookDto) => {
     setCurrentBook(updatedBook);
@@ -40,21 +39,21 @@ export function BookDetailsForm({
   };
 
   const handleCancel = () => {
-    setIsClosing(true); 
+    setIsClosing(true);
     setTimeout(() => {
-      setIsEditing(false); 
+      setIsEditing(false);
       setIsClosing(false);
-    }, 300); 
+    }, 300);
   };
 
   if (isEditing) {
     return (
       <div className={`fade-wrapper ${isClosing ? "fade-out" : "fade-in"}`}>
-      <BookEditForm
-        bookId={currentBook.id}
-        onSave={handleSave}
-        onCancel={handleCancel}
-      />
+        <BookEditForm
+          bookId={currentBook.id}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
       </div>
     );
   }
@@ -133,8 +132,8 @@ export function BookDetailsForm({
                     <p>{c.content}</p>
                     {user?.role === "editor" && (
                       <button
-                      className="btn-comment-delete"
-                      onClick={() => onDeleteComment?.(c.id)}
+                        className="btn-comment-delete"
+                        onClick={() => onDeleteComment?.(c.id)}
                       >
                         Delete comment
                       </button>

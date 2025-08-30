@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
 *,
 *:after,
 *:before {
@@ -11,7 +12,7 @@ body {
 }
 
 main {
-  min-height: 500px; 
+  min-height: 500px;
 }
 
 .container {
@@ -39,7 +40,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family:  Bebas Neue;
+  font-family: Bebas Neue;
   font-size: 20px;
   font-weight: 600;
   border-radius: 25px;
@@ -50,9 +51,10 @@ main {
   white-space: nowrap;
   transition: color 0.15s ease-in;
   width: 200px;
-  height: 100%;                
-  line-height: normal;        
+  height: 100%;
+  line-height: normal;
 }
+
 .tab:hover {
   color: var(--color-copper-rust-800);
 }
@@ -61,40 +63,57 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%; 
-  width: calc(100% / 5); 
+  height: 100%;
+  width: calc(100% / 5);
   background-color: var(--color-copper-rust-300);
   border-radius: 25px;
   z-index: 1;
   transition: transform 0.25s ease-out;
 }
 
-#radio-1:checked ~ .glider { transform: translateX(0%); }
-#radio-2:checked ~ .glider { transform: translateX(100%); }
-#radio-3:checked ~ .glider { transform: translateX(200%); }
-#radio-4:checked ~ .glider { transform: translateX(300%); }
-#radio-5:checked ~ .glider { transform: translateX(400%); }
+#radio-1:checked~.glider {
+  transform: translateX(0%);
+}
+
+#radio-2:checked~.glider {
+  transform: translateX(100%);
+}
+
+#radio-3:checked~.glider {
+  transform: translateX(200%);
+}
+
+#radio-4:checked~.glider {
+  transform: translateX(300%);
+}
+
+#radio-5:checked~.glider {
+  transform: translateX(400%);
+}
 
 @media (max-width: 700px) {
   .tabs {
-    flex-direction: column; 
-    align-items: stretch; 
-    height: auto; 
-    padding: 5px; 
-    width: 90%; 
-    max-width: 300px; 
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 5px;
+    width: 90%;
+    max-width: 300px;
   }
+
   .tab {
-    width: 100%; 
+    width: 100%;
     margin-bottom: 0.5rem;
     height: 50px;
-    flex-grow: 0; 
+    flex-grow: 0;
   }
+
   .tab:last-child {
-    margin-bottom: 0; 
+    margin-bottom: 0;
   }
+
   .glider {
-    display: none; 
+    display: none;
   }
 }
 
@@ -115,16 +134,16 @@ main {
 }
 
 .logoutBtn {
-  display: flex;              
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 20px;           
-  margin-right: 10px;          
-  padding: 5px 10px;        
-  border-radius: 25px;       
+  margin-left: 20px;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border-radius: 25px;
   color: #341d1d;
   background-color: var(--color-copper-rust-100);
-  text-decoration: none;       
+  text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease;
 }
 

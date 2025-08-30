@@ -40,8 +40,8 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
-      onClose(); // tek posle animacije se unmountuje
-    }, 300); // isto trajanje kao CSS animacija
+      onClose(); 
+    }, 300); 
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,7 +212,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
           />
         </div>
 
-        <div className="genres">
+        <div className="genres-add-book">
           {genres.map((genre) => (
             <label key={genre.id}>
               <input

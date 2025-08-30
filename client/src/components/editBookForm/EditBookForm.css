@@ -7,7 +7,7 @@
   padding: 2rem;
   background-color: #dfc7c2;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: 'Times New Roman', Times, serif;
 }
 
@@ -24,6 +24,7 @@
     opacity: 1;
     transform: scale(1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.95);
@@ -72,28 +73,29 @@
   width: 180px;
 }
 
-.edit-book-header{
+.edit-book-header {
   color: #321d1d;
   text-align: center;
   font-size: 2.5rem;
 }
 
-.genres {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+.genres-edit-book {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.3rem 1rem;
+  justify-items: start;
 }
 
-.genres label {
-  font-size: 1.3rem; 
+.genres-edit-book label {
+  font-size: 1.3rem;
   display: flex;
   align-items: center;
-  gap: 0.3rem; 
+  margin-bottom: 0.1rem;
 }
 
-.genres input[type="checkbox"] {
-  width: 16px;   
-  height: 16px;
+.genres-edit-book input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: var(--color-copper-rust-600);
 }
 
 @keyframes fadeInScale {
@@ -101,20 +103,21 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-.upload-btn:hover{
-  color:#321d1d;
+.upload-btn:hover {
+  color: #321d1d;
 }
 
-.save-btn:hover{
-  color:#321d1d;
+.save-btn:hover {
+  color: #321d1d;
 }
 
-.cancel-btn:hover{
-  color:#321d1d;
+.cancel-btn:hover {
+  color: #321d1d;
 }

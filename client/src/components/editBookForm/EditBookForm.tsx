@@ -21,7 +21,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
   const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
   const [coverPreview, setCoverPreview] = useState<string>("");
   const [isClosing, setIsClosing] = useState(false);
-  
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -40,7 +40,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
     setIsClosing(true);
     setTimeout(() => {
       onCancel();
-    }, 300); // isto trajanje kao CSS animacija
+    }, 300); 
   };
 
 
@@ -212,7 +212,7 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       </div>
 
 
-      <div className="genres">
+      <div className="genres-edit-book">
         {genres.map((genre) => (
           <label key={genre.id}>
             <input

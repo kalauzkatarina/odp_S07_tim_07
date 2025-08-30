@@ -59,7 +59,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
         required
       />
 
-       <div className={styles.roleSelection}>
+      <div className={styles.roleSelection}>
         <label className={styles.radioLabel}>
           <input
             type="radio"

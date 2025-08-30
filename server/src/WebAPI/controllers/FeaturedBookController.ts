@@ -7,7 +7,7 @@ export class FeaturedBookController {
     private router: Router;
     private featuredBookService: IFeaturedBookService;
 
-    constructor(featuredBookService: IFeaturedBookService){
+    constructor(featuredBookService: IFeaturedBookService) {
         this.router = Router();
         this.featuredBookService = featuredBookService;
         this.initializeRoutes();
@@ -20,35 +20,35 @@ export class FeaturedBookController {
     }
 
     private async getAllFeaturedBooks(req: Request, res: Response): Promise<void> {
-    try {
-        const limit = 5;
-        const featuredBooks = await this.featuredBookService.getAllFeaturedBooks(limit);
+        try {
+            const limit = 5;
+            const featuredBooks = await this.featuredBookService.getAllFeaturedBooks(limit);
 
-        const featuredBooksWithDetails = featuredBooks.map(fb => ({
-            id: fb.id,
-            book_id: fb.book_id,
-            editor_id: fb.editor_id,
-            book: fb.book
-        }));
+            const featuredBooksWithDetails = featuredBooks.map(fb => ({
+                id: fb.id,
+                book_id: fb.book_id,
+                editor_id: fb.editor_id,
+                book: fb.book
+            }));
 
-        res.status(200).json(featuredBooksWithDetails);
-    } catch (error) {
-        res.status(500).json({ success: false, message: error });
+            res.status(200).json(featuredBooksWithDetails);
+        } catch (error) {
+            res.status(500).json({ success: false, message: error });
+        }
     }
-}
 
-     private async addFeaturedBook(req: Request, res: Response): Promise<void> {
-    try {
-        const { bookId, editorId } = req.body;
-        const newFeatured = await this.featuredBookService.addFeaturedBook(
-            Number(bookId),
-            Number(editorId)
-        );
-        res.status(201).json(newFeatured);
-    } catch (error) {
-        res.status(500).json({ success: false, message: error });
+    private async addFeaturedBook(req: Request, res: Response): Promise<void> {
+        try {
+            const { bookId, editorId } = req.body;
+            const newFeatured = await this.featuredBookService.addFeaturedBook(
+                Number(bookId),
+                Number(editorId)
+            );
+            res.status(201).json(newFeatured);
+        } catch (error) {
+            res.status(500).json({ success: false, message: error });
+        }
     }
-}
 
     private async removeFeaturedBook(req: Request, res: Response): Promise<void> {
         try {

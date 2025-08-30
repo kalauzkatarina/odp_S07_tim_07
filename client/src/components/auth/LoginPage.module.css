@@ -23,13 +23,14 @@
   display: none;
 }
 
-.signup, .login {
+.signup,
+.login {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.signup{
+.signup {
   color: #624345;
 }
 
@@ -42,26 +43,28 @@ label {
   font-weight: bold;
   cursor: pointer;
   transition: 0.5s ease-in-out;
-  font-family:  'Times New Roman', Times, serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 
-.btnLogin{
+.btnLogin {
   background: #dfc7c2;
   color: #624345;
   width: 100px;
 }
 
-.btnSignUp{
+.btnSignUp {
   color: #dfc7c2;
   background: #624345;
   width: 100px;
 }
 
-.btnLogin:hover{
+.btnLogin:hover {
   color: #dfc7c2;
 }
 
-input, select, button {
+input,
+select,
+button {
   margin: 20px auto;
   display: block;
   padding: 12px;
@@ -74,7 +77,8 @@ input, select, button {
 }
 
 
-input, select {
+input,
+select {
   background: var(--color-copper-rust-50);
   color: var(--color-copper-rust-900);
 }
@@ -84,8 +88,8 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: var(--color-copper-rust-50); 
-  color: var(--color-copper-rust-900);    
+  background: var(--color-copper-rust-50);
+  color: var(--color-copper-rust-900);
   border-radius: 5px;
   padding: 12px;
   transition: 0.2s ease-in;
@@ -97,7 +101,7 @@ select:hover {
 
 select:focus {
   outline: none;
-  background: var(--color-copper-rust-100); 
+  background: var(--color-copper-rust-100);
   color: var(--color-copper-rust-900);
 }
 
@@ -107,7 +111,7 @@ select option {
 }
 
 select::-ms-expand {
-  display: none; 
+  display: none;
 }
 
 button {
@@ -131,21 +135,21 @@ button:hover {
   transform: scale(0.7);
 }
 
-.chk:checked ~ .login {
+.chk:checked~.login {
   transform: translateY(-500px);
 }
 
-.chk:checked ~ .login label {
-  transform: scale(1);  
+.chk:checked~.login label {
+  transform: scale(1);
 }
 
-.chk:checked ~ .signup label {
+.chk:checked~.signup label {
   transform: scale(0.7);
 }
 
 .roleSelection {
   display: flex;
-  margin: -40px 0px -25px 0px; 
+  margin: -40px 0px -25px 0px;
   justify-content: center;
 }
 
@@ -160,4 +164,3 @@ button:hover {
   cursor: pointer;
   accent-color: var(--color-copper-rust-800);
 }
-

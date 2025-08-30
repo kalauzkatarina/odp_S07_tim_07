@@ -80,7 +80,6 @@ export class BookService implements IBookService {
 
     async updateBook(id: number, updates: Partial<BookDto>): Promise<BookDto> {
         const existingBook = await this.bookRepository.getBookById(id);
-        console.log(existingBook);
         if (existingBook.id === 0) return new BookDto();
 
         const updatedBook = new Book(
@@ -111,7 +110,7 @@ export class BookService implements IBookService {
                 });
             }
         }
-        
+
         return this.mapToDto(savedBook);
     }
 
@@ -131,7 +130,6 @@ export class BookService implements IBookService {
 
     async getTopViewedBooks(limit: number): Promise<BookDto[]> {
         const books = await this.bookRepository.getTopViewed(limit);
-        console.log(books)
         const bookDtos: BookDto[] = [];
         for (const b of books) {
             bookDtos.push(await this.mapToDto(b));
