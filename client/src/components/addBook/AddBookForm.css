@@ -156,6 +156,11 @@
   color: #321d1d;
 }
 
+.btn-upload:hover{
+  background-color: #dfc2c2;
+  color: #321d1d;
+}
+
 .file-choose{
   width: 600px;
   margin-left: 0px;

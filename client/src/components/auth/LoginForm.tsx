@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormProps";
+import styles from "./LoginPage.module.css"
 
 export function LoginForm({ authApi }: AuthFormProps) {
   const [username, setUsername] = useState("");
@@ -50,7 +51,7 @@ export function LoginForm({ authApi }: AuthFormProps) {
         required
       />
       {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-      <button className="login-btn" type="submit">Login</button>
+      <button className={styles.btnLogin} type="submit">Login</button>
     </form>
   );
 }

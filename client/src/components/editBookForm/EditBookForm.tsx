@@ -226,8 +226,8 @@ export function BookEditForm({ bookId, onSave, onCancel }: BookEditFormProps) {
       </div>
 
       <div className="row">
-        <button onClick={handleSubmit}>Save changes</button>
-        <button onClick={handleClose}>Cancel</button>
+        <button className="save-btn" onClick={handleSubmit}>Save changes</button>
+        <button className="cancel-btn" onClick={handleClose}>Cancel</button>
       </div>
     </section>
   );

@@ -62,7 +62,6 @@ export function BookDetailsForm({
   return (
     <section className="book-details">
       <div className="product">
-        {/* LEVA STRANA: SLIKA */}
         <div className="product__photo">
           <div className="photo-container">
             <div className="photo-main">
@@ -74,12 +73,11 @@ export function BookDetailsForm({
           </div>
         </div>
 
-        {/* DESNA STRANA: DETALJI */}
         <div className="product__info">
           <div className="title">
             <h2 className="title-details">{currentBook.title}</h2>
             <p><b>Author:</b> {currentBook.author}</p>
-            <span><b>ISBN:</b> {currentBook.isbn}</span>
+            <p className="isbn"><b>ISBN:</b> {currentBook.isbn}</p>
           </div>
 
           <div className="book-summary">

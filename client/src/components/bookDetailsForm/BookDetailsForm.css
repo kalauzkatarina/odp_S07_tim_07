@@ -107,7 +107,10 @@
 
 span, p, b {
   color: #321d1d;
-  margin: 3px;
+}
+
+.isbn{
+  margin-bottom: -15px;
 }
 
 .comments-header{

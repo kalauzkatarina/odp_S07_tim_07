@@ -3,7 +3,7 @@ import { SignUpForm } from "./SignUpForm";
 import { LoginForm } from "./LoginForm";
 import AuthContext from "../../contexts/auth_context/AuthContext";
 import type { IAuthAPIService } from "../../api_services/authApi/IAuthAPIService";
-import styles from "../../pages/auth/LoginPage.module.css"; 
+import styles from "./LoginPage.module.css"; 
 import { UserForm } from "../userProfile/UserProfile";
 
 interface AuthFormProps {

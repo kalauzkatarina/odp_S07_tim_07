@@ -49,7 +49,7 @@
 }
 
 .bookmark_btn.active{
-  background-color: #a06262;
+  background-color: #624345;
 }
 
 .card__content {
@@ -207,14 +207,6 @@
   text-align: center;
 }
 
-.sign-up{
-  color: #321d1d;
-}
-
-.btn-sign-up{
-  color: #faf6f6;
-}
-
 .select-genres {
   display: flex;
   justify-content: center; 
@@ -222,10 +214,14 @@
 
 .modal-overlay {
   position: fixed;
-  inset: 0; /* zauzima ceo ekran */
-  background: rgba(0, 0, 0, 0.3); /* tamna providna pozadina */
-  backdrop-filter: blur(4px);     /* ovde je blur efekat */
+  inset: 0; 
+  background: rgba(0, 0, 0, 0.3); 
+  backdrop-filter: blur(4px);    
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.bookmark_btn:hover{
+  background-color:#a06262;
 }

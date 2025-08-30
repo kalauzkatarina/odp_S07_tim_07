@@ -3,7 +3,7 @@ import type { AuthFormProps } from "../../types/props/auth_form_props/AuthFormPr
 import { validationOfDatasAuth } from "../../api_services/validators/auth/AuthValidators";
 import { useAuth } from "../../hooks/auth/useAuthHook";
 
-import styles from "../../pages/auth/LoginPage.module.css"
+import styles from "./LoginPage.module.css"
 
 export function SignUpForm({ authApi }: AuthFormProps) {
   const [username, setUsername] = useState("");
@@ -35,7 +35,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
 
   return (
     <form onSubmit={submitForm}>
-      <label className="sign-up" htmlFor="chk">Sign up</label>
+      <label className="signup" htmlFor="chk">Sign up</label>
 
       <input
         type="text"
@@ -83,7 +83,7 @@ export function SignUpForm({ authApi }: AuthFormProps) {
       </div>
 
       {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-      <button className="btn-sign-up" type="submit">Sign up</button>
+      <button className={styles.btnSignUp} type="submit">Sign up</button>
     </form>
   );
 }

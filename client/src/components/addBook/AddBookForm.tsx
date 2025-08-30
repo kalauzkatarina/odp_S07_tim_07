@@ -200,7 +200,7 @@ export default function AddBookForm({ onClose, onBookAdded }: AddBookFormProps) 
         </div>
 
         <div className="upload-cover-wrapper">
-          <button type="button" className="upload-btn" onClick={handleUploadClick}>
+          <button type="button" className="btn-upload" onClick={handleUploadClick}>
             Upload Cover
           </button>
           <input

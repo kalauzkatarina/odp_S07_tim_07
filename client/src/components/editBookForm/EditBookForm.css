@@ -106,3 +106,18 @@
     transform: scale(1);
   }
 }
+
+.upload-btn:hover{
+  background-color:#624345;
+  color:#321d1d;
+}
+
+.save-btn:hover{
+  background-color:#624345;
+  color:#321d1d;
+}
+
+.cancel-btn:hover{
+  background-color:#624345;
+  color:#321d1d;
+}

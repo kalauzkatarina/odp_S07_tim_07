@@ -15,7 +15,7 @@
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
-  background: #9f7875;
+  background: #dfc7c2;
   position: relative;
 }
 
@@ -29,8 +29,12 @@
   height: 100%;
 }
 
+.signup{
+  color: #624345;
+}
+
 label {
-  color: #dfc7c2;
+  color: #624345;
   font-size: 2.3em;
   justify-content: center;
   display: flex;
@@ -39,6 +43,16 @@ label {
   cursor: pointer;
   transition: 0.5s ease-in-out;
   font-family:  'Times New Roman', Times, serif;
+}
+
+.btnLogin{
+  background: #dfc7c2;
+  color: #624345;
+}
+
+.btnSignUp{
+  color: #dfc7c2;
+  background: #624345;
 }
 
 input, select, button {
@@ -50,9 +64,9 @@ input, select, button {
   font-size: 1em;
   text-align: center;
   width: 180px;
-  color: #faf6f6;
   font-family: 'Times New Roman', Times, serif;
 }
+
 
 input, select {
   background: var(--color-copper-rust-50);
@@ -100,14 +114,14 @@ button:hover {
 
 .login {
   height: 460px;
-  background: #dfc7c2;
+  background: #624345;
   border-radius: 60% / 10%;
   transform: translateY(-180px);
   transition: 0.8s ease-in-out;
 }
 
 .login label {
-  color: #9f7875;
+  color: #dfc7c2;
   transform: scale(0.7);
 }
 
@@ -140,3 +154,4 @@ button:hover {
   cursor: pointer;
   accent-color: var(--color-copper-rust-800);
 }
+
