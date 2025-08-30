@@ -1,9 +1,9 @@
 import type { BookDto } from "../../models/books/BookDto";
 
 type Props = {
-  books: BookDto[]; // svi prikazani bookovi
-  favoriteBooks?: BookDto[]; // koji su označeni kao omiljeni
-  onToggleFavorite: (book: BookDto) => void; // handler za dodavanje/uklanjanje iz omiljenih
+  books: BookDto[]; 
+  favoriteBooks?: BookDto[]; 
+  onToggleFavorite: (book: BookDto) => void; 
 };
 
 const FavoriteBookImageGrid = ({ books, favoriteBooks, onToggleFavorite }: Props) => {

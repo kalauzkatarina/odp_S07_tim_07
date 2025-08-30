@@ -47,7 +47,7 @@ h1 {
   margin-bottom: 1rem;
   text-align: center;
   font-family: Bebas Neue;
-  color: #faf6f6;
+  color: var(--color-copper-rust-100);
 }
 
 button {

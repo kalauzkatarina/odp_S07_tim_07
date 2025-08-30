@@ -44,12 +44,13 @@ const SearchAndFilter = ({
               width: 200,
               boxShadow: "none",
               "&:focus": { outline: "none" },
+              backgroundColor: "var(--color-copper-rust-100)"
             }),
             menu: (provided) => ({
               ...provided,
               borderRadius: 20,
               width: 200,
-              backgroundColor: "#faf6f6"
+              backgroundColor: "var(--color-copper-rust-100)",
             }),
             option: (provided, state) => ({
               ...provided,
@@ -59,13 +60,13 @@ const SearchAndFilter = ({
                   ? "#dfc2c2"
                   : "#faf6f6",
               color: state.isSelected
-                ? "#faf6f6"        // boja teksta selektovane opcije
+                ? "#faf6f6"
                 : state.isFocused
-                  ? "#000"        // boja teksta hover
-                  : "#321d1d",    // normalna boja teksta
+                  ? "#000"
+                  : "#321d1d",
               cursor: "pointer",
               borderRadius: "20px",
-              outline: "none", // uklanja outline na opcijama
+              outline: "none",
               boxShadow: "none",
               ":active": { outline: "none", boxShadow: "none" },
               ":focus": { outline: "none", boxShadow: "none" },

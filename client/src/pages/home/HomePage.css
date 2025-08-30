@@ -84,6 +84,7 @@
 .form-input{
   width: 700px;
   border-radius: 20px;
+  background-color: var(--color-copper-rust-100);
 }
 
 .form-select{
@@ -227,6 +228,7 @@
 .select-genres {
   display: flex;
   justify-content: center; 
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .modal-overlay {
