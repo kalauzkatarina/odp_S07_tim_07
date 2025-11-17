@@ -3,7 +3,11 @@
 Bukvarijum is a full-stack web application designed as a digital catalog of books with user accounts, content management, and dynamic homepage sections.  
 The system includes authentication, authorization with role-based access control, book management, comments, and advanced browsing features.
 
-This project was developed as part of the **PZ S07** course, under the supervision of assistant **Danijel Jovanović**.
+This project was developed as part of the **PZ S07** course, under the supervision of assistant [Danijel Jovanović](https://github.com/owlCoder).
+
+## Authors
+- [Katarina Kalauz](https://github.com/kalauzkatarina)
+- [Julijana Ristić](https://github.com/julijanaristic)
 
 ---
 
